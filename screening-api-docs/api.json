@@ -1,0 +1,6333 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/partner/v1/authenticate": {
+      "post": {
+        "operationId": "AuthenticationController_post",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthenticationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/partner/v1/users": {
+      "post": {
+        "operationId": "UsersController_create",
+        "summary": "Create a user",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUser"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "UsersController_findAll",
+        "summary": "List all users",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/User"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/users/{id}": {
+      "patch": {
+        "operationId": "UsersController_update",
+        "summary": "Update a user",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUser"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "UsersController_get",
+        "summary": "Get user by id",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "UsersController_delete",
+        "summary": "Delete a user",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/properties": {
+      "get": {
+        "operationId": "PropertiesController_findAll",
+        "summary": "List all properties",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "external_id",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/PropertyList"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Properties"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "PropertiesController_create",
+        "summary": "Create a new property",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProperty"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PropertyDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Properties"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/properties/{id}": {
+      "get": {
+        "operationId": "PropertiesController_findById",
+        "summary": "Get property by id",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PropertyDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Properties"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "PropertiesController_update",
+        "summary": "Update a property",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProperty"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PropertyDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Properties"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "PropertiesController_delete",
+        "summary": "Delete a property",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Properties"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/units": {
+      "get": {
+        "operationId": "UnitsController_findAll",
+        "summary": "List all units",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "property_id",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "available_for_application",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "external_id",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/UnitList"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Units"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "UnitsController_create",
+        "summary": "Create a new unit",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUnit"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnitDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Units"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/units/{id}": {
+      "get": {
+        "operationId": "UnitsController_findById",
+        "summary": "Get unit by id",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnitDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Units"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "UnitsController_update",
+        "summary": "Update a unit",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUnit"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnitDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Units"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "UnitsController_delete",
+        "summary": "Delete a unit",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Units"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/magic_links": {
+      "get": {
+        "operationId": "MagicLinksController_getLink",
+        "summary": "Get portfolio link",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MagicLink"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Magic links"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/magic_links/{id}": {
+      "patch": {
+        "operationId": "MagicLinksController_updateLink",
+        "summary": "Update a magic link",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMagicLink"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MagicLink"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Magic links"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/applications": {
+      "get": {
+        "operationId": "ApplicationsController_findAll",
+        "summary": "List all applications",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "property_id",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "unit_id",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "external_id",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/ApplicationList"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Applications"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/applications/{id}": {
+      "get": {
+        "operationId": "ApplicationsController_findById",
+        "summary": "Get application by id",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Applications"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/applications/{id}/approve": {
+      "post": {
+        "operationId": "ApplicationsController_approve",
+        "summary": "Approve an application",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApproveApplication"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationList"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Applications"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/applications/{id}/reject": {
+      "post": {
+        "operationId": "ApplicationsController_reject",
+        "summary": "Reject an application",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RejectApplication"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationList"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Applications"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/applications/{id}/applicants/{applicant_id}/override_identity": {
+      "post": {
+        "operationId": "ApplicationsController_overrideIdentityVerification",
+        "summary": "Override failed identity verification",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "applicant_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OverrideIdentityVerification"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificationDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Applications"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/applications/{id}/applicants/{applicant_id}": {
+      "get": {
+        "operationId": "ApplicationsController_findApplicant",
+        "summary": "Get applicant by id",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "applicant_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicantDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Applications"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/applications/{id}/applicants/{applicant_id}/verifications/{verification_id}": {
+      "get": {
+        "operationId": "ApplicationsController_findReport",
+        "summary": "Get verification with report by id",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "applicant_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "verification_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificationDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Applications"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/applicants/{id}/additional_documents": {
+      "get": {
+        "operationId": "ApplicantsController_getAdditionalDocuments",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/AdditionalDocument"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Applicants"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "BoomScreen API",
+    "description": "Boom Pay screening API documentation",
+    "version": "1.0",
+    "contact": {
+      "name": "Boom Pay",
+      "url": "https://www.boompay.app/",
+      "email": ""
+    }
+  },
+  "tags": [],
+  "servers": [
+    {
+      "url": "https://api.sandbox.boompay.app"
+    },
+    {
+      "url": "https://api.production.boompay.app"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "ValidatorResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "number",
+            "example": 400
+          },
+          "error": {
+            "type": "string",
+            "example": "Bad Request"
+          },
+          "message": {
+            "example": [
+              "First name must be a string",
+              "Last name must be a string"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "statusCode",
+          "error",
+          "message"
+        ]
+      },
+      "TooManyRequestsResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "number",
+            "example": 429
+          },
+          "error": {
+            "type": "string",
+            "example": "Too many requets"
+          }
+        },
+        "required": [
+          "statusCode",
+          "error"
+        ]
+      },
+      "InternalErrorResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "number",
+            "example": 500
+          },
+          "error": {
+            "type": "string",
+            "example": "Internal Server Error"
+          }
+        },
+        "required": [
+          "statusCode",
+          "error"
+        ]
+      },
+      "AuthenticationRequest": {
+        "type": "object",
+        "properties": {
+          "access_key": {
+            "type": "string",
+            "example": "access_key"
+          },
+          "secret_key": {
+            "type": "string",
+            "example": "secret_key"
+          }
+        },
+        "required": [
+          "access_key",
+          "secret_key"
+        ]
+      },
+      "AuthenticationResponse": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "example": "access_token"
+          }
+        },
+        "required": [
+          "access_token"
+        ]
+      },
+      "Unauthorized": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "number",
+            "example": 401
+          },
+          "error": {
+            "type": "string",
+            "example": "Unauthorized"
+          }
+        },
+        "required": [
+          "statusCode",
+          "error"
+        ]
+      },
+      "CreateUser": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "test@gmail.com"
+          },
+          "role": {
+            "type": "string",
+            "example": "admin",
+            "default": "property_manager"
+          }
+        },
+        "required": [
+          "name",
+          "email"
+        ]
+      },
+      "Address": {
+        "type": "object",
+        "properties": {
+          "address1": {
+            "type": "string",
+            "example": "123 Main St"
+          },
+          "address2": {
+            "type": "string",
+            "example": "Apt 123",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "example": "San Francisco"
+          },
+          "state_or_province": {
+            "type": "string",
+            "example": "CA"
+          },
+          "postal_code": {
+            "type": "string",
+            "example": "12345"
+          }
+        },
+        "required": [
+          "address1",
+          "city",
+          "state_or_province",
+          "postal_code"
+        ]
+      },
+      "MagicLink": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "1"
+          },
+          "active": {
+            "type": "boolean",
+            "example": true
+          },
+          "application_link": {
+            "type": "string",
+            "example": "https://example.com"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "active",
+          "application_link",
+          "created_at"
+        ]
+      },
+      "Money": {
+        "type": "object",
+        "properties": {
+          "cents": {
+            "type": "number",
+            "example": 100
+          },
+          "currency": {
+            "type": "string",
+            "example": "USD",
+            "default": "USD"
+          }
+        },
+        "required": [
+          "cents"
+        ]
+      },
+      "VerificationSchemaType": {
+        "type": "object",
+        "properties": {
+          "terms_and_conditions": {
+            "type": "object",
+            "example": {}
+          },
+          "rental_application": {
+            "type": "object",
+            "example": {}
+          },
+          "identity_verification": {
+            "type": "object",
+            "example": {}
+          },
+          "income_verification": {
+            "type": "object",
+            "example": {}
+          },
+          "verified_income_verification": {
+            "type": "object",
+            "example": {}
+          },
+          "housing_history": {
+            "type": "object",
+            "example": {}
+          },
+          "credit_report": {
+            "type": "object",
+            "example": {}
+          },
+          "criminal_report": {
+            "type": "object",
+            "example": {}
+          },
+          "eviction_report": {
+            "type": "object",
+            "example": {}
+          },
+          "submission_disclosure": {
+            "type": "object",
+            "example": {}
+          }
+        }
+      },
+      "VerificationSchema": {
+        "type": "object",
+        "properties": {
+          "applicant": {
+            "$ref": "#/components/schemas/VerificationSchemaType"
+          },
+          "co_signer": {
+            "$ref": "#/components/schemas/VerificationSchemaType"
+          }
+        },
+        "required": [
+          "applicant",
+          "co_signer"
+        ]
+      },
+      "VerificationScreeningCriteria": {
+        "type": "object",
+        "properties": {
+          "decline_range_start": {
+            "type": "number",
+            "example": 0
+          },
+          "decline_range_end": {
+            "type": "number",
+            "example": 3
+          },
+          "conditional_approval_range_start": {
+            "type": "number",
+            "example": 4
+          },
+          "conditional_approval_range_end": {
+            "type": "number",
+            "example": 6
+          },
+          "approval_range_start": {
+            "type": "number",
+            "example": 7
+          },
+          "approval_range_end": {
+            "type": "number",
+            "example": 10
+          },
+          "co_signer_settings": {
+            "type": "object",
+            "example": {}
+          },
+          "applicant_settings": {
+            "type": "object",
+            "example": {}
+          },
+          "combined_settings": {
+            "type": "object",
+            "example": {}
+          }
+        },
+        "required": [
+          "decline_range_start",
+          "decline_range_end",
+          "conditional_approval_range_start",
+          "conditional_approval_range_end",
+          "approval_range_start",
+          "approval_range_end",
+          "co_signer_settings",
+          "applicant_settings",
+          "combined_settings"
+        ]
+      },
+      "VerificationTemplateList": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "123456"
+          },
+          "name": {
+            "type": "string",
+            "example": "Verification template name"
+          },
+          "applicant_fee": {
+            "$ref": "#/components/schemas/Money"
+          },
+          "co_signer_fee": {
+            "$ref": "#/components/schemas/Money"
+          },
+          "verification_schemas": {
+            "$ref": "#/components/schemas/VerificationSchema"
+          },
+          "applicant_paid": {
+            "type": "boolean",
+            "example": true
+          },
+          "co_signer_paid": {
+            "type": "boolean",
+            "example": true
+          },
+          "applying_criteria": {
+            "type": "boolean",
+            "example": true
+          },
+          "screening_criteria": {
+            "$ref": "#/components/schemas/VerificationScreeningCriteria"
+          },
+          "default": {
+            "type": "boolean",
+            "example": true
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-09-01T00:00:00.000Z"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-09-01T00:00:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "applicant_fee",
+          "co_signer_fee",
+          "verification_schemas",
+          "applicant_paid",
+          "co_signer_paid",
+          "applying_criteria",
+          "default",
+          "created_at",
+          "updated_at"
+        ]
+      },
+      "PropertyList": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "1"
+          },
+          "name": {
+            "type": "string",
+            "example": "My property",
+            "nullable": true
+          },
+          "owner": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "magic_link": {
+            "$ref": "#/components/schemas/MagicLink"
+          },
+          "verification_template": {
+            "$ref": "#/components/schemas/VerificationTemplateList"
+          },
+          "external_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "address",
+          "verification_template",
+          "created_at",
+          "updated_at"
+        ]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "12345"
+          },
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "test@gmail.com"
+          },
+          "role": {
+            "type": "string",
+            "example": "admin"
+          },
+          "can_change_rent_amount": {
+            "type": "boolean",
+            "example": true
+          },
+          "can_change_available_by_date": {
+            "type": "boolean",
+            "example": true
+          },
+          "can_make_decisions": {
+            "type": "boolean",
+            "example": true
+          },
+          "can_view_reports": {
+            "type": "boolean",
+            "example": true
+          },
+          "can_cancel_applications": {
+            "type": "boolean",
+            "example": true
+          },
+          "can_change_unit": {
+            "type": "boolean",
+            "example": true
+          },
+          "properties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PropertyList"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "email",
+          "role"
+        ]
+      },
+      "UpdateUser": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "example": "admin",
+            "default": "property_manager"
+          },
+          "can_change_rent_amount": {
+            "type": "boolean",
+            "example": true
+          },
+          "can_change_available_by_date": {
+            "type": "boolean",
+            "example": true
+          },
+          "can_make_decisions": {
+            "type": "boolean",
+            "example": true
+          },
+          "can_view_reports": {
+            "type": "boolean",
+            "example": true
+          },
+          "can_cancel_applications": {
+            "type": "boolean",
+            "example": true
+          },
+          "can_change_unit": {
+            "type": "boolean",
+            "example": true
+          },
+          "property_ids": {
+            "description": "List of property IDs, could be Boom ID or external ID",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "PaginatedResponse": {
+        "type": "object",
+        "properties": {
+          "total_count": {
+            "type": "number",
+            "example": 1
+          },
+          "page": {
+            "type": "number",
+            "example": 1
+          }
+        },
+        "required": [
+          "total_count",
+          "page"
+        ]
+      },
+      "NotFoundResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "number",
+            "example": 404
+          },
+          "error": {
+            "type": "string",
+            "example": "Not found"
+          }
+        },
+        "required": [
+          "statusCode",
+          "error"
+        ]
+      },
+      "UnitList": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "1"
+          },
+          "title": {
+            "type": "string",
+            "example": "Unit 1"
+          },
+          "property_id": {
+            "type": "string",
+            "example": "1"
+          },
+          "monthly_rent_amount": {
+            "$ref": "#/components/schemas/Money"
+          },
+          "occupied": {
+            "type": "boolean",
+            "example": false
+          },
+          "available_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01"
+          },
+          "magic_link": {
+            "$ref": "#/components/schemas/MagicLink"
+          },
+          "external_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "property_id",
+          "occupied",
+          "created_at",
+          "updated_at"
+        ]
+      },
+      "PropertyDetail": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "1"
+          },
+          "name": {
+            "type": "string",
+            "example": "My property",
+            "nullable": true
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "magic_link": {
+            "$ref": "#/components/schemas/MagicLink"
+          },
+          "verification_template": {
+            "$ref": "#/components/schemas/VerificationTemplateList"
+          },
+          "external_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          },
+          "units": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UnitList"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "address",
+          "verification_template",
+          "created_at",
+          "updated_at",
+          "units"
+        ]
+      },
+      "CreateAddress": {
+        "type": "object",
+        "properties": {
+          "address1": {
+            "type": "string",
+            "example": "123 Main St"
+          },
+          "address2": {
+            "type": "string",
+            "example": "Apt 123",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "example": "San Francisco"
+          },
+          "state_or_province": {
+            "type": "string",
+            "example": "CA"
+          },
+          "postal_code": {
+            "type": "string",
+            "example": "12345"
+          }
+        },
+        "required": [
+          "address1",
+          "city",
+          "state_or_province",
+          "postal_code"
+        ]
+      },
+      "CreatePropertyUnit": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Unit 1"
+          },
+          "monthly_rent_amount": {
+            "$ref": "#/components/schemas/Money"
+          },
+          "occupied": {
+            "type": "boolean",
+            "example": false
+          },
+          "available_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01"
+          },
+          "external_id": {
+            "type": "string",
+            "example": "123",
+            "nullable": true
+          }
+        },
+        "required": [
+          "title",
+          "occupied"
+        ]
+      },
+      "CreateProperty": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "My property",
+            "nullable": true
+          },
+          "address": {
+            "$ref": "#/components/schemas/CreateAddress"
+          },
+          "verification_template_id": {
+            "type": "string",
+            "example": "1234567890"
+          },
+          "units": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreatePropertyUnit"
+            }
+          },
+          "external_id": {
+            "type": "string",
+            "example": "123",
+            "nullable": true
+          }
+        },
+        "required": [
+          "address"
+        ]
+      },
+      "ForbiddenErrorResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "number",
+            "example": 403
+          },
+          "error": {
+            "type": "string",
+            "example": "Forbidden"
+          }
+        },
+        "required": [
+          "statusCode",
+          "error"
+        ]
+      },
+      "UpdateProperty": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "My property",
+            "nullable": true
+          },
+          "address": {
+            "$ref": "#/components/schemas/CreateAddress"
+          },
+          "verification_template_id": {
+            "type": "string",
+            "example": "1234567890"
+          },
+          "external_id": {
+            "type": "string",
+            "example": "123",
+            "nullable": true
+          }
+        }
+      },
+      "UnitDetail": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "1"
+          },
+          "title": {
+            "type": "string",
+            "example": "Unit 1"
+          },
+          "property_id": {
+            "type": "string",
+            "example": "1"
+          },
+          "monthly_rent_amount": {
+            "$ref": "#/components/schemas/Money"
+          },
+          "occupied": {
+            "type": "boolean",
+            "example": false
+          },
+          "available_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01"
+          },
+          "magic_link": {
+            "$ref": "#/components/schemas/MagicLink"
+          },
+          "external_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "property_id",
+          "occupied",
+          "created_at",
+          "updated_at"
+        ]
+      },
+      "CreateUnit": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Unit 1"
+          },
+          "property_id": {
+            "type": "string",
+            "example": "1"
+          },
+          "monthly_rent_amount": {
+            "$ref": "#/components/schemas/Money"
+          },
+          "occupied": {
+            "type": "boolean",
+            "example": false
+          },
+          "available_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01"
+          },
+          "external_id": {
+            "type": "string",
+            "example": "123",
+            "nullable": true
+          }
+        },
+        "required": [
+          "title",
+          "property_id",
+          "occupied"
+        ]
+      },
+      "UpdateUnit": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Unit 1"
+          },
+          "property_id": {
+            "type": "string",
+            "example": "1"
+          },
+          "monthly_rent_amount": {
+            "$ref": "#/components/schemas/Money"
+          },
+          "occupied": {
+            "type": "boolean",
+            "example": false
+          },
+          "available_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01"
+          },
+          "external_id": {
+            "type": "string",
+            "example": "123",
+            "nullable": true
+          }
+        }
+      },
+      "UpdateMagicLink": {
+        "type": "object",
+        "properties": {
+          "active": {
+            "type": "boolean",
+            "example": true
+          }
+        },
+        "required": [
+          "active"
+        ]
+      },
+      "VerificationProgress": {
+        "type": "object",
+        "properties": {
+          "total_steps": {
+            "type": "number",
+            "example": 10
+          },
+          "filled_steps": {
+            "type": "number",
+            "example": 5
+          }
+        },
+        "required": [
+          "total_steps",
+          "filled_steps"
+        ]
+      },
+      "VerificationList": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "1"
+          },
+          "name": {
+            "type": "string",
+            "example": "identity_verification"
+          },
+          "index": {
+            "type": "number",
+            "example": 1
+          },
+          "editable": {
+            "type": "boolean",
+            "example": true
+          },
+          "progress": {
+            "$ref": "#/components/schemas/VerificationProgress"
+          },
+          "description": {
+            "type": "string",
+            "example": "Verify the identity of the applicant"
+          },
+          "title": {
+            "type": "string",
+            "example": "Identity Verification"
+          },
+          "status": {
+            "type": "string",
+            "example": "pending",
+            "enum": [
+              "pending",
+              "started",
+              "submitted",
+              "failed",
+              "finished",
+              "finished_with_warnings",
+              "verified",
+              "canceled"
+            ]
+          },
+          "completed_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "index",
+          "editable",
+          "progress",
+          "description",
+          "title",
+          "status",
+          "completed_at",
+          "created_at",
+          "updated_at"
+        ]
+      },
+      "ApplicantList": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "1"
+          },
+          "first_name": {
+            "type": "string",
+            "example": "John"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "jd@boompay.app"
+          },
+          "phone": {
+            "type": "string",
+            "example": "1234567890"
+          },
+          "role": {
+            "type": "string",
+            "example": "applicant",
+            "enum": [
+              "applicant",
+              "co_signer"
+            ]
+          },
+          "invited_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "decision_time_in_days": {
+            "type": "number",
+            "example": 3,
+            "nullable": true
+          },
+          "application_status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "started",
+              "finished",
+              "submitted"
+            ],
+            "example": "pending"
+          },
+          "application_started_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "application_finished_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "external_id": {
+            "type": "string",
+            "example": "123",
+            "nullable": true
+          },
+          "verifications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VerificationList"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "first_name",
+          "last_name",
+          "email",
+          "phone",
+          "role",
+          "application_status",
+          "application_started_at",
+          "application_finished_at",
+          "external_id",
+          "verifications"
+        ]
+      },
+      "ApplicantDetails": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "1"
+          },
+          "first_name": {
+            "type": "string",
+            "example": "John"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "jd@boompay.app"
+          },
+          "phone": {
+            "type": "string",
+            "example": "1234567890"
+          },
+          "role": {
+            "type": "string",
+            "example": "applicant",
+            "enum": [
+              "applicant",
+              "co_signer"
+            ]
+          },
+          "invited_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "decision_time_in_days": {
+            "type": "number",
+            "example": 3,
+            "nullable": true
+          },
+          "application_status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "started",
+              "finished",
+              "submitted"
+            ],
+            "example": "pending"
+          },
+          "application_started_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "application_finished_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "external_id": {
+            "type": "string",
+            "example": "123",
+            "nullable": true
+          },
+          "verifications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VerificationList"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "first_name",
+          "last_name",
+          "email",
+          "phone",
+          "role",
+          "application_status",
+          "application_started_at",
+          "application_finished_at",
+          "external_id",
+          "verifications"
+        ]
+      },
+      "ApplicationList": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "1"
+          },
+          "property": {
+            "$ref": "#/components/schemas/PropertyList"
+          },
+          "unit": {
+            "$ref": "#/components/schemas/UnitList"
+          },
+          "score": {
+            "type": "number",
+            "example": 10
+          },
+          "monthly_rent_amount": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ]
+          },
+          "status": {
+            "type": "string",
+            "example": "pending",
+            "enum": [
+              "pending",
+              "started",
+              "submitted",
+              "approved",
+              "approved_with_conditions",
+              "rejected",
+              "canceled"
+            ]
+          },
+          "desired_move_in_date": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "submitted_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "applicants": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApplicantList"
+            }
+          },
+          "recommendation": {
+            "type": "string",
+            "example": "decline",
+            "enum": [
+              "decline"
+            ]
+          },
+          "decision_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2025-02-03T15:55:38.816+00:00",
+            "nullable": true
+          },
+          "decision_time_in_days": {
+            "type": "number",
+            "example": 3,
+            "nullable": true
+          },
+          "grouped_income_rent_ratio": {
+            "type": "number",
+            "example": 0.3,
+            "nullable": true
+          },
+          "listing_rent_amount": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ]
+          },
+
+          "verifications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VerificationList"
+            }
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "property",
+          "unit",
+          "score",
+          "monthly_rent_amount",
+          "status",
+          "desired_move_in_date",
+          "submitted_at",
+          "applicants",
+          "verifications",
+          "created_at",
+          "updated_at"
+        ]
+      },
+      "ApplicationDetail": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "1"
+          },
+          "property": {
+            "$ref": "#/components/schemas/PropertyList"
+          },
+          "unit": {
+            "$ref": "#/components/schemas/UnitList"
+          },
+          "score": {
+            "type": "number",
+            "example": 10
+          },
+          "monthly_rent_amount": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ]
+          },
+          "status": {
+            "type": "string",
+            "example": "pending",
+            "enum": [
+              "pending",
+              "started",
+              "submitted",
+              "approved",
+              "approved_with_conditions",
+              "rejected",
+              "canceled"
+            ]
+          },
+          "desired_move_in_date": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "submitted_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "applicants": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApplicantList"
+            }
+          },
+          "verifications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VerificationList"
+            }
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          },
+          "recommendation": {
+            "type": "string",
+            "example": "decline",
+            "enum": [
+              "decline"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "property",
+          "unit",
+          "score",
+          "monthly_rent_amount",
+          "status",
+          "desired_move_in_date",
+          "submitted_at",
+          "applicants",
+          "verifications",
+          "created_at",
+          "updated_at",
+          "recommendation"
+        ]
+      },
+      "ApproveApplication": {
+        "type": "object",
+        "properties": {
+          "conditions": {
+            "example": [
+              "condition"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "skip_sending_email": {
+            "type": "boolean",
+            "example": false
+          },
+          "email_message": {
+            "type": "string",
+            "example": "email message"
+          },
+          "note_message": {
+            "type": "string",
+            "example": "note message"
+          },
+          "send_applicants_to_pms": {
+            "type": "boolean",
+            "example": false
+          },
+          "conditional_approval": {
+            "type": "boolean",
+            "example": false
+          }
+        }
+      },
+      "RejectApplication": {
+        "type": "object",
+        "properties": {
+          "reasons": {
+            "example": [
+              "reason"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "skip_sending_email": {
+            "type": "boolean",
+            "example": false
+          },
+          "email_message": {
+            "type": "string",
+            "example": "email message"
+          },
+          "note_message": {
+            "type": "string",
+            "example": "note message"
+          }
+        },
+        "required": [
+          "reasons"
+        ]
+      },
+      "RentalApplicationEmergencyContact": {
+        "type": "object",
+        "properties": {
+          "last_name": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "first_name": {
+            "type": "string",
+            "example": "Jane"
+          },
+          "phone_number": {
+            "type": "string",
+            "example": "1234567890"
+          }
+        },
+        "required": [
+          "last_name",
+          "first_name",
+          "phone_number"
+        ]
+      },
+      "RentalApplicationReport": {
+        "type": "object",
+        "properties": {
+          "contact_email": {
+            "type": "string",
+            "example": "John"
+          },
+          "contact_last_name": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "contact_first_name": {
+            "type": "string",
+            "example": "John"
+          },
+          "contact_phone_number": {
+            "type": "string",
+            "example": "1234567890"
+          },
+          "dependents": {
+            "type": "string",
+            "example": "Dependents"
+          },
+          "emergency_contacts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RentalApplicationEmergencyContact"
+            }
+          },
+          "do_you_have_pets": {
+            "type": "string",
+            "example": "Yes"
+          },
+          "do_you_have_vehicles": {
+            "type": "string",
+            "example": "Yes"
+          },
+          "are_you_military_first_responder_teacher": {
+            "type": "string",
+            "example": "Yes"
+          }
+        },
+        "required": [
+          "contact_email",
+          "contact_last_name",
+          "contact_first_name",
+          "contact_phone_number",
+          "dependents",
+          "emergency_contacts",
+          "do_you_have_pets",
+          "do_you_have_vehicles",
+          "are_you_military_first_responder_teacher"
+        ]
+      },
+      "HouseHistoryRent": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string",
+            "example": "123 Main St"
+          },
+          "move_in_date": {
+            "type": "string",
+            "example": "2021-01-01"
+          },
+          "landlord_name": {
+            "type": "string",
+            "example": "Partner"
+          },
+          "landlord_email": {
+            "type": "string",
+            "example": "partner@boompay.app"
+          },
+          "lease_document": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "monthly_payment": {
+            "type": "number",
+            "example": 1000
+          },
+          "current_residence": {
+            "type": "boolean",
+            "example": true
+          },
+          "reason_for_leaving": {
+            "type": "string",
+            "example": "Any"
+          }
+        },
+        "required": [
+          "address",
+          "move_in_date",
+          "landlord_name",
+          "landlord_email",
+          "lease_document",
+          "monthly_payment",
+          "current_residence",
+          "reason_for_leaving"
+        ]
+      },
+      "HouseHistoryAddress": {
+        "type": "object",
+        "properties": {
+          "rent": {
+            "$ref": "#/components/schemas/HouseHistoryRent"
+          },
+          "housing_type": {
+            "type": "string",
+            "example": "Apartment"
+          }
+        },
+        "required": [
+          "rent",
+          "housing_type"
+        ]
+      },
+      "HouseHistoryReport": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HouseHistoryAddress"
+            }
+          },
+          "total_number_of_residences": {
+            "type": "number",
+            "example": 2
+          },
+          "total_months_of_residence": {
+            "type": "number",
+            "example": 24
+          },
+          "average_monthly_payment_amount": {
+            "type": "number",
+            "example": 1000
+          }
+        },
+        "required": [
+          "address",
+          "total_number_of_residences",
+          "total_months_of_residence",
+          "average_monthly_payment_amount"
+        ]
+      },
+      "IdentityVerificationIdNumber": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "ssn"
+          },
+          "value": {
+            "type": "string",
+            "example": "123456789"
+          }
+        },
+        "required": [
+          "type",
+          "value"
+        ]
+      },
+      "Asset": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "example": "https://example.com/image.jpg"
+          },
+          "content_type": {
+            "type": "string",
+            "example": "image/jpeg"
+          },
+          "filename": {
+            "type": "string",
+            "example": "image.jpg"
+          },
+          "size": {
+            "type": "number",
+            "example": 123456
+          },
+          "extension": {
+            "type": "string",
+            "example": "jpg"
+          }
+        },
+        "required": [
+          "url",
+          "content_type",
+          "filename",
+          "size",
+          "extension"
+        ]
+      },
+      "File": {
+        "type": "object",
+        "properties": {
+          "asset": {
+            "$ref": "#/components/schemas/Asset"
+          }
+        },
+        "required": [
+          "asset"
+        ]
+      },
+      "IdentityVerificationDocuments": {
+        "type": "object",
+        "properties": {
+          "face": {
+            "$ref": "#/components/schemas/File"
+          },
+          "original_front": {
+            "$ref": "#/components/schemas/File"
+          },
+          "original_back": {
+            "$ref": "#/components/schemas/File"
+          }
+        },
+        "required": [
+          "face",
+          "original_front",
+          "original_back"
+        ]
+      },
+      "IdentityVerificationReport": {
+        "type": "object",
+        "properties": {
+          "dob": {
+            "type": "string",
+            "example": "1990-01-01"
+          },
+          "zip": {
+            "type": "string",
+            "example": "12345"
+          },
+          "city": {
+            "type": "string",
+            "example": "New York"
+          },
+          "email": {
+            "type": "string",
+            "example": "idv@boompay.app"
+          },
+          "phone": {
+            "type": "string",
+            "example": "1234567890"
+          },
+          "state": {
+            "type": "string",
+            "example": "NY"
+          },
+          "po_box": {
+            "type": "string",
+            "example": "match"
+          },
+          "country": {
+            "type": "string",
+            "example": "US"
+          },
+          "address1": {
+            "type": "string",
+            "example": "123 Main St"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "first_name": {
+            "type": "string",
+            "example": "John"
+          },
+          "dob_summary": {
+            "type": "string",
+            "example": "match"
+          },
+          "ssn_summary": {
+            "type": "string",
+            "example": "match"
+          },
+          "name_summary": {
+            "type": "string",
+            "example": "match"
+          },
+          "phone_summary": {
+            "type": "string",
+            "example": "match"
+          },
+          "address_summary": {
+            "type": "string",
+            "example": "match"
+          },
+          "risk_check_status": {
+            "type": "string",
+            "example": "success"
+          },
+          "ssn": {
+            "type": "string",
+            "example": "123456789"
+          },
+          "id_number": {
+            "$ref": "#/components/schemas/IdentityVerificationIdNumber"
+          },
+          "documents": {
+            "$ref": "#/components/schemas/IdentityVerificationDocuments"
+          }
+        },
+        "required": [
+          "dob",
+          "zip",
+          "city",
+          "email",
+          "phone",
+          "state",
+          "po_box",
+          "country",
+          "address1",
+          "last_name",
+          "first_name",
+          "dob_summary",
+          "ssn_summary",
+          "name_summary",
+          "phone_summary",
+          "address_summary",
+          "risk_check_status",
+          "ssn",
+          "id_number",
+          "documents"
+        ]
+      },
+      "EvictionReportResult": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string",
+            "example": "123 Main St"
+          },
+          "city": {
+            "type": "string",
+            "example": "New York"
+          },
+          "state": {
+            "type": "string",
+            "example": "NY"
+          },
+          "zip": {
+            "type": "string",
+            "example": "12345"
+          },
+          "court": {
+            "type": "string",
+            "example": "Court"
+          },
+          "case_number": {
+            "type": "string",
+            "example": "123456"
+          },
+          "plaintiff": {
+            "type": "string",
+            "example": "Property"
+          },
+          "notice_type": {
+            "type": "string",
+            "example": "Type",
+            "nullable": true
+          },
+          "filling_date": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z"
+          },
+          "judgement_date": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z"
+          },
+          "judgement_amount": {
+            "description": "Judgement amount",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ]
+          },
+          "judgement": {
+            "type": "string",
+            "example": "Judgement"
+          }
+        },
+        "required": [
+          "address",
+          "city",
+          "state",
+          "zip",
+          "court",
+          "case_number",
+          "plaintiff",
+          "notice_type",
+          "filling_date",
+          "judgement_date",
+          "judgement_amount",
+          "judgement"
+        ]
+      },
+      "EvictionReport": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Request Processed Successfully"
+          },
+          "consumer_statement": {
+            "type": "string",
+            "example": "Statement of the consumer",
+            "nullable": true
+          },
+          "results": {
+            "description": "Eviction report results",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EvictionReportResult"
+            }
+          }
+        },
+        "required": [
+          "message",
+          "consumer_statement",
+          "results"
+        ]
+      },
+      "CriminalReportSubject": {
+        "type": "object",
+        "properties": {
+          "full_name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "image_url": {
+            "type": "string",
+            "example": "https://www.example.com/image.png"
+          },
+          "dob": {
+            "type": "string",
+            "example": "1990-01-01T00:00:00.000Z\"",
+            "nullable": true
+          },
+          "sex": {
+            "type": "string",
+            "example": "Male",
+            "nullable": true
+          },
+          "hair_color": {
+            "type": "string",
+            "example": "Brown",
+            "nullable": true
+          },
+          "eye_color": {
+            "type": "string",
+            "example": "Brown",
+            "nullable": true
+          },
+          "height": {
+            "type": "string",
+            "example": "6 feet",
+            "nullable": true
+          },
+          "weight": {
+            "type": "string",
+            "example": "200 lbs",
+            "nullable": true
+          },
+          "race": {
+            "type": "string",
+            "example": "BROWN",
+            "nullable": true
+          },
+          "age": {
+            "type": "string",
+            "example": "30",
+            "nullable": true
+          },
+          "military_service": {
+            "type": "string",
+            "example": "US Army",
+            "nullable": true
+          },
+          "scars_marks": {
+            "type": "string",
+            "example": "Scar on left cheek",
+            "nullable": true
+          },
+          "alias": {
+            "type": "string",
+            "example": "JD",
+            "nullable": true
+          },
+          "source": {
+            "type": "string",
+            "example": "FL DEPT OF CORRECTIONS- INMATE"
+          },
+          "address": {
+            "type": "string",
+            "example": "123 Main St",
+            "nullable": true
+          },
+          "category": {
+            "type": "string",
+            "example": "CRIMINAL"
+          }
+        },
+        "required": [
+          "full_name",
+          "image_url",
+          "dob",
+          "sex",
+          "hair_color",
+          "eye_color",
+          "height",
+          "weight",
+          "race",
+          "age",
+          "military_service",
+          "scars_marks",
+          "alias",
+          "source",
+          "address",
+          "category"
+        ]
+      },
+      "CriminalReportCaseDetails": {
+        "type": "object",
+        "properties": {
+          "case_number": {
+            "type": "string",
+            "example": "123456"
+          },
+          "state": {
+            "type": "string",
+            "example": "2020-01-01"
+          },
+          "jurisdiction": {
+            "type": "string",
+            "example": "Jurisdiction",
+            "nullable": true
+          },
+          "comments": {
+            "type": "string",
+            "example": "Comment",
+            "nullable": true
+          }
+        },
+        "required": [
+          "case_number",
+          "state",
+          "jurisdiction",
+          "comments"
+        ]
+      },
+      "CriminalReportOffense": {
+        "type": "object",
+        "properties": {
+          "court": {
+            "type": "string",
+            "example": "Court",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "example": "Status",
+            "nullable": true
+          },
+          "filing_date": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "case_type": {
+            "type": "string",
+            "example": "Type",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "example": "Description",
+            "nullable": true
+          },
+          "disposition": {
+            "type": "string",
+            "example": "Disposition",
+            "nullable": true
+          },
+          "disposition_date": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "offense_code": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
+          },
+          "offense_date": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "statute": {
+            "type": "string",
+            "example": "Statute",
+            "nullable": true
+          },
+          "commitment_location": {
+            "type": "string",
+            "example": "Location",
+            "nullable": true
+          },
+          "commitment_state": {
+            "type": "string",
+            "example": "State",
+            "nullable": true
+          },
+          "commitment_date": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "release_date": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "conviction_date": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "conviction_location": {
+            "type": "string",
+            "example": "Location",
+            "nullable": true
+          },
+          "sentence_length": {
+            "type": "string",
+            "example": "Length",
+            "nullable": true
+          }
+        },
+        "required": [
+          "court",
+          "status",
+          "filing_date",
+          "case_type",
+          "description",
+          "disposition",
+          "disposition_date",
+          "offense_code",
+          "offense_date",
+          "statute",
+          "commitment_location",
+          "commitment_state",
+          "commitment_date",
+          "release_date",
+          "conviction_date",
+          "conviction_location",
+          "sentence_length"
+        ]
+      },
+      "CriminalReportResult": {
+        "type": "object",
+        "properties": {
+          "subject": {
+            "description": "Subject details",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CriminalReportSubject"
+              }
+            ]
+          },
+          "case_details": {
+            "description": "Case details",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CriminalReportCaseDetails"
+              }
+            ]
+          },
+          "offenses": {
+            "description": "List of offenses",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CriminalReportOffense"
+            }
+          }
+        },
+        "required": [
+          "subject",
+          "case_details",
+          "offenses"
+        ]
+      },
+      "CriminalReport": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Request Results"
+          },
+          "disclaimer": {
+            "type": "string",
+            "nullable": true,
+            "example": "Disclaimer"
+          },
+          "consumer_statement": {
+            "type": "string",
+            "nullable": true,
+            "example": "Statement of the consumer"
+          },
+          "results": {
+            "description": "Criminal report results",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CriminalReportResult"
+            }
+          }
+        },
+        "required": [
+          "message",
+          "disclaimer",
+          "consumer_statement",
+          "results"
+        ]
+      },
+      "CreditReportHitCode": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "1",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "example": "Hit",
+            "nullable": true
+          }
+        },
+        "required": [
+          "code",
+          "description"
+        ]
+      },
+      "CreditReportPersonalData": {
+        "type": "object",
+        "properties": {
+          "full_name": {
+            "type": "string",
+            "example": "John Doe",
+            "nullable": true
+          },
+          "ssn": {
+            "type": "string",
+            "example": "123456789",
+            "nullable": true
+          },
+          "file_pulled": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "customer_number": {
+            "type": "string",
+            "example": "123456789"
+          },
+          "dob": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          }
+        },
+        "required": [
+          "full_name",
+          "ssn",
+          "file_pulled",
+          "customer_number",
+          "dob"
+        ]
+      },
+      "CreditReportNarrativeCode": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "N",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "example": "Narrative Code",
+            "nullable": true
+          }
+        },
+        "required": [
+          "code",
+          "description"
+        ]
+      },
+      "CreditReportBankruptcyDetail": {
+        "type": "object",
+        "properties": {
+          "date_filed": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "date_reported": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "filer": {
+            "type": "string",
+            "example": "Filer",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "example": "Type",
+            "nullable": true
+          },
+          "industry_code": {
+            "type": "string",
+            "example": "Industry code",
+            "nullable": true
+          },
+          "narrative_codes": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreditReportNarrativeCode"
+            }
+          },
+          "case_number": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
+          },
+          "customer_number": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
+          },
+          "disposition": {
+            "type": "string",
+            "example": "Disposition",
+            "nullable": true
+          },
+          "current_intent_or_disposition_code": {
+            "type": "string",
+            "example": "Disposition code",
+            "nullable": true
+          },
+          "current_disposition_date": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "prior_intent_or_disposition_code": {
+            "type": "string",
+            "example": "Disposition",
+            "nullable": true
+          }
+        },
+        "required": [
+          "date_filed",
+          "date_reported",
+          "filer",
+          "type",
+          "industry_code",
+          "narrative_codes",
+          "case_number",
+          "customer_number",
+          "disposition",
+          "current_intent_or_disposition_code",
+          "current_disposition_date",
+          "prior_intent_or_disposition_code"
+        ]
+      },
+      "CreditReportInquiry": {
+        "type": "object",
+        "properties": {
+          "inquirer": {
+            "type": "string",
+            "example": "Inquirer",
+            "nullable": true
+          },
+          "date": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          }
+        },
+        "required": [
+          "inquirer",
+          "date"
+        ]
+      },
+      "CreditReportConsumerInformation": {
+        "type": "object",
+        "properties": {
+          "other_names": {
+            "examples": [
+              "John Doe",
+              "JD"
+            ],
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "death_date": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "address1": {
+            "type": "string",
+            "example": "123 Main St",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "example": "New York",
+            "nullable": true
+          },
+          "state": {
+            "type": "string",
+            "example": "NY",
+            "nullable": true
+          },
+          "zip": {
+            "type": "string",
+            "example": "12345",
+            "nullable": true
+          },
+          "address_variance_indicator": {
+            "type": "string",
+            "example": "Variance Indicator",
+            "nullable": true
+          },
+          "current_phone_number": {
+            "type": "string",
+            "example": "(504) 113-1705",
+            "nullable": true
+          },
+          "date_reported_address": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "date_reported_phone_number": {
+            "type": "string",
+            "example": "(504) 113-1705",
+            "nullable": true
+          },
+          "ssn_status": {
+            "type": "string",
+            "example": "Status",
+            "nullable": true
+          },
+          "ssn_match": {
+            "type": "boolean",
+            "example": true,
+            "nullable": true
+          },
+          "ssn_match_flags": {
+            "type": "string",
+            "example": "Match Flags",
+            "nullable": true
+          },
+          "issue_date": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "issue_state": {
+            "type": "string",
+            "example": "NY",
+            "nullable": true
+          },
+          "date_file_established": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "date_most_recent_activity": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          }
+        },
+        "required": [
+          "other_names",
+          "death_date",
+          "address1",
+          "city",
+          "state",
+          "zip",
+          "address_variance_indicator",
+          "current_phone_number",
+          "date_reported_address",
+          "date_reported_phone_number",
+          "ssn_status",
+          "ssn_match",
+          "ssn_match_flags",
+          "issue_date",
+          "issue_state",
+          "date_file_established",
+          "date_most_recent_activity"
+        ]
+      },
+      "CreditReportStatus": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "S",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "example": "Status",
+            "nullable": true
+          }
+        },
+        "required": [
+          "code",
+          "description"
+        ]
+      },
+      "CreditReportCollection": {
+        "type": "object",
+        "properties": {
+          "industry_code": {
+            "type": "string",
+            "example": "Collection Agency",
+            "nullable": true
+          },
+          "customer_number": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
+          },
+          "account_number": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
+          },
+          "client_name": {
+            "type": "string",
+            "example": "Original Creditor",
+            "nullable": true
+          },
+          "status": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CreditReportStatus"
+              }
+            ]
+          },
+          "narrative_codes": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreditReportNarrativeCode"
+            }
+          },
+          "date_reported": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "original_amount": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ]
+          },
+          "balance": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ]
+          }
+        },
+        "required": [
+          "industry_code",
+          "customer_number",
+          "account_number",
+          "client_name",
+          "status",
+          "narrative_codes",
+          "date_reported",
+          "original_amount",
+          "balance"
+        ]
+      },
+      "CreditReportEmploymentInformation": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "Current",
+            "nullable": true
+          },
+          "occupation": {
+            "type": "string",
+            "example": "Occupation",
+            "nullable": true
+          },
+          "employer": {
+            "type": "string",
+            "example": "Employer",
+            "nullable": true
+          },
+          "date_last_reported": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "date_first_reported": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          }
+        },
+        "required": [
+          "status",
+          "occupation",
+          "employer",
+          "date_last_reported",
+          "date_first_reported"
+        ]
+      },
+      "CreditReportAccountOwner": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "O",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "example": "Owner",
+            "nullable": true
+          }
+        },
+        "required": [
+          "code",
+          "description"
+        ]
+      },
+      "CreditReportAccountType": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "C",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "example": "Credit",
+            "nullable": true
+          }
+        },
+        "required": [
+          "code",
+          "description"
+        ]
+      },
+      "CreditReportRate": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "number",
+            "example": "R",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "example": "Rate",
+            "nullable": true
+          }
+        },
+        "required": [
+          "code",
+          "description"
+        ]
+      },
+      "CreditReportTermsDuration": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "T",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "example": "Terms of duration",
+            "nullable": true
+          }
+        },
+        "required": [
+          "code",
+          "description"
+        ]
+      },
+      "CreditReportTermsFrequency": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "T",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "example": "Terms of frequency",
+            "nullable": true
+          }
+        },
+        "required": [
+          "code",
+          "description"
+        ]
+      },
+      "CreditorClassification": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "1",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "example": "Credit classification",
+            "nullable": true
+          }
+        },
+        "required": [
+          "code",
+          "description"
+        ]
+      },
+      "CreditReportPaymentHistory": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "P"
+          },
+          "description": {
+            "type": "string",
+            "example": "Payment History",
+            "nullable": true
+          }
+        },
+        "required": [
+          "code",
+          "description"
+        ]
+      },
+      "CreditReportAccountOverview": {
+        "type": "object",
+        "properties": {
+          "account_number": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
+          },
+          "account_name": {
+            "type": "string",
+            "example": "Account Name",
+            "nullable": true
+          },
+          "account_owner": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CreditReportAccountOwner"
+              }
+            ]
+          },
+          "account_type": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CreditReportAccountType"
+              }
+            ]
+          },
+          "balance": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ]
+          },
+          "high_credit": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ]
+          },
+          "credit_limit": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ]
+          },
+          "scheduled_payment_amount": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ]
+          },
+          "months_reviewed": {
+            "type": "string",
+            "example": "24",
+            "nullable": true
+          },
+          "rate": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CreditReportRate"
+              }
+            ]
+          },
+          "date_opened": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "date_reported": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "date_closed": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "charge_off_amount": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ]
+          },
+          "last_activity_date": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "narrative_codes": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreditReportNarrativeCode"
+            }
+          },
+          "ballon_payment_amount": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ]
+          },
+          "ballon_payment_date": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "past_due_amount": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ]
+          },
+          "actual_payment_amount": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ]
+          },
+          "last_payment_date": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "terms_duration": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CreditReportTermsDuration"
+              }
+            ]
+          },
+          "terms_frequency": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CreditReportTermsFrequency"
+              }
+            ]
+          },
+          "deferred_payment_start": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "previous_high_rate_one": {
+            "type": "number",
+            "nullable": true,
+            "example": 10
+          },
+          "previous_high_rate_two": {
+            "type": "number",
+            "nullable": true,
+            "example": 10
+          },
+          "previous_high_date_one": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "previous_high_date_two": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "date_major_first_delinquency_reported": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "thirty_days_delinquency": {
+            "type": "number",
+            "example": 1,
+            "nullable": true
+          },
+          "sixty_days_delinquency": {
+            "type": "number",
+            "example": 1,
+            "nullable": true
+          },
+          "ninety_days_delinquency": {
+            "type": "number",
+            "example": 1,
+            "nullable": true
+          },
+          "creditor_classification": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CreditorClassification"
+              }
+            ]
+          },
+          "original_creditor_name": {
+            "type": "string",
+            "example": "Creditor",
+            "nullable": true
+          },
+          "payment_history": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreditReportPaymentHistory"
+            }
+          }
+        },
+        "required": [
+          "account_number",
+          "account_name",
+          "account_owner",
+          "account_type",
+          "balance",
+          "high_credit",
+          "credit_limit",
+          "scheduled_payment_amount",
+          "months_reviewed",
+          "rate",
+          "date_opened",
+          "date_reported",
+          "date_closed",
+          "charge_off_amount",
+          "last_activity_date",
+          "narrative_codes",
+          "ballon_payment_amount",
+          "ballon_payment_date",
+          "past_due_amount",
+          "actual_payment_amount",
+          "last_payment_date",
+          "terms_duration",
+          "terms_frequency",
+          "deferred_payment_start",
+          "previous_high_rate_one",
+          "previous_high_rate_two",
+          "previous_high_date_one",
+          "previous_high_date_two",
+          "date_major_first_delinquency_reported",
+          "thirty_days_delinquency",
+          "sixty_days_delinquency",
+          "ninety_days_delinquency",
+          "creditor_classification",
+          "original_creditor_name",
+          "payment_history"
+        ]
+      },
+      "CreditReportHistoricalConsumerInformation": {
+        "type": "object",
+        "properties": {
+          "address1": {
+            "type": "string",
+            "example": "123 Main St",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "example": "New York",
+            "nullable": true
+          },
+          "state": {
+            "type": "string",
+            "example": "NY",
+            "nullable": true
+          },
+          "zip": {
+            "type": "string",
+            "example": "12345",
+            "nullable": true
+          },
+          "date_first_reported": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "date_last_reported": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "example": "Type",
+            "nullable": true
+          }
+        },
+        "required": [
+          "address1",
+          "city",
+          "state",
+          "zip",
+          "date_first_reported",
+          "date_last_reported",
+          "type"
+        ]
+      },
+      "CreditReportConsumerStatement": {
+        "type": "object",
+        "properties": {
+          "statement": {
+            "type": "string",
+            "example": "Statement of the consumer",
+            "nullable": true
+          },
+          "date_reported": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "date_purged": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          }
+        },
+        "required": [
+          "statement",
+          "date_reported",
+          "date_purged"
+        ]
+      },
+      "CreditReportType": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "T",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "example": "Type",
+            "nullable": true
+          }
+        },
+        "required": [
+          "code",
+          "description"
+        ]
+      },
+      "CreditReportAlertContact": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CreditReportType"
+              }
+            ]
+          },
+          "date_reported": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "date_effective": {
+            "type": "string",
+            "example": "2020-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "example": "Status",
+            "nullable": true
+          },
+          "phone_numbers": {
+            "examples": [
+              "(504) 113-1705",
+              "(504) 113-1705"
+            ],
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "address": {
+            "type": "string",
+            "example": "123 Main St",
+            "nullable": true
+          }
+        },
+        "required": [
+          "type",
+          "date_reported",
+          "date_effective",
+          "status",
+          "phone_numbers",
+          "address"
+        ]
+      },
+      "CreditReportAlertsAndTriggers": {
+        "type": "object",
+        "properties": {
+          "fraud_victim_indicator": {
+            "type": "string",
+            "example": "Fraud Victim Indicator",
+            "nullable": true
+          },
+          "address_discrepancy_indicator": {
+            "type": "string",
+            "example": "Address Discrepancy Indicator",
+            "nullable": true
+          },
+          "alert_contacts": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreditReportAlertContact"
+            }
+          }
+        },
+        "required": [
+          "fraud_victim_indicator",
+          "address_discrepancy_indicator",
+          "alert_contacts"
+        ]
+      },
+      "CreditReport": {
+        "type": "object",
+        "properties": {
+          "score": {
+            "type": "number",
+            "example": 700,
+            "nullable": true
+          },
+          "hit_code": {
+            "$ref": "#/components/schemas/CreditReportHitCode"
+          },
+          "personal_data": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CreditReportPersonalData"
+              }
+            ]
+          },
+          "bankruptcy_details": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreditReportBankruptcyDetail"
+            }
+          },
+          "credit_inquiries": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreditReportInquiry"
+            }
+          },
+          "consumer_information": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CreditReportConsumerInformation"
+              }
+            ]
+          },
+          "collections": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreditReportCollection"
+            }
+          },
+          "employment_information": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreditReportEmploymentInformation"
+            }
+          },
+          "account_overview": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreditReportAccountOverview"
+            }
+          },
+          "historical_consumer_information": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreditReportHistoricalConsumerInformation"
+            }
+          },
+          "consumer_statements": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreditReportConsumerStatement"
+            }
+          },
+          "alerts_and_triggers": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CreditReportAlertsAndTriggers"
+              }
+            ]
+          }
+        },
+        "required": [
+          "score",
+          "hit_code",
+          "personal_data",
+          "bankruptcy_details",
+          "credit_inquiries",
+          "consumer_information",
+          "collections",
+          "employment_information",
+          "account_overview",
+          "historical_consumer_information",
+          "consumer_statements",
+          "alerts_and_triggers"
+        ]
+      },
+      "IncomeVerificationSupervisor": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "jd@boompay.app"
+          },
+          "phone": {
+            "type": "string",
+            "example": "1234567890"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "first_name": {
+            "type": "string",
+            "example": "John"
+          }
+        },
+        "required": [
+          "email",
+          "phone",
+          "last_name",
+          "first_name"
+        ]
+      },
+      "IncomeVerificationPreTaxIncome": {
+        "type": "object",
+        "properties": {
+          "income_type": {
+            "type": "Type"
+          },
+          "income_amount": {
+            "type": "number",
+            "example": 1000
+          }
+        },
+        "required": [
+          "income_type",
+          "income_amount"
+        ]
+      },
+      "IncomeVerificationMethod": {
+        "type": "object",
+        "properties": {
+          "pay_stub_files": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/File"
+            }
+          },
+          "verification_type": {
+            "type": "string",
+            "example": "Paystub"
+          }
+        },
+        "required": [
+          "pay_stub_files",
+          "verification_type"
+        ]
+      },
+      "IncomeVerificationEmployment": {
+        "type": "object",
+        "properties": {
+          "job_title": {
+            "type": "string",
+            "example": "Software Engineer"
+          },
+          "start_date": {
+            "type": "string",
+            "example": "2021-01-01"
+          },
+          "supervisor": {
+            "$ref": "#/components/schemas/IncomeVerificationSupervisor"
+          },
+          "company_name": {
+            "type": "string",
+            "example": "BoomPay"
+          },
+          "current_income": {
+            "type": "boolean",
+            "example": true
+          },
+          "pre_tax_income": {
+            "$ref": "#/components/schemas/IncomeVerificationPreTaxIncome"
+          },
+          "verification_method": {
+            "$ref": "#/components/schemas/IncomeVerificationMethod"
+          }
+        },
+        "required": [
+          "job_title",
+          "start_date",
+          "supervisor",
+          "company_name",
+          "current_income",
+          "pre_tax_income",
+          "verification_method"
+        ]
+      },
+      "IncomeVerificationIncomeSource": {
+        "type": "object",
+        "properties": {
+          "employment": {
+            "$ref": "#/components/schemas/IncomeVerificationEmployment"
+          },
+          "income_source": {
+            "type": "string",
+            "example": "Employment"
+          },
+          "monthly_income": {
+            "$ref": "#/components/schemas/Money"
+          }
+        },
+        "required": [
+          "employment",
+          "income_source",
+          "monthly_income"
+        ]
+      },
+      "IncomeVerificationReport": {
+        "type": "object",
+        "properties": {
+          "income_sources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IncomeVerificationIncomeSource"
+            }
+          },
+          "do_you_have_source_of_income": {
+            "type": "string",
+            "example": "Yes"
+          },
+          "current_income": {
+            "$ref": "#/components/schemas/Money"
+          },
+          "income_to_rent_ratio": {
+            "type": "number",
+            "example": 1.5
+          }
+        },
+        "required": [
+          "income_sources",
+          "do_you_have_source_of_income",
+          "current_income",
+          "income_to_rent_ratio"
+        ]
+      },
+      "BankIncomeTotalAmount": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "example": 1000
+          },
+          "iso_currency_code": {
+            "type": "string",
+            "example": "USD"
+          },
+          "unofficial_currency_code": {
+            "type": "object",
+            "example": "USD"
+          }
+        },
+        "required": [
+          "amount",
+          "iso_currency_code",
+          "unofficial_currency_code"
+        ]
+      },
+      "VerifiedTransaction": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "example": "2021-01-01"
+          },
+          "name": {
+            "type": "string",
+            "example": "Transaction"
+          },
+          "amount": {
+            "$ref": "#/components/schemas/Money"
+          },
+          "check_number": {
+            "type": "string",
+            "example": "123"
+          },
+          "transaction_id": {
+            "type": "string",
+            "example": "123"
+          },
+          "iso_currency_code": {
+            "type": "string",
+            "example": "USD"
+          },
+          "original_description": {
+            "type": "string",
+            "example": "This is a description"
+          },
+          "unofficial_currency_code": {
+            "type": "object",
+            "example": "USD"
+          }
+        },
+        "required": [
+          "date",
+          "name",
+          "amount",
+          "check_number",
+          "transaction_id",
+          "iso_currency_code",
+          "original_description",
+          "unofficial_currency_code"
+        ]
+      },
+      "VerifiedHistoricalSummary": {
+        "type": "object",
+        "properties": {
+          "end_date": {
+            "type": "string",
+            "example": "2021-01-01"
+          },
+          "start_date": {
+            "type": "string",
+            "example": "2021-01-01"
+          },
+          "iso_currency_code": {
+            "type": "string",
+            "example": "USD"
+          },
+          "unofficial_currency_code": {
+            "type": "string",
+            "example": "USD"
+          },
+          "total_amount": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BankIncomeTotalAmount"
+              }
+            ]
+          },
+          "transactions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VerifiedTransaction"
+            }
+          },
+          "total_amounts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BankIncomeTotalAmount"
+            }
+          }
+        },
+        "required": [
+          "end_date",
+          "start_date",
+          "iso_currency_code",
+          "unofficial_currency_code",
+          "total_amount",
+          "transactions",
+          "total_amounts"
+        ]
+      },
+      "VerifiedContactData": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "string",
+            "example": "Value"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "VerifiedBankOwner": {
+        "type": "object",
+        "properties": {
+          "names": {
+            "example": [
+              "John",
+              "Doe"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "emails": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VerifiedContactData"
+            }
+          },
+          "addresses": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VerifiedContactData"
+            }
+          },
+          "phone_numbers": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VerifiedContactData"
+            }
+          }
+        },
+        "required": [
+          "names",
+          "emails",
+          "addresses",
+          "phone_numbers"
+        ]
+      },
+      "VerifiedBankIncomeSource": {
+        "type": "object",
+        "properties": {
+          "end_date": {
+            "type": "string",
+            "example": "2021-01-01"
+          },
+          "account_id": {
+            "type": "string",
+            "example": "123"
+          },
+          "start_date": {
+            "type": "string",
+            "example": "2021-01-01"
+          },
+          "total_amount": {
+            "$ref": "#/components/schemas/BankIncomeTotalAmount"
+          },
+          "pay_frequency": {
+            "type": "string",
+            "example": "MONTHLY"
+          },
+          "income_category": {
+            "type": "string",
+            "example": "SALARY"
+          },
+          "income_source_id": {
+            "type": "string",
+            "example": "123"
+          },
+          "transaction_count": {
+            "type": "number",
+            "example": 10
+          },
+          "historical_summary": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VerifiedHistoricalSummary"
+            }
+          },
+          "income_description": {
+            "type": "string",
+            "example": "Description"
+          },
+          "mask": {
+            "type": "string",
+            "example": "1234"
+          },
+          "name": {
+            "type": "string",
+            "example": "Checking"
+          },
+          "type": {
+            "type": "string",
+            "example": "Bank"
+          },
+          "owners": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VerifiedBankOwner"
+            }
+          },
+          "subtype": {
+            "type": "string",
+            "example": "Checking"
+          },
+          "official_name": {
+            "type": "string",
+            "example": "Name"
+          },
+          "past_three_months_avg": {
+            "$ref": "#/components/schemas/Money"
+          }
+        },
+        "required": [
+          "end_date",
+          "account_id",
+          "start_date",
+          "total_amount",
+          "pay_frequency",
+          "income_category",
+          "income_source_id",
+          "transaction_count",
+          "historical_summary",
+          "income_description",
+          "mask",
+          "name",
+          "type",
+          "owners",
+          "subtype",
+          "official_name",
+          "past_three_months_avg"
+        ]
+      },
+      "VerifiedBankIncomeAccount": {
+        "type": "object",
+        "properties": {
+          "mask": {
+            "type": "string",
+            "example": "1234"
+          },
+          "name": {
+            "type": "string",
+            "example": "Checking"
+          },
+          "type": {
+            "type": "string",
+            "example": "Bank"
+          },
+          "owners": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VerifiedBankOwner"
+            }
+          },
+          "subtype": {
+            "type": "string",
+            "example": "Checking"
+          },
+          "account_id": {
+            "type": "string",
+            "example": "123"
+          },
+          "official_name": {
+            "type": "string",
+            "example": "Name"
+          }
+        },
+        "required": [
+          "mask",
+          "name",
+          "type",
+          "owners",
+          "subtype",
+          "account_id",
+          "official_name"
+        ]
+      },
+      "VerifiedInstitutionMetadata": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "example": "https://example.com"
+          },
+          "logo": {
+            "type": "string",
+            "example": "base64content"
+          },
+          "name": {
+            "type": "string",
+            "example": "Bank"
+          },
+          "status": {
+            "type": "string",
+            "example": "status"
+          },
+          "institution_id": {
+            "type": "string",
+            "example": "123"
+          },
+          "routing_numbers": {
+            "example": [
+              "123"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "url",
+          "logo",
+          "name",
+          "status",
+          "institution_id",
+          "routing_numbers"
+        ]
+      },
+      "VerifiedIncomeItem": {
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "example": "123"
+          },
+          "institution_id": {
+            "type": "string",
+            "example": "123"
+          },
+          "institution_name": {
+            "type": "string",
+            "example": "Bank"
+          },
+          "bank_income_sources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VerifiedBankIncomeSource"
+            }
+          },
+          "bank_income_accounts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VerifiedBankIncomeAccount"
+            }
+          },
+          "institution_metadata": {
+            "$ref": "#/components/schemas/VerifiedInstitutionMetadata"
+          }
+        },
+        "required": [
+          "item_id",
+          "institution_id",
+          "institution_name",
+          "bank_income_sources",
+          "bank_income_accounts",
+          "institution_metadata"
+        ]
+      },
+      "VerifiedBankIncomeSummary": {
+        "type": "object",
+        "properties": {
+          "end_date": {
+            "type": "string",
+            "example": "2021-01-01"
+          },
+          "start_date": {
+            "type": "string",
+            "example": "2021-01-01"
+          },
+          "total_amount": {
+            "type": "number",
+            "example": 1000
+          },
+          "total_amounts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BankIncomeTotalAmount"
+            }
+          },
+          "iso_currency_code": {
+            "type": "string",
+            "example": "USD"
+          },
+          "historical_summary": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VerifiedHistoricalSummary"
+            }
+          },
+          "income_sources_count": {
+            "type": "number",
+            "example": 1
+          },
+          "income_categories_count": {
+            "type": "number",
+            "example": 1
+          },
+          "unofficial_currency_code": {
+            "type": "string",
+            "example": "USD"
+          },
+          "income_transactions_count": {
+            "type": "number",
+            "example": 1
+          }
+        },
+        "required": [
+          "end_date",
+          "start_date",
+          "total_amount",
+          "total_amounts",
+          "iso_currency_code",
+          "historical_summary",
+          "income_sources_count",
+          "income_categories_count",
+          "unofficial_currency_code",
+          "income_transactions_count"
+        ]
+      },
+      "VerifiedBankIncome": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VerifiedIncomeItem"
+            }
+          },
+          "bank_income_id": {
+            "type": "string",
+            "example": "123"
+          },
+          "days_requested": {
+            "type": "number",
+            "example": 365
+          },
+          "bank_income_summary": {
+            "$ref": "#/components/schemas/VerifiedBankIncomeSummary"
+          },
+          "historical_summary": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VerifiedHistoricalSummary"
+            }
+          }
+        },
+        "required": [
+          "items",
+          "bank_income_id",
+          "days_requested",
+          "bank_income_summary",
+          "historical_summary"
+        ]
+      },
+      "VerifiedIncomeVerificationReport": {
+        "type": "object",
+        "properties": {
+          "income_source_type": {
+            "type": "string",
+            "example": "Bank"
+          },
+          "flow_types": {
+            "example": [
+              "payroll_digital_income"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "monthly_rent_amount": {
+            "$ref": "#/components/schemas/Money"
+          },
+          "start_date": {
+            "type": "string",
+            "example": "2021-01-01"
+          },
+          "end_date": {
+            "type": "string",
+            "example": "2021-01-01"
+          },
+          "bank_income": {
+            "$ref": "#/components/schemas/VerifiedBankIncome"
+          },
+          "income_count": {
+            "type": "number",
+            "example": 1
+          },
+          "past_three_months_avg": {
+            "$ref": "#/components/schemas/Money"
+          },
+          "income_to_rent_ratio": {
+            "type": "number",
+            "example": 1.5
+          }
+        },
+        "required": [
+          "income_source_type",
+          "flow_types",
+          "monthly_rent_amount",
+          "start_date",
+          "end_date",
+          "bank_income",
+          "income_count",
+          "past_three_months_avg",
+          "income_to_rent_ratio"
+        ]
+      },
+      "VerificationDetail": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "1"
+          },
+          "name": {
+            "type": "string",
+            "example": "identity_verification"
+          },
+          "index": {
+            "type": "number",
+            "example": 1
+          },
+          "editable": {
+            "type": "boolean",
+            "example": true
+          },
+          "progress": {
+            "$ref": "#/components/schemas/VerificationProgress"
+          },
+          "description": {
+            "type": "string",
+            "example": "Verify the identity of the applicant"
+          },
+          "title": {
+            "type": "string",
+            "example": "Identity Verification"
+          },
+          "status": {
+            "type": "string",
+            "example": "pending",
+            "enum": [
+              "pending",
+              "started",
+              "submitted",
+              "failed",
+              "finished",
+              "finished_with_warnings",
+              "verified",
+              "canceled"
+            ]
+          },
+          "completed_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          },
+          "report": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RentalApplicationReport"
+              },
+              {
+                "$ref": "#/components/schemas/HouseHistoryReport"
+              },
+              {
+                "$ref": "#/components/schemas/IdentityVerificationReport"
+              },
+              {
+                "$ref": "#/components/schemas/EvictionReport"
+              },
+              {
+                "$ref": "#/components/schemas/CriminalReport"
+              },
+              {
+                "$ref": "#/components/schemas/CreditReport"
+              },
+              {
+                "$ref": "#/components/schemas/IncomeVerificationReport"
+              },
+              {
+                "$ref": "#/components/schemas/VerifiedIncomeVerificationReport"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "index",
+          "editable",
+          "progress",
+          "description",
+          "title",
+          "status",
+          "completed_at",
+          "created_at",
+          "updated_at",
+          "report"
+        ]
+      },
+      "AdditionalDocument": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "123"
+          },
+          "document_type": {
+            "type": "string",
+            "example": "document_type"
+          },
+          "asset_url": {
+            "type": "string",
+            "example": "asset_url"
+          },
+          "asset_name": {
+            "type": "string",
+            "example": "asset_name"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          },
+          "uploaded_by": {
+            "type": "string",
+            "example": "uploaded_by"
+          }
+        },
+        "required": [
+          "id",
+          "document_type",
+          "asset_url",
+          "asset_name",
+          "created_at",
+          "updated_at",
+          "uploaded_by"
+        ]
+      },
+      "OverrideIdentityVerification": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    }
+  }
+}

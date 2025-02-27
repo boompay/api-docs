@@ -1,0 +1,1779 @@
+{
+  "info": {
+    "title": "Boom Report API",
+    "version": "1.0.0"
+  },
+  "swagger": "2.0",
+  "produces": [
+    "application/xml",
+    "application/json",
+    "application/octet-stream",
+    "text/plain"
+  ],
+  "securityDefinitions": {
+    "partner_jwt_token": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "Enter the token with the `Bearer: ` prefix, e.g. \"Bearer zxckvarest\""
+    }
+  },
+  "host": "api.sandbox.boompay.app",
+  "tags": [
+    {
+      "name": "Authenticate",
+      "description": "Authentication endpoints"
+    },
+    {
+      "name": "Customers",
+      "description": "Endpoints to manage customers"
+    },
+    {
+      "name": "Enrollments",
+      "description": "Endpoints to manage Enrollments"
+    }
+  ],
+  "paths": {
+    "/partner/v1/customers": {
+      "post": {
+        "description": "Create customer for partner",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "first_name",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "last_name",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "phone",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "email",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "dob",
+            "description": "Date of birth",
+            "type": "string",
+            "format": "date",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "ssn",
+            "type": "string",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "processor_tokens",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "required": false
+          }
+        ],
+        "security": [
+          {
+            "partner_jwt_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Create customer for partner",
+            "schema": {
+              "$ref": "#/definitions/Boom_PartnerAPI_PartnersCustomer_BaseEntity"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "422": {
+            "description": "Could not create customer"
+          }
+        },
+        "tags": [
+          "Customers"
+        ],
+        "operationId": "postPartnerV1Customers"
+      },
+      "get": {
+        "description": "Get customers",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "type": "integer",
+            "format": "int32",
+            "default": 1,
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer",
+            "format": "int32",
+            "default": 100,
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "order_by",
+            "type": "string",
+            "default": "created_at",
+            "enum": [
+              "id",
+              "created_at",
+              "updated_at",
+              "soft_deleted_at",
+              "password_digest",
+              "email",
+              "email_verified_at",
+              "phone",
+              "phone_verified_at",
+              "first_name",
+              "last_name",
+              "note",
+              "timezone",
+              "registered_env",
+              "expo_push_notification_tokens",
+              "legal_entity_id",
+              "encryption_key_id",
+              "ssn_encrypted",
+              "dob",
+              "opaque_id",
+              "identity_verified_at",
+              "marked_fraudulent_by_id",
+              "marked_fraudulent_at",
+              "identity_verification_status"
+            ],
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "order_direction",
+            "type": "string",
+            "default": "desc",
+            "enum": [
+              "asc",
+              "desc"
+            ],
+            "required": false
+          }
+        ],
+        "security": [
+          {
+            "partner_jwt_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get customers",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Boom_PartnerAPI_Customer_BaseEntity"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": [
+          "Customers"
+        ],
+        "operationId": "getPartnerV1Customers"
+      }
+    },
+    "/partner/v1/customers/{customer_id}/issues": {
+      "get": {
+        "description": "List unresolved issues",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "customer_id",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "partner_jwt_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List unresolved issues",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "issues": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Boom_PartnerAPI_Customer_IssueEntity"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "tags": [
+          "Customers"
+        ],
+        "operationId": "getPartnerV1CustomersCustomerIdIssues"
+      }
+    },
+    "/partner/v1/customers/{customer_id}": {
+      "delete": {
+        "description": "Unenroll customer",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "customer_id",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "partner_jwt_token": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Unenroll customer"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "tags": [
+          "Customers"
+        ],
+        "operationId": "deletePartnerV1CustomersCustomerId"
+      },
+      "patch": {
+        "description": "Update customer's personal details",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "customer_id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "first_name",
+            "type": "string",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "last_name",
+            "type": "string",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "dob",
+            "description": "Date of birth",
+            "type": "string",
+            "format": "date",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "ssn",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "security": [
+          {
+            "partner_jwt_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Update customer's personal details",
+            "schema": {
+              "$ref": "#/definitions/Boom_PartnerAPI_PartnersCustomer_BaseEntity"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        },
+        "tags": [
+          "Customers"
+        ],
+        "operationId": "patchPartnerV1CustomersCustomerId"
+      },
+      "get": {
+        "description": "Get customer's personal details",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "customer_id",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "partner_jwt_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get customer's personal details",
+            "schema": {
+              "$ref": "#/definitions/Boom_PartnerAPI_PartnersCustomer_BaseEntity"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "tags": [
+          "Customers"
+        ],
+        "operationId": "getPartnerV1CustomersCustomerId"
+      }
+    },
+    "/partner/v1/customers/{customer_id}/partner/plaid/unlink": {
+      "post": {
+        "description": "Unlinks plaid processor token",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "customer_id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "processor_token",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "partner_jwt_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Unlinks plaid processor token",
+            "schema": {
+              "$ref": "#/definitions/Boom_PartnerAPI_PartnersCustomer_WithPlaidTokenEntity"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        },
+        "tags": [
+          "Customers"
+        ],
+        "operationId": "postPartnerV1CustomersCustomerIdPartnerPlaidUnlink"
+      }
+    },
+    "/partner/v1/customers/{customer_id}/partner/plaid/link": {
+      "post": {
+        "description": "Links plaid processor token",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "customer_id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "processor_token",
+            "type": "string",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "relay_token",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "security": [
+          {
+            "partner_jwt_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Links plaid processor token",
+            "schema": {
+              "$ref": "#/definitions/Boom_PartnerAPI_PartnersCustomer_WithPlaidTokenEntity"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        },
+        "tags": [
+          "Customers"
+        ],
+        "operationId": "postPartnerV1CustomersCustomerIdPartnerPlaidLink"
+      }
+    },
+    "/partner/v1/customers/{customer_id}/ledgers": {
+      "post": {
+        "description": "Link external ledger with a customer",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "customer_id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "service_name",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "authorization_code",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "partner_jwt_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Links external ledgger to the customer",
+            "schema": {
+              "$ref": "#/definitions/Boom_PartnerAPI_PartnersCustomer_WithLedgerEntity"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          }
+        },
+        "tags": [
+          "Customers"
+        ],
+        "operationId": "postPartnerV1CustomersCustomerIdPartnerLedgers"
+      },
+      "get": {
+        "description": "List external ledgers",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "customer_id",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "partner_jwt_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List plaid tokens",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Boom_PartnerAPI_Ledger_BaseEntity"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "tags": [
+          "Customers"
+        ],
+        "operationId": "getPartnerV1CustomersCustomerIdPartnerLedgers"
+      }
+    },
+    "/partner/v1/customers/{customer_id}/ledgers/{ledger_id}": {
+      "get": {
+        "description": "Get external ledger",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "customer_id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "ledger_id",
+            "type": "integer",
+            "format": "int32",
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "partner_jwt_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get external ledger",
+            "schema": {
+              "$ref": "#/definitions/Boom_PartnerAPI_Ledger_BaseEntity"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "tags": [
+          "Customers"
+        ],
+        "operationId": "getPartnerV1CustomersCustomerIdPartnerLedgersLedgerId"
+      },
+      "delete": {
+        "description": "Remove external ledger",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "customer_id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "ledger_id",
+            "type": "integer",
+            "format": "int32",
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "partner_jwt_token": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "ledger removed"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "tags": [
+          "Customers"
+        ],
+        "operationId": "deletePartnerV1CustomersCustomerIdPartnerLedgersLedgerId"
+      }
+    },
+    "/partner/v1/customers/{customer_id}/partner/plaid/tokens": {
+      "get": {
+        "description": "List plaid tokens",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "customer_id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "partner",
+            "type": "integer",
+            "format": "int32",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "plaid",
+            "type": "integer",
+            "format": "int32",
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "partner_jwt_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List plaid tokens",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Boom_PartnerAPI_PlaidToken_BaseEntity"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "tags": [
+          "Customers"
+        ],
+        "operationId": "getPartnerV1CustomersCustomerIdPartnerPlaidTokens"
+      }
+    },
+    "/partner/v1/enrollments/{enrollment_id}/landlord": {
+      "patch": {
+        "description": "Update enrollment's landlord details",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "enrollment_id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "contact_first_name",
+            "type": "string",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "contact_last_name",
+            "type": "string",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "company_name",
+            "type": "string",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "type",
+            "type": "string",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "allow_landlord_contact",
+            "type": "boolean",
+            "default": false,
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "phone",
+            "type": "string",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "email",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "security": [
+          {
+            "partner_jwt_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Update enrollment's landlord details",
+            "schema": {
+              "$ref": "#/definitions/Boom_PartnerAPI_ReportingAccount_Enrollment_BaseEntity"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": [
+          "Enrollments"
+        ],
+        "operationId": "patchPartnerV1EnrollmentsEnrollmentIdLandlord"
+      }
+    },
+    "/partner/v1/enrollments/{enrollment_id}/enroll": {
+      "post": {
+        "description": "Enroll completed enrollment",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "enrollment_id",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "partner_jwt_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Enroll completed enrollment",
+            "schema": {
+              "$ref": "#/definitions/Boom_PartnerAPI_ReportingAccount_Enrollment_BaseEntity"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "422": {
+            "description": "Could not submit enrollment"
+          }
+        },
+        "tags": [
+          "Enrollments"
+        ],
+        "operationId": "postPartnerV1EnrollmentsEnrollmentIdEnroll"
+      }
+    },
+    "/partner/v1/enrollments": {
+      "post": {
+        "description": "Create enrollment for partner",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "customer_id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "move_in_date",
+            "description": "Move in date",
+            "type": "string",
+            "format": "date",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "lease_end_date",
+            "description": "Lease end date",
+            "type": "string",
+            "format": "date",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "lease_month_to_month",
+            "description": "Lease month to month",
+            "type": "boolean",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "monthly_rent_amount",
+            "description": "Monthly rent amount",
+            "type": "integer",
+            "format": "int32",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "opt_out",
+            "type": "boolean",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "address",
+            "type": "json",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "address[address1]",
+            "type": "string",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "address[address2]",
+            "type": "string",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "address[city]",
+            "type": "string",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "address[state_or_province]",
+            "type": "string",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "address[postal_code]",
+            "type": "string",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "address[lat]",
+            "type": "number",
+            "format": "float",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "address[lng]",
+            "type": "number",
+            "format": "float",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "address[name]",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "security": [
+          {
+            "partner_jwt_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Create enrollment for partner",
+            "schema": {
+              "$ref": "#/definitions/Boom_PartnerAPI_ReportingAccount_Enrollment_BaseEntity"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Customer already have active enrollment"
+          }
+        },
+        "tags": [
+          "Enrollments"
+        ],
+        "operationId": "postPartnerV1Enrollments"
+      },
+      "get": {
+        "description": "Get enrollments",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "type": "integer",
+            "format": "int32",
+            "default": 1,
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer",
+            "format": "int32",
+            "default": 100,
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "customer_id",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "security": [
+          {
+            "partner_jwt_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get enrollments",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Boom_PartnerAPI_ReportingAccount_Enrollment_BaseEntity"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": [
+          "Enrollments"
+        ],
+        "operationId": "getPartnerV1Enrollments"
+      }
+    },
+    "/partner/v1/enrollments/{enrollment_id}": {
+      "delete": {
+        "description": "Delete an enrollment",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "enrollment_id",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "partner_jwt_token": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Delete an enrollment"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": [
+          "Enrollments"
+        ],
+        "operationId": "deletePartnerV1EnrollmentsEnrollmentId"
+      },
+      "patch": {
+        "description": "Update enrollment details",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "enrollment_id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "move_in_date",
+            "type": "string",
+            "format": "date",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "lease_end_date",
+            "type": "string",
+            "format": "date",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "moved_out_date",
+            "type": "string",
+            "format": "date",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "monthly_rent_amount",
+            "type": "integer",
+            "format": "int32",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "lease_month_to_month",
+            "type": "boolean",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "address",
+            "type": "json",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "address[address1]",
+            "type": "string",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "address[address2]",
+            "type": "string",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "address[city]",
+            "type": "string",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "address[state_or_province]",
+            "type": "string",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "address[postal_code]",
+            "type": "string",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "address[lat]",
+            "type": "number",
+            "format": "float",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "address[lng]",
+            "type": "number",
+            "format": "float",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "address[name]",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "security": [
+          {
+            "partner_jwt_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Update enrollment details",
+            "schema": {
+              "$ref": "#/definitions/Boom_PartnerAPI_ReportingAccount_Enrollment_BaseEntity"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": [
+          "Enrollments"
+        ],
+        "operationId": "patchPartnerV1EnrollmentsEnrollmentId"
+      },
+      "get": {
+        "description": "Get an enrollment details",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "enrollment_id",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "partner_jwt_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get an enrollment details",
+            "schema": {
+              "$ref": "#/definitions/Boom_PartnerAPI_ReportingAccount_Enrollment_BaseEntity"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": [
+          "Enrollments"
+        ],
+        "operationId": "getPartnerV1EnrollmentsEnrollmentId"
+      }
+    },
+    "/partner/v1/enrollments/{enrollment_id}/report_rental_payments": {
+      "post": {
+        "description": "Verify rental payments",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "enrollment_id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "rental_payments[for_month]",
+            "type": "array",
+            "required": true,
+            "items": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "formData",
+            "name": "rental_payments[no_data]",
+            "type": "array",
+            "required": true,
+            "items": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "formData",
+            "name": "rental_payments[months_delinquency]",
+            "type": "array",
+            "required": true,
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "security": [
+          {
+            "partner_jwt_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Verify rental payments",
+            "schema": {
+              "$ref": "#/definitions/Boom_PartnerAPI_ReportingAccount_RentalVerification_BaseEntity"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "422": {
+            "description": "Failed to verify rental payments"
+          }
+        },
+        "tags": [
+          "Enrollments"
+        ],
+        "operationId": "postPartnerV1EnrollmentsEnrollmentIdReportRentalPayments"
+      }
+    },
+    "/partner/v1/enrollments/{enrollment_id}/add_products": {
+      "post": {
+        "description": "Add product to an enrolled enrollment",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "enrollment_id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "products",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "past_reporting"
+              ]
+            },
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "partner_jwt_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Add product to an enrolled enrollment",
+            "schema": {
+              "$ref": "#/definitions/Boom_PartnerAPI_ReportingAccount_Enrollment_BaseEntity"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "422": {
+            "description": "Failed to add products"
+          }
+        },
+        "tags": [
+          "Enrollments"
+        ],
+        "operationId": "postPartnerV1EnrollmentsEnrollmentIdAddProducts"
+      }
+    },
+
+    "/partner/v1/customers/{customer_id}/issue_access_token": {
+      "post": {
+        "description": "Issues temporal access token for customer",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "customer_id",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "partner_jwt_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Issues access token",
+            "schema": {
+              "$ref": "#/definitions/Boom_PartnerAPI_PartnersCustomer_WithAccessTokenEntity"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "tags": [
+          "Customers"
+        ],
+        "operationId": "postPartnerV1CustomersCustomerIdIssueAccessToken"
+      }
+    },
+    "/partner/v1/authenticate": {
+      "post": {
+        "description": "Authenticate partner by access and secret key and return JWT auth token",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "access_key",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "secret_key",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Authenticate partner by access and secret key and return JWT auth token",
+            "schema": {
+              "$ref": "#/definitions/Boom_PartnerAPI_AuthTokenEntity"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": [
+          "Authenticate"
+        ],
+        "operationId": "postPartnerV1Authenticate"
+      },
+      "get": {
+        "description": "Check if partner authenticated",
+        "produces": [
+          "application/json"
+        ],
+        "security": [
+          {
+            "partner_jwt_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Check if partner authenticated"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": [
+          "Authenticate"
+        ],
+        "operationId": "getPartnerV1Authenticate"
+      }
+    }
+  },
+  "definitions": {
+    "Boom_PartnerAPI_PartnersCustomer_BaseEntity": {
+      "type": "object",
+      "properties": {
+        "object": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "first_name": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "dob": {
+          "type": "string"
+        },
+        "access_key": {
+          "type": "string"
+        }
+      },
+      "description": "Boom_PartnerAPI_PartnersCustomer_BaseEntity model"
+    },
+    "Boom_PartnerAPI_Customer_BaseEntity": {
+      "type": "object",
+      "properties": {
+        "object": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "first_name": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "dob": {
+          "type": "string"
+        }
+      },
+      "description": "Boom_PartnerAPI_Customer_BaseEntity model"
+    },
+    "Boom_PartnerAPI_Customer_IssueEntity": {
+      "type": "object",
+      "properties": {
+        "slug": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "description": "Boom_PartnerAPI_Customer_IssueEntity model"
+    },
+    "Boom_PartnerAPI_PartnersCustomer_WithPlaidTokenEntity": {
+      "type": "object",
+      "properties": {
+        "object": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "first_name": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "dob": {
+          "type": "string"
+        },
+        "access_key": {
+          "type": "string"
+        },
+        "plaid_token_id": {
+          "type": "string"
+        }
+      },
+      "description": "Boom_PartnerAPI_PartnersCustomer_WithPlaidTokenEntity model"
+    },
+    "Boom_PartnerAPI_PartnersCustomer_WithLedgerEntity": {
+      "type": "object",
+      "properties": {
+        "service_name": {
+          "type": "string"
+        },
+        "authorization_code": {
+          "type": "string"
+        }
+      },
+      "description": "Boom_PartnerAPI_PartnersCustomer_WithLedgerEntity model"
+    },
+    "Boom_PartnerAPI_PartnersCustomer_WithAccessTokenEntity": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string"
+        }
+      },
+      "description": "Boom_PartnerAPI_PartnersCustomer_WithAccessTokenEntity model"
+    },
+    "Boom_PartnerAPI_Ledger_BaseEntity": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      },
+      "description": "Boom_PartnerAPI_Ledger_BaseEntity model"
+    },
+    "Boom_PartnerAPI_PlaidToken_BaseEntity": {
+      "type": "object",
+      "properties": {
+        "object": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string"
+        }
+      },
+      "description": "Boom_PartnerAPI_PlaidToken_BaseEntity model"
+    },
+    "Boom_PartnerAPI_ReportingAccount_Enrollment_BaseEntity": {
+      "type": "object",
+      "properties": {
+        "object": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "address": {
+          "$ref": "#/definitions/Boom_Service_Entities_Address"
+        },
+        "monthly_rent_amount": {
+          "type": "string"
+        },
+        "monthly_rent_day_of_month": {
+          "type": "string"
+        },
+        "move_in_date": {
+          "type": "string"
+        },
+        "lease_end_date": {
+          "type": "string"
+        },
+        "lease_month_to_month": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "customer_id": {
+          "type": "string"
+        },
+        "issues": {
+          "type": "string"
+        },
+        "rental_verifications": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Boom_PartnerAPI_ReportingAccount_RentalVerification_BaseEntity"
+          }
+        }
+      },
+      "description": "Boom_PartnerAPI_ReportingAccount_Enrollment_BaseEntity model"
+    },
+    "Boom_PartnerAPI_ReportingAccount_RentalVerification_BaseEntity": {
+      "type": "object",
+      "properties": {
+        "object": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "for_month": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "months_delinquency": {
+          "type": "string"
+        }
+      },
+      "description": "Boom_PartnerAPI_ReportingAccount_RentalVerification_BaseEntity model"
+    },
+    "Boom_Service_Entities_Address": {
+      "type": "object",
+      "properties": {
+        "object": {
+          "type": "string"
+        },
+        "address1": {
+          "type": "string"
+        },
+        "address2": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state_or_province": {
+          "type": "string"
+        },
+        "postal_code": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "lat": {
+          "type": "string"
+        },
+        "lng": {
+          "type": "string"
+        },
+        "one_line_address": {
+          "type": "string"
+        }
+      }
+    },
+    "Boom_PartnerAPI_AuthTokenEntity": {
+      "type": "object",
+      "properties": {
+        "object": {
+          "type": "string"
+        },
+        "auth_token": {
+          "type": "string"
+        }
+      },
+      "description": "Boom_PartnerAPI_AuthTokenEntity model"
+    }
+  }
+}
