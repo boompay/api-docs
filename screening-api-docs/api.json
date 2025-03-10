@@ -3177,6 +3177,11 @@
             "type": "string",
             "example": "123",
             "nullable": true
+          },
+          "listing_id": {
+            "type": "string",
+            "example": "123",
+            "nullable": true
           }
         }
       },
@@ -3536,6 +3541,11 @@
           "decision_time_in_days": {
             "type": "number",
             "example": 3,
+            "nullable": true
+          },
+          "listing_id": {
+            "type": "string",
+            "example": "1234567890",
             "nullable": true
           },
           "grouped_income_rent_ratio": {
