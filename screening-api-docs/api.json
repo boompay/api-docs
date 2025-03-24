@@ -1567,6 +1567,22 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "last_updated_from_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "last_updated_to_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
