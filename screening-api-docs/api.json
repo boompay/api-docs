@@ -67,9 +67,7 @@
             }
           }
         },
-        "tags": [
-          "Authentication"
-        ]
+        "tags": ["Authentication"]
       }
     },
     "/partner/v1/users": {
@@ -139,9 +137,7 @@
             }
           }
         },
-        "tags": [
-          "Users"
-        ],
+        "tags": ["Users"],
         "security": [
           {
             "bearer": []
@@ -235,9 +231,7 @@
             }
           }
         },
-        "tags": [
-          "Users"
-        ],
+        "tags": ["Users"],
         "security": [
           {
             "bearer": []
@@ -321,9 +315,7 @@
             }
           }
         },
-        "tags": [
-          "Users"
-        ],
+        "tags": ["Users"],
         "security": [
           {
             "bearer": []
@@ -395,9 +387,7 @@
             }
           }
         },
-        "tags": [
-          "Users"
-        ],
+        "tags": ["Users"],
         "security": [
           {
             "bearer": []
@@ -462,9 +452,7 @@
             }
           }
         },
-        "tags": [
-          "Users"
-        ],
+        "tags": ["Users"],
         "security": [
           {
             "bearer": []
@@ -560,9 +548,7 @@
             }
           }
         },
-        "tags": [
-          "Properties"
-        ],
+        "tags": ["Properties"],
         "security": [
           {
             "bearer": []
@@ -635,9 +621,7 @@
             }
           }
         },
-        "tags": [
-          "Properties"
-        ],
+        "tags": ["Properties"],
         "security": [
           {
             "bearer": []
@@ -711,9 +695,7 @@
             }
           }
         },
-        "tags": [
-          "Properties"
-        ],
+        "tags": ["Properties"],
         "security": [
           {
             "bearer": []
@@ -795,9 +777,7 @@
             }
           }
         },
-        "tags": [
-          "Properties"
-        ],
+        "tags": ["Properties"],
         "security": [
           {
             "bearer": []
@@ -862,9 +842,7 @@
             }
           }
         },
-        "tags": [
-          "Properties"
-        ],
+        "tags": ["Properties"],
         "security": [
           {
             "bearer": []
@@ -976,9 +954,7 @@
             }
           }
         },
-        "tags": [
-          "Units"
-        ],
+        "tags": ["Units"],
         "security": [
           {
             "bearer": []
@@ -1051,9 +1027,7 @@
             }
           }
         },
-        "tags": [
-          "Units"
-        ],
+        "tags": ["Units"],
         "security": [
           {
             "bearer": []
@@ -1127,9 +1101,7 @@
             }
           }
         },
-        "tags": [
-          "Units"
-        ],
+        "tags": ["Units"],
         "security": [
           {
             "bearer": []
@@ -1211,9 +1183,7 @@
             }
           }
         },
-        "tags": [
-          "Units"
-        ],
+        "tags": ["Units"],
         "security": [
           {
             "bearer": []
@@ -1278,9 +1248,7 @@
             }
           }
         },
-        "tags": [
-          "Units"
-        ],
+        "tags": ["Units"],
         "security": [
           {
             "bearer": []
@@ -1411,9 +1379,7 @@
             }
           }
         },
-        "tags": [
-          "Magic links"
-        ],
+        "tags": ["Magic links"],
         "security": [
           {
             "bearer": []
@@ -1487,9 +1453,7 @@
             }
           }
         },
-        "tags": [
-          "Magic links"
-        ],
+        "tags": ["Magic links"],
         "security": [
           {
             "bearer": []
@@ -1641,9 +1605,7 @@
             }
           }
         },
-        "tags": [
-          "Applications"
-        ],
+        "tags": ["Applications"],
         "security": [
           {
             "bearer": []
@@ -1717,9 +1679,7 @@
             }
           }
         },
-        "tags": [
-          "Applications"
-        ],
+        "tags": ["Applications"],
         "security": [
           {
             "bearer": []
@@ -1793,9 +1753,7 @@
             }
           }
         },
-        "tags": [
-          "Applications"
-        ],
+        "tags": ["Applications"],
         "security": [
           {
             "bearer": []
@@ -1869,9 +1827,7 @@
             }
           }
         },
-        "tags": [
-          "Applications"
-        ],
+        "tags": ["Applications"],
         "security": [
           {
             "bearer": []
@@ -1963,9 +1919,7 @@
             }
           }
         },
-        "tags": [
-          "Applications"
-        ],
+        "tags": ["Applications"],
         "security": [
           {
             "bearer": []
@@ -2047,9 +2001,7 @@
             }
           }
         },
-        "tags": [
-          "Applications"
-        ],
+        "tags": ["Applications"],
         "security": [
           {
             "bearer": []
@@ -2139,9 +2091,7 @@
             }
           }
         },
-        "tags": [
-          "Applications"
-        ],
+        "tags": ["Applications"],
         "security": [
           {
             "bearer": []
@@ -2231,9 +2181,7 @@
             }
           }
         },
-        "tags": [
-          "Applications"
-        ],
+        "tags": ["Applications"],
         "security": [
           {
             "bearer": []
@@ -2320,9 +2268,7 @@
             }
           }
         },
-        "tags": [
-          "Applicants"
-        ],
+        "tags": ["Applicants"],
         "security": [
           {
             "bearer": []
@@ -2381,11 +2327,7 @@
             }
           }
         },
-        "required": [
-          "statusCode",
-          "error",
-          "message"
-        ]
+        "required": ["statusCode", "error", "message"]
       },
       "TooManyRequestsResponse": {
         "type": "object",
@@ -2399,10 +2341,7 @@
             "example": "Too many requets"
           }
         },
-        "required": [
-          "statusCode",
-          "error"
-        ]
+        "required": ["statusCode", "error"]
       },
       "InternalErrorResponse": {
         "type": "object",
@@ -2416,10 +2355,7 @@
             "example": "Internal Server Error"
           }
         },
-        "required": [
-          "statusCode",
-          "error"
-        ]
+        "required": ["statusCode", "error"]
       },
       "AuthenticationRequest": {
         "type": "object",
@@ -2433,10 +2369,7 @@
             "example": "secret_key"
           }
         },
-        "required": [
-          "access_key",
-          "secret_key"
-        ]
+        "required": ["access_key", "secret_key"]
       },
       "AuthenticationResponse": {
         "type": "object",
@@ -2446,9 +2379,7 @@
             "example": "access_token"
           }
         },
-        "required": [
-          "access_token"
-        ]
+        "required": ["access_token"]
       },
       "Unauthorized": {
         "type": "object",
@@ -2462,10 +2393,7 @@
             "example": "Unauthorized"
           }
         },
-        "required": [
-          "statusCode",
-          "error"
-        ]
+        "required": ["statusCode", "error"]
       },
       "CreateUser": {
         "type": "object",
@@ -2484,10 +2412,7 @@
             "default": "property_manager"
           }
         },
-        "required": [
-          "name",
-          "email"
-        ]
+        "required": ["name", "email"]
       },
       "Address": {
         "type": "object",
@@ -2514,12 +2439,7 @@
             "example": "12345"
           }
         },
-        "required": [
-          "address1",
-          "city",
-          "state_or_province",
-          "postal_code"
-        ]
+        "required": ["address1", "city", "state_or_province", "postal_code"]
       },
       "MagicLink": {
         "type": "object",
@@ -2542,12 +2462,7 @@
             "example": "2021-01-01T00:00:00.000Z"
           }
         },
-        "required": [
-          "id",
-          "active",
-          "application_link",
-          "created_at"
-        ]
+        "required": ["id", "active", "application_link", "created_at"]
       },
       "Money": {
         "type": "object",
@@ -2562,9 +2477,7 @@
             "default": "USD"
           }
         },
-        "required": [
-          "cents"
-        ]
+        "required": ["cents"]
       },
       "VerificationSchemaType": {
         "type": "object",
@@ -2621,10 +2534,7 @@
             "$ref": "#/components/schemas/VerificationSchemaType"
           }
         },
-        "required": [
-          "applicant",
-          "co_signer"
-        ]
+        "required": ["applicant", "co_signer"]
       },
       "VerificationScreeningCriteria": {
         "type": "object",
@@ -2841,12 +2751,7 @@
             }
           }
         },
-        "required": [
-          "id",
-          "name",
-          "email",
-          "role"
-        ]
+        "required": ["id", "name", "email", "role"]
       },
       "UpdateUser": {
         "type": "object",
@@ -2901,10 +2806,7 @@
             "example": 1
           }
         },
-        "required": [
-          "total_count",
-          "page"
-        ]
+        "required": ["total_count", "page"]
       },
       "NotFoundResponse": {
         "type": "object",
@@ -2918,10 +2820,7 @@
             "example": "Not found"
           }
         },
-        "required": [
-          "statusCode",
-          "error"
-        ]
+        "required": ["statusCode", "error"]
       },
       "UnitList": {
         "type": "object",
@@ -3056,12 +2955,7 @@
             "example": "12345"
           }
         },
-        "required": [
-          "address1",
-          "city",
-          "state_or_province",
-          "postal_code"
-        ]
+        "required": ["address1", "city", "state_or_province", "postal_code"]
       },
       "CreatePropertyUnit": {
         "type": "object",
@@ -3093,10 +2987,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "title",
-          "occupied"
-        ]
+        "required": ["title", "occupied"]
       },
       "CreateProperty": {
         "type": "object",
@@ -3125,9 +3016,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "address"
-        ]
+        "required": ["address"]
       },
       "ForbiddenErrorResponse": {
         "type": "object",
@@ -3141,10 +3030,7 @@
             "example": "Forbidden"
           }
         },
-        "required": [
-          "statusCode",
-          "error"
-        ]
+        "required": ["statusCode", "error"]
       },
       "UpdateProperty": {
         "type": "object",
@@ -3252,11 +3138,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "title",
-          "property_id",
-          "occupied"
-        ]
+        "required": ["title", "property_id", "occupied"]
       },
       "UpdateUnit": {
         "type": "object",
@@ -3301,9 +3183,7 @@
             "example": true
           }
         },
-        "required": [
-          "active"
-        ]
+        "required": ["active"]
       },
       "VerificationProgress": {
         "type": "object",
@@ -3317,10 +3197,7 @@
             "example": 5
           }
         },
-        "required": [
-          "total_steps",
-          "filled_steps"
-        ]
+        "required": ["total_steps", "filled_steps"]
       },
       "VerificationList": {
         "type": "object",
@@ -3423,10 +3300,7 @@
           "role": {
             "type": "string",
             "example": "applicant",
-            "enum": [
-              "applicant",
-              "co_signer"
-            ]
+            "enum": ["applicant", "co_signer"]
           },
           "invited_at": {
             "format": "date-time",
@@ -3441,12 +3315,7 @@
           },
           "application_status": {
             "type": "string",
-            "enum": [
-              "pending",
-              "started",
-              "finished",
-              "submitted"
-            ],
+            "enum": ["pending", "started", "finished", "submitted"],
             "example": "pending"
           },
           "application_started_at": {
@@ -3513,10 +3382,7 @@
           "role": {
             "type": "string",
             "example": "applicant",
-            "enum": [
-              "applicant",
-              "co_signer"
-            ]
+            "enum": ["applicant", "co_signer"]
           },
           "invited_at": {
             "format": "date-time",
@@ -3531,12 +3397,7 @@
           },
           "application_status": {
             "type": "string",
-            "enum": [
-              "pending",
-              "started",
-              "finished",
-              "submitted"
-            ],
+            "enum": ["pending", "started", "finished", "submitted"],
             "example": "pending"
           },
           "application_started_at": {
@@ -3636,9 +3497,7 @@
           "recommendation": {
             "type": "string",
             "example": "decline",
-            "enum": [
-              "decline"
-            ]
+            "enum": ["decline"]
           },
           "decision_at": {
             "format": "date-time",
@@ -3681,7 +3540,7 @@
             "type": "string",
             "example": "2021-01-01T00:00:00.000Z"
           },
-          "updated_at": {
+          "application_updated_at": {
             "format": "date-time",
             "type": "string",
             "example": "2021-01-01T00:00:00.000Z"
@@ -3773,7 +3632,7 @@
             "type": "string",
             "example": "2021-01-01T00:00:00.000Z"
           },
-          "updated_at": {
+          "application_updated_at": {
             "format": "date-time",
             "type": "string",
             "example": "2021-01-01T00:00:00.000Z"
@@ -3781,9 +3640,7 @@
           "recommendation": {
             "type": "string",
             "example": "decline",
-            "enum": [
-              "decline"
-            ]
+            "enum": ["decline"]
           }
         },
         "required": [
@@ -3806,9 +3663,7 @@
         "type": "object",
         "properties": {
           "conditions": {
-            "example": [
-              "condition"
-            ],
+            "example": ["condition"],
             "type": "array",
             "items": {
               "type": "string"
@@ -3840,9 +3695,7 @@
         "type": "object",
         "properties": {
           "reasons": {
-            "example": [
-              "reason"
-            ],
+            "example": ["reason"],
             "type": "array",
             "items": {
               "type": "string"
@@ -3861,9 +3714,7 @@
             "example": "note message"
           }
         },
-        "required": [
-          "reasons"
-        ]
+        "required": ["reasons"]
       },
       "RentalApplicationEmergencyContact": {
         "type": "object",
@@ -3881,11 +3732,7 @@
             "example": "1234567890"
           }
         },
-        "required": [
-          "last_name",
-          "first_name",
-          "phone_number"
-        ]
+        "required": ["last_name", "first_name", "phone_number"]
       },
       "RentalApplicationReport": {
         "type": "object",
@@ -4001,10 +3848,7 @@
             "example": "Apartment"
           }
         },
-        "required": [
-          "rent",
-          "housing_type"
-        ]
+        "required": ["rent", "housing_type"]
       },
       "HouseHistoryReport": {
         "type": "object",
@@ -4047,10 +3891,7 @@
             "example": "123456789"
           }
         },
-        "required": [
-          "type",
-          "value"
-        ]
+        "required": ["type", "value"]
       },
       "Asset": {
         "type": "object",
@@ -4076,13 +3917,7 @@
             "example": "jpg"
           }
         },
-        "required": [
-          "url",
-          "content_type",
-          "filename",
-          "size",
-          "extension"
-        ]
+        "required": ["url", "content_type", "filename", "size", "extension"]
       },
       "File": {
         "type": "object",
@@ -4091,9 +3926,7 @@
             "$ref": "#/components/schemas/Asset"
           }
         },
-        "required": [
-          "asset"
-        ]
+        "required": ["asset"]
       },
       "IdentityVerificationDocuments": {
         "type": "object",
@@ -4108,11 +3941,7 @@
             "$ref": "#/components/schemas/File"
           }
         },
-        "required": [
-          "face",
-          "original_front",
-          "original_back"
-        ]
+        "required": ["face", "original_front", "original_back"]
       },
       "IdentityVerificationReport": {
         "type": "object",
@@ -4311,11 +4140,7 @@
             }
           }
         },
-        "required": [
-          "message",
-          "consumer_statement",
-          "results"
-        ]
+        "required": ["message", "consumer_statement", "results"]
       },
       "CriminalReportSubject": {
         "type": "object",
@@ -4438,12 +4263,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "case_number",
-          "state",
-          "jurisdiction",
-          "comments"
-        ]
+        "required": ["case_number", "state", "jurisdiction", "comments"]
       },
       "CriminalReportOffense": {
         "type": "object",
@@ -4581,11 +4401,7 @@
             }
           }
         },
-        "required": [
-          "subject",
-          "case_details",
-          "offenses"
-        ]
+        "required": ["subject", "case_details", "offenses"]
       },
       "CriminalReport": {
         "type": "object",
@@ -4612,12 +4428,7 @@
             }
           }
         },
-        "required": [
-          "message",
-          "disclaimer",
-          "consumer_statement",
-          "results"
-        ]
+        "required": ["message", "disclaimer", "consumer_statement", "results"]
       },
       "CreditReportHitCode": {
         "type": "object",
@@ -4633,10 +4444,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "code",
-          "description"
-        ]
+        "required": ["code", "description"]
       },
       "CreditReportPersonalData": {
         "type": "object",
@@ -4688,10 +4496,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "code",
-          "description"
-        ]
+        "required": ["code", "description"]
       },
       "CreditReportBankruptcyDetail": {
         "type": "object",
@@ -4788,19 +4593,13 @@
             "nullable": true
           }
         },
-        "required": [
-          "inquirer",
-          "date"
-        ]
+        "required": ["inquirer", "date"]
       },
       "CreditReportConsumerInformation": {
         "type": "object",
         "properties": {
           "other_names": {
-            "examples": [
-              "John Doe",
-              "JD"
-            ],
+            "examples": ["John Doe", "JD"],
             "nullable": true,
             "type": "array",
             "items": {
@@ -4922,10 +4721,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "code",
-          "description"
-        ]
+        "required": ["code", "description"]
       },
       "CreditReportCollection": {
         "type": "object",
@@ -5050,10 +4846,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "code",
-          "description"
-        ]
+        "required": ["code", "description"]
       },
       "CreditReportAccountType": {
         "type": "object",
@@ -5069,10 +4862,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "code",
-          "description"
-        ]
+        "required": ["code", "description"]
       },
       "CreditReportRate": {
         "type": "object",
@@ -5088,10 +4878,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "code",
-          "description"
-        ]
+        "required": ["code", "description"]
       },
       "CreditReportTermsDuration": {
         "type": "object",
@@ -5107,10 +4894,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "code",
-          "description"
-        ]
+        "required": ["code", "description"]
       },
       "CreditReportTermsFrequency": {
         "type": "object",
@@ -5126,10 +4910,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "code",
-          "description"
-        ]
+        "required": ["code", "description"]
       },
       "CreditorClassification": {
         "type": "object",
@@ -5145,10 +4926,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "code",
-          "description"
-        ]
+        "required": ["code", "description"]
       },
       "CreditReportPaymentHistory": {
         "type": "object",
@@ -5163,10 +4941,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "code",
-          "description"
-        ]
+        "required": ["code", "description"]
       },
       "CreditReportAccountOverview": {
         "type": "object",
@@ -5499,11 +5274,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "statement",
-          "date_reported",
-          "date_purged"
-        ]
+        "required": ["statement", "date_reported", "date_purged"]
       },
       "CreditReportType": {
         "type": "object",
@@ -5519,10 +5290,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "code",
-          "description"
-        ]
+        "required": ["code", "description"]
       },
       "CreditReportAlertContact": {
         "type": "object",
@@ -5551,10 +5319,7 @@
             "nullable": true
           },
           "phone_numbers": {
-            "examples": [
-              "(504) 113-1705",
-              "(504) 113-1705"
-            ],
+            "examples": ["(504) 113-1705", "(504) 113-1705"],
             "nullable": true,
             "type": "array",
             "items": {
@@ -5723,12 +5488,7 @@
             "example": "John"
           }
         },
-        "required": [
-          "email",
-          "phone",
-          "last_name",
-          "first_name"
-        ]
+        "required": ["email", "phone", "last_name", "first_name"]
       },
       "IncomeVerificationPreTaxIncome": {
         "type": "object",
@@ -5741,10 +5501,7 @@
             "example": 1000
           }
         },
-        "required": [
-          "income_type",
-          "income_amount"
-        ]
+        "required": ["income_type", "income_amount"]
       },
       "IncomeVerificationMethod": {
         "type": "object",
@@ -5760,10 +5517,7 @@
             "example": "Paystub"
           }
         },
-        "required": [
-          "pay_stub_files",
-          "verification_type"
-        ]
+        "required": ["pay_stub_files", "verification_type"]
       },
       "IncomeVerificationEmployment": {
         "type": "object",
@@ -5818,11 +5572,7 @@
             "$ref": "#/components/schemas/Money"
           }
         },
-        "required": [
-          "employment",
-          "income_source",
-          "monthly_income"
-        ]
+        "required": ["employment", "income_source", "monthly_income"]
       },
       "IncomeVerificationReport": {
         "type": "object",
@@ -5868,11 +5618,7 @@
             "example": "USD"
           }
         },
-        "required": [
-          "amount",
-          "iso_currency_code",
-          "unofficial_currency_code"
-        ]
+        "required": ["amount", "iso_currency_code", "unofficial_currency_code"]
       },
       "VerifiedTransaction": {
         "type": "object",
@@ -5978,18 +5724,13 @@
             "example": "Value"
           }
         },
-        "required": [
-          "data"
-        ]
+        "required": ["data"]
       },
       "VerifiedBankOwner": {
         "type": "object",
         "properties": {
           "names": {
-            "example": [
-              "John",
-              "Doe"
-            ],
+            "example": ["John", "Doe"],
             "type": "array",
             "items": {
               "type": "string"
@@ -6017,12 +5758,7 @@
             }
           }
         },
-        "required": [
-          "names",
-          "emails",
-          "addresses",
-          "phone_numbers"
-        ]
+        "required": ["names", "emails", "addresses", "phone_numbers"]
       },
       "VerifiedBankIncomeSource": {
         "type": "object",
@@ -6186,9 +5922,7 @@
             "example": "123"
           },
           "routing_numbers": {
-            "example": [
-              "123"
-            ],
+            "example": ["123"],
             "type": "array",
             "items": {
               "type": "string"
@@ -6348,9 +6082,7 @@
             "example": "Bank"
           },
           "flow_types": {
-            "example": [
-              "payroll_digital_income"
-            ],
+            "example": ["payroll_digital_income"],
             "type": "array",
             "items": {
               "type": "string"
