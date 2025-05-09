@@ -850,7 +850,7 @@
         ]
       }
     },
-	"/partner/v1/units": {
+    "/partner/v1/units": {
       "get": {
         "operationId": "UnitsController_findAll",
         "summary": "List all units",
