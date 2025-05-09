@@ -2920,7 +2920,7 @@
               "$ref": "#/components/schemas/UnitList"
             }
           },
-          "unit_url": {
+          "property_url": {
             "nullable": true,
             "type": "string",
 		    "example": "{BOOM_PORTAL_URL}/properties/{obfuscated_partner_id}"
