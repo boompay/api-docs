@@ -2923,7 +2923,7 @@
           "unit_url": {
             "nullable": true,
             "type": "string",
-            "example": "('BOOM_PORTAL_URL')/properties/{obfuscated_partner_id}"
+		    "example": "{BOOM_PORTAL_URL}/properties/{obfuscated_partner_id}"
           }
         },
         "required": [
@@ -3106,7 +3106,7 @@
           },
            "unit_url": {
             "type": "string",
-            "example": "{BOOM_PORTAL_URL}/properties/{obfuscated_partner_id}"
+            "example": "{BOOM_PORTAL_URL}/properties/{property.obfuscated_partner_id}/units/{obfuscated_partner_id}"
           }
         },
         "required": [
