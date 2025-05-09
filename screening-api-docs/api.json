@@ -850,6 +850,80 @@
         ]
       }
     },
+    "/partner/v1/properties/units/{unit_id}": {
+      "get": {
+        "operationId": "ApplicationsController_getUnitDetails",
+        "summary": "Get unit details by unit id",
+        "parameters": [
+          {
+            "name": "unit_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Unit details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnitDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Properties"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/partner/v1/units": {
       "get": {
         "operationId": "UnitsController_findAll",
@@ -2919,6 +2993,11 @@
             "items": {
               "$ref": "#/components/schemas/UnitList"
             }
+          },
+          "unit_url": {
+            "nullable": true,
+            "type": "string",
+            "example": "('BOOM_PORTAL_URL')/properties/{obfuscated_partner_id}"
           }
         },
         "required": [
@@ -3098,6 +3177,10 @@
             "format": "date-time",
             "type": "string",
             "example": "2021-01-01T00:00:00.000Z"
+          },
+           "unit_url": {
+            "type": "string",
+            "example": "{BOOM_PORTAL_URL}/properties/{obfuscated_partner_id}"
           }
         },
         "required": [
