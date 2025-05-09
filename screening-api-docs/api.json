@@ -2691,6 +2691,11 @@
             "format": "date-time",
             "type": "string",
             "example": "2021-01-01T00:00:00.000Z"
+          },
+          "property_url": {
+            "nullable": true,
+            "type": "string",
+		        "example": "{BOOM_PORTAL_URL}/properties/{obfuscated_partner_id}"
           }
         },
         "required": [
@@ -2866,6 +2871,10 @@
             "format": "date-time",
             "type": "string",
             "example": "2021-01-01T00:00:00.000Z"
+          },
+           "unit_url": {
+            "type": "string",
+            "example": "{BOOM_PORTAL_URL}/properties/{property.obfuscated_partner_id}/units/{obfuscated_partner_id}"
           }
         },
         "required": [
@@ -2919,6 +2928,11 @@
             "items": {
               "$ref": "#/components/schemas/UnitList"
             }
+          },
+          "property_url": {
+            "nullable": true,
+            "type": "string",
+		    "example": "{BOOM_PORTAL_URL}/properties/{obfuscated_partner_id}"
           }
         },
         "required": [
@@ -3098,6 +3112,10 @@
             "format": "date-time",
             "type": "string",
             "example": "2021-01-01T00:00:00.000Z"
+          },
+           "unit_url": {
+            "type": "string",
+            "example": "{BOOM_PORTAL_URL}/properties/{property.obfuscated_partner_id}/units/{obfuscated_partner_id}"
           }
         },
         "required": [
