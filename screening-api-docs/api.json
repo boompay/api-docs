@@ -2252,9 +2252,9 @@
 				    }
 				  },
 				  "AlreadyDeclined": {
-				    "summary": "Application already declined",
+				    "summary": "Application already rejected",
 				    "value": {
-					  "message": "This application has already been declined and cannot be cancelled"
+					  "message": "This application has already been rejected and cannot be cancelled"
 				    }
 				  }
 			    }
