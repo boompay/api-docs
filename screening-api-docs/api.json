@@ -2232,15 +2232,35 @@
             }
           },
           "400": {
-            "description": "Validation or cancellation failure",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ValidatorResponse"
-                }
-              }
-            }
-          },
+		    "description": "Validation or cancellation failure",
+		    "content": {
+			  "application/json": {
+			    "schema": {
+				  "$ref": "#/components/schemas/ValidatorResponse"
+			    },
+			    "examples": {
+				  "AlreadyCancelled": {
+				    "summary": "Application already cancelled",
+				    "value": {
+					  "message": "This application has already been cancelled"
+				    }
+				  },
+				  "AlreadyApproved": {
+				    "summary": "Application already approved",
+				    "value": {
+					  "message": "This application has already been approved and cannot be cancelled"
+				    }
+				  },
+				  "AlreadyDeclined": {
+				    "summary": "Application already rejected",
+				    "value": {
+					  "message": "This application has already been rejected and cannot be cancelled"
+				    }
+				  }
+			    }
+			  }
+		    }
+		  },
           "404": {
             "description": "Application not found",
             "content": {
