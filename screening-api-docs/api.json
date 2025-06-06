@@ -3200,6 +3200,10 @@
             "nullable": true,
             "type": "string",
 		    "example": "{BOOM_PORTAL_URL}/properties/{obfuscated_partner_id}"
+          },
+          "use_property_group_verification_template": {
+            "type": "boolean",
+            "example": true
           }
         },
         "required": [
@@ -3295,6 +3299,10 @@
             "type": "string",
             "example": "123",
             "nullable": true
+          },
+          "use_property_group_verification_template": {
+            "type": "boolean",
+            "example": true
           }
         },
         "required": ["address"]
@@ -3332,6 +3340,10 @@
             "type": "string",
             "example": "123",
             "nullable": true
+          },
+          "use_property_group_verification_template": {
+            "type": "boolean",
+            "example": true
           }
         }
       },
