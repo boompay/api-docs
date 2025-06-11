@@ -2232,35 +2232,35 @@
             }
           },
           "400": {
-		    "description": "Validation or cancellation failure",
-		    "content": {
-			  "application/json": {
-			    "schema": {
-				  "$ref": "#/components/schemas/ValidatorResponse"
-			    },
-			    "examples": {
-				  "AlreadyCancelled": {
-				    "summary": "Application already cancelled",
-				    "value": {
-					  "message": "This application has already been cancelled"
-				    }
-				  },
-				  "AlreadyApproved": {
-				    "summary": "Application already approved",
-				    "value": {
-					  "message": "This application has already been approved and cannot be cancelled"
-				    }
-				  },
-				  "AlreadyDeclined": {
-				    "summary": "Application already rejected",
-				    "value": {
-					  "message": "This application has already been rejected and cannot be cancelled"
-				    }
-				  }
-			    }
-			  }
-		    }
-		  },
+            "description": "Validation or cancellation failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                },
+                "examples": {
+                  "AlreadyCancelled": {
+                    "summary": "Application already cancelled",
+                    "value": {
+                      "message": "This application has already been cancelled"
+                    }
+                  },
+                  "AlreadyApproved": {
+                    "summary": "Application already approved",
+                    "value": {
+                      "message": "This application has already been approved and cannot be cancelled"
+                    }
+                  },
+                  "AlreadyDeclined": {
+                    "summary": "Application already rejected",
+                    "value": {
+                      "message": "This application has already been rejected and cannot be cancelled"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "404": {
             "description": "Application not found",
             "content": {
@@ -2962,7 +2962,12 @@
           "property_url": {
             "nullable": true,
             "type": "string",
-		        "example": "{BOOM_PORTAL_URL}/properties/{obfuscated_partner_id}"
+            "example": "{BOOM_PORTAL_URL}/properties/{obfuscated_partner_id}"
+          },
+          "market": {
+            "type": "string",
+            "example": "San Francisco",
+            "nullable": true
           }
         },
         "required": [
@@ -3139,7 +3144,7 @@
             "type": "string",
             "example": "2021-01-01T00:00:00.000Z"
           },
-           "unit_url": {
+          "unit_url": {
             "type": "string",
             "example": "{BOOM_PORTAL_URL}/properties/{property.obfuscated_partner_id}/units/{obfuscated_partner_id}"
           }
@@ -3199,11 +3204,16 @@
           "property_url": {
             "nullable": true,
             "type": "string",
-		    "example": "{BOOM_PORTAL_URL}/properties/{obfuscated_partner_id}"
+            "example": "{BOOM_PORTAL_URL}/properties/{obfuscated_partner_id}"
           },
           "use_property_group_verification_template": {
             "type": "boolean",
             "example": true
+          },
+          "market": {
+            "type": "string",
+            "example": "San Francisco",
+            "nullable": true
           }
         },
         "required": [
@@ -3303,6 +3313,11 @@
           "use_property_group_verification_template": {
             "type": "boolean",
             "example": true
+          },
+          "market": {
+            "type": "string",
+            "example": "San Francisco",
+            "nullable": true
           }
         },
         "required": ["address"]
@@ -3344,6 +3359,11 @@
           "use_property_group_verification_template": {
             "type": "boolean",
             "example": true
+          },
+          "market": {
+            "type": "string",
+            "example": "San Francisco",
+            "nullable": true
           }
         }
       },
@@ -3392,7 +3412,7 @@
             "type": "string",
             "example": "2021-01-01T00:00:00.000Z"
           },
-           "unit_url": {
+          "unit_url": {
             "type": "string",
             "example": "{BOOM_PORTAL_URL}/properties/{property.obfuscated_partner_id}/units/{obfuscated_partner_id}"
           }
