@@ -3062,6 +3062,14 @@
             "type": "boolean",
             "example": true
           },
+          "can_change_applicant_role": {
+            "type": "boolean",
+            "example": true
+          },
+          "can_show_full_ssn": {
+            "type": "boolean",
+            "example": true
+          },
           "property_ids": {
             "description": "List of property IDs, could be Boom ID or external ID",
             "type": "array",
