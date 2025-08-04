@@ -3715,7 +3715,8 @@
           },
           "phone": {
             "type": "string",
-            "example": "1234567890"
+            "example": "1234567890",
+            "nullable": true
           },
           "phone_from_plaid": {
             "type": "string",
