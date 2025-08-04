@@ -3628,7 +3628,14 @@
           },
           "phone": {
             "type": "string",
-            "example": "1234567890"
+            "example": "1234567890",
+            "nullable": true
+          },
+          "phone_from_plaid": {
+            "type": "string",
+            "example": "1234567890",
+            "description": "Phone number extracted from Plaid; can be an international number (e.g., 442079460123 for the UK, without the leading '+')",
+            "nullable": true
           },
           "role": {
             "type": "string",
@@ -3680,7 +3687,6 @@
           "first_name",
           "last_name",
           "email",
-          "phone",
           "role",
           "application_status",
           "application_started_at",
@@ -3710,7 +3716,14 @@
           },
           "phone": {
             "type": "string",
-            "example": "1234567890"
+            "example": "1234567890",
+            "nullable": true
+          },
+          "phone_from_plaid": {
+            "type": "string",
+            "example": "1234567890",
+            "description": "Phone number extracted from Plaid; can be an international number (e.g., 442079460123 for the UK, without the leading '+')",
+            "nullable": true
           },
           "role": {
             "type": "string",
@@ -3762,7 +3775,6 @@
           "first_name",
           "last_name",
           "email",
-          "phone",
           "role",
           "application_status",
           "application_started_at",
