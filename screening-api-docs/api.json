@@ -3628,7 +3628,13 @@
           },
           "phone": {
             "type": "string",
-            "example": "1234567890"
+            "example": "1234567890",
+            "nullable": true
+          },
+          "phone_from_plaid": {
+            "type": "string",
+            "example": "1234567890",
+            "nullable": true
           },
           "role": {
             "type": "string",
@@ -3680,7 +3686,6 @@
           "first_name",
           "last_name",
           "email",
-          "phone",
           "role",
           "application_status",
           "application_started_at",
@@ -3712,6 +3717,11 @@
             "type": "string",
             "example": "1234567890"
           },
+          "phone_from_plaid": {
+            "type": "string",
+            "example": "1234567890",
+            "nullable": true
+          },
           "role": {
             "type": "string",
             "example": "applicant",
@@ -3762,7 +3772,6 @@
           "first_name",
           "last_name",
           "email",
-          "phone",
           "role",
           "application_status",
           "application_started_at",
