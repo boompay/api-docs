@@ -2641,12 +2641,12 @@
       "AuthenticationResponse": {
         "type": "object",
         "properties": {
-          "access_token": {
+          "auth_token": {
             "type": "string",
-            "example": "access_token"
+            "example": "auth_token"
           }
         },
-        "required": ["access_token"]
+        "required": ["auth_token"]
       },
       "Unauthorized": {
         "type": "object",
