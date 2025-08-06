@@ -3097,9 +3097,13 @@
           "page_count": {
             "type": "number",
             "example": 1
+          },
+          "current_page": {
+            "type": "number",
+            "example": 1
           }
         },
-        "required": ["total_count", "page_count"]
+        "required": ["total_count", "page_count", "current_page"]
       },
       "NotFoundResponse": {
         "type": "object",
