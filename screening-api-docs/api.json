@@ -3094,12 +3094,12 @@
             "type": "number",
             "example": 1
           },
-          "page": {
+          "page_count": {
             "type": "number",
             "example": 1
           }
         },
-        "required": ["total_count", "page"]
+        "required": ["total_count", "page_count"]
       },
       "NotFoundResponse": {
         "type": "object",
