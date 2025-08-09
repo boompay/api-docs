@@ -2719,17 +2719,51 @@
             "type": "boolean",
             "example": true
           },
-          "application_link": {
+          "link": {
             "type": "string",
             "example": "https://example.com"
+          },
+          "name": {
+            "type": "string",
+            "example": "John Doe",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "example": "test@gmail.com",
+            "nullable": true
+          },
+          "unit_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
+          },
+           "property_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
+          },
+          "application_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
+          },
+          "kind": {
+            "type": "string",
+            "example": "portfolio"
           },
           "created_at": {
             "format": "date-time",
             "type": "string",
             "example": "2021-01-01T00:00:00.000Z"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
           }
         },
-        "required": ["id", "active", "application_link", "created_at"]
+        "required": ["id", "active", "link", "created_at"]
       },
       "Money": {
         "type": "object",
@@ -2933,7 +2967,16 @@
           },
           "owner": {
             "type": "string",
-            "example": "John Doe"
+            "example": "John Doe",
+            "nullable": true
+          },
+          "use_property_group_verification_template": {
+            "type": "boolean",
+            "example": false
+          },
+          "can_delete": {
+            "type": "boolean",
+            "example": false
           },
           "address": {
             "$ref": "#/components/schemas/Address"
@@ -2941,8 +2984,10 @@
           "magic_link": {
             "$ref": "#/components/schemas/MagicLink"
           },
-          "verification_template": {
-            "$ref": "#/components/schemas/VerificationTemplateList"
+          "verification_template_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
           },
           "external_id": {
             "type": "string",
@@ -3101,9 +3146,13 @@
           "current_page": {
             "type": "number",
             "example": 1
+          },
+          "has_more": {
+            "type": "boolean",
+            "example": false
           }
         },
-        "required": ["total_count", "page_count", "current_page"]
+        "required": ["total_count", "page_count", "current_page", "has_more"]
       },
       "NotFoundResponse": {
         "type": "object",
@@ -3167,6 +3216,20 @@
           "unit_url": {
             "type": "string",
             "example": "{BOOM_PORTAL_URL}/properties/{property.obfuscated_partner_id}/units/{obfuscated_partner_id}"
+          },
+          "verification_template_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
+          },
+          "can_delete": {
+            "type": "boolean",
+            "example": false
+          },
+          "list_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
           }
         },
         "required": [
@@ -3190,14 +3253,29 @@
             "example": "My property",
             "nullable": true
           },
+          "owner": {
+            "type": "string",
+            "example": "John Doe",
+            "nullable": true
+          },
+          "use_property_group_verification_template": {
+            "type": "boolean",
+            "example": false
+          },
+          "can_delete": {
+            "type": "boolean",
+            "example": false
+          },
           "address": {
             "$ref": "#/components/schemas/Address"
           },
           "magic_link": {
             "$ref": "#/components/schemas/MagicLink"
           },
-          "verification_template": {
-            "$ref": "#/components/schemas/VerificationTemplateList"
+          "verification_template_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
           },
           "external_id": {
             "type": "string",
@@ -3214,32 +3292,27 @@
             "type": "string",
             "example": "2021-01-01T00:00:00.000Z"
           },
+          "property_url": {
+            "nullable": true,
+            "type": "string",
+            "example": "{BOOM_PORTAL_URL}/properties/{obfuscated_partner_id}"
+          },
+          "market": {
+            "type": "string",
+            "example": "San Francisco",
+            "nullable": true
+          },
           "units": {
             "nullable": true,
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/UnitList"
             }
-          },
-          "property_url": {
-            "nullable": true,
-            "type": "string",
-            "example": "{BOOM_PORTAL_URL}/properties/{obfuscated_partner_id}"
-          },
-          "use_property_group_verification_template": {
-            "type": "boolean",
-            "example": true
-          },
-          "market": {
-            "type": "string",
-            "example": "San Francisco",
-            "nullable": true
           }
         },
         "required": [
           "id",
           "address",
-          "verification_template",
           "created_at",
           "updated_at",
           "units"
