@@ -2719,6 +2719,9 @@
             "type": "boolean",
             "example": true
           },
+          "monthly_rent_amount": {
+            "$ref": "#/components/schemas/Money"
+          },
           "link": {
             "type": "string",
             "example": "https://example.com"
