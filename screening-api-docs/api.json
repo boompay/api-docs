@@ -3653,7 +3653,8 @@
               "finished",
               "finished_with_warnings",
               "verified",
-              "canceled"
+              "canceled",
+              "skipped"
             ]
           },
           "completed_at": {
@@ -3870,11 +3871,19 @@
             "type": "string",
             "example": "1"
           },
-          "property": {
-            "$ref": "#/components/schemas/PropertyList"
+          "property_id": {
+            "type": "string",
+            "example": "123456"
           },
-          "unit": {
-            "$ref": "#/components/schemas/UnitList"
+          "verification_template_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
+          },
+          "unit_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
           },
           "score": {
             "type": "number",
@@ -3902,6 +3911,12 @@
             ]
           },
           "desired_move_in_date": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "started_at": {
             "format": "date-time",
             "type": "string",
             "example": "2021-01-01T00:00:00.000Z",
@@ -3953,12 +3968,8 @@
               }
             ]
           },
-
-          "verifications": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/VerificationList"
-            }
+          "pending_magic_links": {
+            "$ref": "#/components/schemas/MagicLink"
           },
           "created_at": {
             "format": "date-time",
@@ -3973,19 +3984,23 @@
           "application_url": {
             "type": "string",
             "example": "https://boompay.app/applications/1234567890"
+          },
+          "adverse_action_reasons": {
+            "example": ["condition"],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         },
         "required": [
           "id",
-          "property",
-          "unit",
-          "score",
+          "property_id",
+          "unit_id",
           "monthly_rent_amount",
           "status",
-          "desired_move_in_date",
           "submitted_at",
           "applicants",
-          "verifications",
           "created_at",
           "updated_at"
         ]
@@ -6592,7 +6607,8 @@
               "finished",
               "finished_with_warnings",
               "verified",
-              "canceled"
+              "canceled",
+              "skipped"
             ]
           },
           "completed_at": {
