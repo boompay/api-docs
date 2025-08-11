@@ -3999,7 +3999,6 @@
           "unit_id",
           "monthly_rent_amount",
           "status",
-          "submitted_at",
           "applicants",
           "created_at",
           "updated_at"
@@ -4012,11 +4011,19 @@
             "type": "string",
             "example": "1"
           },
-          "property": {
-            "$ref": "#/components/schemas/PropertyList"
+          "property_id": {
+            "type": "string",
+            "example": "123456"
           },
-          "unit": {
-            "$ref": "#/components/schemas/UnitList"
+          "verification_template_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
+          },
+          "unit_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
           },
           "score": {
             "type": "number",
@@ -4049,6 +4056,12 @@
             "example": "2021-01-01T00:00:00.000Z",
             "nullable": true
           },
+          "started_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z",
+            "nullable": true
+          },
           "submitted_at": {
             "format": "date-time",
             "type": "string",
@@ -4061,11 +4074,42 @@
               "$ref": "#/components/schemas/ApplicantList"
             }
           },
-          "verifications": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/VerificationList"
-            }
+          "recommendation": {
+            "type": "string",
+            "example": "decline",
+            "enum": ["decline"]
+          },
+          "decision_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2025-02-03T15:55:38.816+00:00",
+            "nullable": true
+          },
+          "decision_time_in_days": {
+            "type": "number",
+            "example": 3,
+            "nullable": true
+          },
+          "listing_id": {
+            "type": "string",
+            "example": "1234567890",
+            "nullable": true
+          },
+          "grouped_income_rent_ratio": {
+            "type": "number",
+            "example": 0.3,
+            "nullable": true
+          },
+          "listing_rent_amount": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ]
+          },
+          "pending_magic_links": {
+            "$ref": "#/components/schemas/MagicLink"
           },
           "created_at": {
             "format": "date-time",
@@ -4077,26 +4121,45 @@
             "type": "string",
             "example": "2021-01-01T00:00:00.000Z"
           },
-          "recommendation": {
+          "application_url": {
             "type": "string",
-            "example": "decline",
-            "enum": ["decline"]
+            "example": "https://boompay.app/applications/1234567890"
+          },
+          "adverse_action_reasons": {
+            "example": ["condition"],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "pet_rent_value": {
+            "$ref": "#/components/schemas/Money",
+            "nullable": true
+          },
+          "pets_count": {
+            "type": "number",
+            "example": 1,
+            "nullable": true
+          },
+          "has_voucher": {
+            "type": "boolean",
+            "example": true,
+            "nullable": true
+          },
+          "voucher_amount": {
+            "$ref": "#/components/schemas/Money",
+            "nullable": true
           }
         },
         "required": [
           "id",
-          "property",
-          "unit",
-          "score",
+          "property_id",
+          "unit_id",
           "monthly_rent_amount",
           "status",
-          "desired_move_in_date",
-          "submitted_at",
           "applicants",
-          "verifications",
           "created_at",
-          "updated_at",
-          "recommendation"
+          "updated_at"
         ]
       },
       "ApproveApplication": {
