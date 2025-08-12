@@ -1728,6 +1728,14 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ValidatorResponse"
+                },
+                "examples": {
+                  "ApplicationOnHold": {
+                    "summary": "Application is on hold",
+                    "value": {
+                      "message": "This action cannot be performed because the application is currently on hold"
+                    }
+                  }
                 }
               }
             }
@@ -1802,6 +1810,14 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ValidatorResponse"
+                },
+                "examples": {
+                  "ApplicationOnHold": {
+                    "summary": "Application is on hold",
+                    "value": {
+                      "message": "This action cannot be performed because the application is currently on hold"
+                    }
+                  }
                 }
               }
             }
@@ -1884,6 +1900,14 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ValidatorResponse"
+                },
+                "examples": {
+                  "ApplicationOnHold": {
+                    "summary": "Application is on hold",
+                    "value": {
+                      "message": "This action cannot be performed because the application is currently on hold"
+                    }
+                  }
                 }
               }
             }
@@ -2146,6 +2170,14 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ValidatorResponse"
+                },
+                "examples": {
+                  "ApplicationOnHold": {
+                    "summary": "Application is on hold",
+                    "value": {
+                      "message": "This action cannot be performed because the application is currently on hold"
+                    }
+                  }
                 }
               }
             }
@@ -2536,6 +2568,171 @@
           }
         },
         "tags": ["Applicants"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/applications/{id}/place_on_hold": {
+      "post": {
+        "operationId": "ApplicationsController_placeOnHold",
+        "summary": "Place an application on hold",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Application placed on hold successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                },
+                "examples": {
+                  "InvalidStatus": {
+                    "summary": "Application not in submitted status",
+                    "value": {
+                      "message": "Only submitted applications can be put on hold"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Application not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Applications"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/applications/{id}/resume": {
+      "post": {
+        "operationId": "ApplicationsController_resume",
+        "summary": "Resume an application from hold",
+        "description": "Resumes an application that was previously placed on hold. Only applications with 'on_hold' status can be resumed. This action restores the application to 'submitted' status and removes all restrictions.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Application resumed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                },
+                "examples": {
+                  "InvalidStatus": {
+                    "summary": "Application not in on_hold status",
+                    "value": {
+                      "message": "Only on_hold applications can be resumed"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Application not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Applications"],
         "security": [
           {
             "bearer": []
@@ -3907,7 +4104,8 @@
               "approved",
               "approved_with_conditions",
               "rejected",
-              "canceled"
+              "canceled",
+              "on_hold"
             ]
           },
           "desired_move_in_date": {
@@ -4047,7 +4245,8 @@
               "approved",
               "approved_with_conditions",
               "rejected",
-              "canceled"
+              "canceled",
+              "on_hold"
             ]
           },
           "desired_move_in_date": {
@@ -6782,6 +6981,61 @@
         "type": "object",
         "properties": {},
         "required": []
+      },
+      "ApplicationOnHoldRestrictions": {
+        "type": "object",
+        "title": "Application On Hold Restrictions",
+        "description": "When an application is placed on hold, the following actions are restricted until the application is resumed:",
+        "properties": {
+          "restricted_actions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of actions that cannot be performed on on_hold applications",
+            "example": [
+              "Approve application",
+              "Reject application",
+              "Perform verifications",
+              "Rerun verifications",
+              "Request retry identity verification",
+              "Resend invitations",
+              "Merge applications",
+              "Make decisions"
+            ]
+          },
+          "allowed_actions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of actions that can still be performed on on_hold applications",
+            "example": [
+              "View application details",
+              "Place on hold (if already on hold)",
+              "Resume application",
+              "Cancel application"
+            ]
+          },
+          "status_transitions": {
+            "type": "object",
+            "description": "Valid status transitions for on_hold applications",
+            "properties": {
+              "from": {
+                "type": "string",
+                "example": "submitted"
+              },
+              "to": {
+                "type": "string",
+                "example": "on_hold"
+              },
+              "resume_to": {
+                "type": "string",
+                "example": "submitted"
+              }
+            }
+          }
+        }
       }
     }
   }
