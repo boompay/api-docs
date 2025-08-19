@@ -258,7 +258,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateUser"
+                "$ref": "#/components/schemas/User"
               }
             }
           }
@@ -570,7 +570,7 @@
           }
         },
         "responses": {
-          "201": {
+          "200": {
             "description": "",
             "content": {
               "application/json": {
@@ -976,7 +976,7 @@
           }
         },
         "responses": {
-          "201": {
+          "200": {
             "description": "",
             "content": {
               "application/json": {
@@ -1259,7 +1259,7 @@
     "/partner/v1/magic_links": {
       "get": {
         "operationId": "MagicLinksController_getLink",
-        "summary": "Get portfolio link",
+        "summary": "List all magic links",
         "parameters": [
           {
             "name": "page",
@@ -1318,7 +1318,8 @@
             "in": "query",
             "schema": {
               "type": "string"
-            }
+            },
+            "nullable": true
           },
           {
             "name": "property_external_id",
@@ -1343,7 +1344,21 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MagicLink"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/MagicLink"
+                          }
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -2901,9 +2916,23 @@
           "postal_code": {
             "type": "string",
             "example": "12345"
+          },
+          "country": {
+            "type": "string",
+            "example": "United States"
+          },
+          "lat": {
+            "type": "number",
+            "example": 1.23,
+            "nullable": true
+          },
+          "lng": {
+            "type": "number",
+            "example": -1.23,
+            "nullable": true
           }
         },
-        "required": ["address1", "city", "state_or_province", "postal_code"]
+        "required": ["address1", "city", "state_or_province", "postal_code", "country"]
       },
       "MagicLink": {
         "type": "object",
@@ -3223,6 +3252,35 @@
           "updated_at"
         ]
       },
+      "PropertyGroupBase": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "1"
+          },
+          "verification_template_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "example": "Texas Group"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "verification_template_id",
+          "created_at"
+        ]
+      },
       "User": {
         "type": "object",
         "properties": {
@@ -3273,6 +3331,28 @@
           "can_show_full_ssn": {
             "type": "boolean",
             "example": true
+          },
+          "can_override_decision_recommendation": {
+            "type": "boolean",
+            "example": true
+          },
+          "can_edit_income": {
+            "type": "boolean",
+            "example": true
+          },
+          "can_manage_all_properties": {
+            "type": "boolean",
+            "example": true
+          },
+          "can_view_boom_report": {
+            "type": "boolean",
+            "example": true
+          },
+          "property_groups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PropertyGroupBase"
+            }
           },
           "properties": {
             "type": "array",
@@ -3548,9 +3628,17 @@
       "CreatePropertyUnit": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "string",
+            "example": "1"
+          },
           "title": {
             "type": "string",
             "example": "Unit 1"
+          },
+          "property_id": {
+            "type": "string",
+            "example": "1"
           },
           "monthly_rent_amount": {
             "$ref": "#/components/schemas/Money"
@@ -3564,18 +3652,51 @@
             "type": "string",
             "example": "2021-01-01"
           },
+          "magic_link": {
+            "$ref": "#/components/schemas/MagicLink"
+          },
           "external_id": {
             "type": "string",
-            "example": "123",
+            "example": "123456",
             "nullable": true
           },
-          "listing_id": {
+          "created_at": {
+            "format": "date-time",
             "type": "string",
-            "example": "123",
+            "example": "2021-01-01T00:00:00.000Z"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          },
+          "unit_url": {
+            "type": "string",
+            "example": "{BOOM_PORTAL_URL}/properties/{property.obfuscated_partner_id}/units/{obfuscated_partner_id}"
+          },
+          "verification_template_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
+          },
+          "can_delete": {
+            "type": "boolean",
+            "example": false
+          },
+          "list_id": {
+            "type": "string",
+            "example": "123456",
             "nullable": true
           }
         },
-        "required": ["title", "occupied"]
+        "required": [
+          "id",
+          "title",
+          "property_id",
+          "occupied",
+          "created_at",
+          "updated_at"
+        ]
       },
       "CreateProperty": {
         "type": "object",
@@ -3708,6 +3829,23 @@
           "unit_url": {
             "type": "string",
             "example": "{BOOM_PORTAL_URL}/properties/{property.obfuscated_partner_id}/units/{obfuscated_partner_id}"
+          },
+          "verification_template_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
+          },
+          "can_delete": {
+            "type": "boolean",
+            "example": false
+          },
+          "list_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
+          },
+          "property": {
+            "$ref": "#/components/schemas/PropertyList"
           }
         },
         "required": [
@@ -3902,7 +4040,8 @@
           },
           "email": {
             "type": "string",
-            "example": "jd@boompay.app"
+            "example": "jd@boompay.app",
+            "nullable": true
           },
           "phone": {
             "type": "string",
@@ -3933,7 +4072,7 @@
           },
           "application_status": {
             "type": "string",
-            "enum": ["pending", "started", "finished", "submitted"],
+            "enum": ["pending", "started", "finished", "submitted", "canceled", "on_hold"],
             "example": "pending"
           },
           "application_started_at": {
@@ -3958,13 +4097,23 @@
             "items": {
               "$ref": "#/components/schemas/VerificationList"
             }
+          },
+          "application_submitted_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
           }
         },
         "required": [
           "id",
           "first_name",
           "last_name",
-          "email",
           "role",
           "application_status",
           "application_started_at",
@@ -3990,7 +4139,8 @@
           },
           "email": {
             "type": "string",
-            "example": "jd@boompay.app"
+            "example": "jd@boompay.app",
+            "nullable": true
           },
           "phone": {
             "type": "string",
@@ -4021,7 +4171,7 @@
           },
           "application_status": {
             "type": "string",
-            "enum": ["pending", "started", "finished", "submitted"],
+            "enum": ["pending", "started", "finished", "submitted", "canceled", "on_hold"],
             "example": "pending"
           },
           "application_started_at": {
@@ -4046,13 +4196,23 @@
             "items": {
               "$ref": "#/components/schemas/VerificationList"
             }
+          },
+          "application_submitted_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
           }
         },
         "required": [
           "id",
           "first_name",
           "last_name",
-          "email",
           "role",
           "application_status",
           "application_started_at",
@@ -4084,7 +4244,8 @@
           },
           "score": {
             "type": "number",
-            "example": 10
+            "example": 10,
+            "nullable": true
           },
           "monthly_rent_amount": {
             "nullable": true,
@@ -4135,7 +4296,12 @@
           "recommendation": {
             "type": "string",
             "example": "decline",
-            "enum": ["decline"]
+            "nullable": true,
+            "enum": [
+              "approve",
+              "conditional_approve",
+              "decline"
+            ]
           },
           "decision_at": {
             "format": "date-time",
@@ -4167,7 +4333,10 @@
             ]
           },
           "pending_magic_links": {
-            "$ref": "#/components/schemas/MagicLink"
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MagicLink"
+            }
           },
           "created_at": {
             "format": "date-time",
@@ -4225,7 +4394,8 @@
           },
           "score": {
             "type": "number",
-            "example": 10
+            "example": 10,
+            "nullable": true
           },
           "monthly_rent_amount": {
             "nullable": true,
@@ -4276,7 +4446,12 @@
           "recommendation": {
             "type": "string",
             "example": "decline",
-            "enum": ["decline"]
+            "nullable": true,
+            "enum": [
+              "approve",
+              "conditional_approve",
+              "decline"
+            ]
           },
           "decision_at": {
             "format": "date-time",
@@ -4308,7 +4483,10 @@
             ]
           },
           "pending_magic_links": {
-            "$ref": "#/components/schemas/MagicLink"
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MagicLink"
+            }
           },
           "created_at": {
             "format": "date-time",
@@ -4662,7 +4840,8 @@
           },
           "email": {
             "type": "string",
-            "example": "idv@boompay.app"
+            "example": "idv@boompay.app",
+            "nullable": true
           },
           "phone": {
             "type": "string",
@@ -4731,7 +4910,6 @@
           "dob",
           "zip",
           "city",
-          "email",
           "phone",
           "state",
           "po_box",
@@ -6156,7 +6334,6 @@
           }
         },
         "required": [
-          "score",
           "hit_code",
           "personal_data",
           "bankruptcy_details",
@@ -6175,7 +6352,8 @@
         "properties": {
           "email": {
             "type": "string",
-            "example": "jd@boompay.app"
+            "example": "jd@boompay.app",
+            "nullable": true
           },
           "phone": {
             "type": "string",
