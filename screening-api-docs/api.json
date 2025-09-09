@@ -4526,6 +4526,72 @@
           "voucher_amount": {
             "$ref": "#/components/schemas/Money",
             "nullable": true
+          },
+          "evaluated_rule_set": {
+            "type": "object",
+            "properties": {
+              "rule_set_type": {
+                "type": "string",
+                "example": "approve",
+                "enum": ["approve", "decline"]
+              },
+              "rules": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "field_name": {
+                      "type": "string",
+                      "example": "gross_income",
+                      "enum":["gross_income", "gross_income_to_rent_ratio", "net_income", "credit_score", "past_due_account", "unpaid_collections_balance", "bankruptcy_records", "sex_offender_check", "no_credit_score", "housing_court_records", "collections_balance", "debt_to_net_income", "felony_records", "misdemeanor_records", "ofac_records", "other_criminal_records", "all_criminal_records", "income_document_fraud_check"]
+                    },
+                    "field_type": {
+                      "type": "string",
+                      "example": null,
+                      "nullable": true,
+                      "enum":["percentage", "numeric", "within_N_years"]
+                    },
+                    "group_type": {
+                      "type": "string",
+                      "example": "anyone_in_group",
+                      "nullable": true,
+                      "enum": ["group_combined", "group_average", "anyone_in_group", "everyone_in_group"]
+                    },
+                    "computed_value": {
+                      "type": "number",
+                      "example": 1000.0,
+                      "nullable": true
+                    },
+                    "applicant_values": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "applicant_id": {
+                            "type": "number",
+                            "example": 1
+                          },
+                          "value": {
+                            "type": "number",
+                            "example": 1000.0
+                          }
+                        }
+                      }
+                    },
+                    "threshold": {
+                      "type": "string",
+                      "example": "600"
+                    },
+                    "operator": {
+                      "type": "string",
+                      "example": ">=",
+                      "enum": [">=", "<=", ">", "<", "==", "!="]
+                    }
+                  }
+                }
+              }
+            },
+            "nullable": false
           }
         },
         "required": [
