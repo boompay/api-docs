@@ -2754,6 +2754,195 @@
           }
         ]
       }
+    },
+    "/partner/v1/applications/{id}/merge": {
+      "post": {
+        "operationId": "ApplicationsController_merge",
+        "summary": "Merge applications into a single application",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The ID of the application to merge into",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "application_ids",
+            "required": true,
+            "in": "query",
+            "description": "List of application IDs which will be merged into this application",
+            "schema": {
+              "type": "array",
+              "maxItems": 5,
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Applications merged successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Application not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Applications"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/applications/{id}/split": {
+      "post": {
+        "operationId": "ApplicationsController_merge",
+        "summary": "Split applicants from a target application into a new application",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The ID of the application to split from",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "moving_applicant_ids",
+            "required": true,
+            "in": "query",
+            "description": "List of applicant IDs in this application which will be moved into a new application",
+            "schema": {
+              "type": "array",
+              "maxItems": 15,
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "moving_magic_link_ids",
+            "required": true,
+            "in": "query",
+            "description": "List of magic link IDs in this application which will be moved into a new application",
+            "schema": {
+              "type": "array",
+              "maxItems": 15,
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Applications merged successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Application not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Applications"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
     }
   },
   "info": {
@@ -2932,7 +3121,13 @@
             "nullable": true
           }
         },
-        "required": ["address1", "city", "state_or_province", "postal_code", "country"]
+        "required": [
+          "address1",
+          "city",
+          "state_or_province",
+          "postal_code",
+          "country"
+        ]
       },
       "MagicLink": {
         "type": "object",
@@ -2967,7 +3162,7 @@
             "example": "123456",
             "nullable": true
           },
-           "property_id": {
+          "property_id": {
             "type": "string",
             "example": "123456",
             "nullable": true
@@ -3274,12 +3469,7 @@
             "example": "2021-01-01T00:00:00.000Z"
           }
         },
-        "required": [
-          "id",
-          "name",
-          "verification_template_id",
-          "created_at"
-        ]
+        "required": ["id", "name", "verification_template_id", "created_at"]
       },
       "User": {
         "type": "object",
@@ -3590,13 +3780,7 @@
             }
           }
         },
-        "required": [
-          "id",
-          "address",
-          "created_at",
-          "updated_at",
-          "units"
-        ]
+        "required": ["id", "address", "created_at", "updated_at", "units"]
       },
       "CreateAddress": {
         "type": "object",
@@ -4072,7 +4256,14 @@
           },
           "application_status": {
             "type": "string",
-            "enum": ["pending", "started", "finished", "submitted", "canceled", "on_hold"],
+            "enum": [
+              "pending",
+              "started",
+              "finished",
+              "submitted",
+              "canceled",
+              "on_hold"
+            ],
             "example": "pending"
           },
           "application_started_at": {
@@ -4171,7 +4362,14 @@
           },
           "application_status": {
             "type": "string",
-            "enum": ["pending", "started", "finished", "submitted", "canceled", "on_hold"],
+            "enum": [
+              "pending",
+              "started",
+              "finished",
+              "submitted",
+              "canceled",
+              "on_hold"
+            ],
             "example": "pending"
           },
           "application_started_at": {
@@ -4297,11 +4495,7 @@
             "type": "string",
             "example": "decline",
             "nullable": true,
-            "enum": [
-              "approve",
-              "conditional_approve",
-              "decline"
-            ]
+            "enum": ["approve", "conditional_approve", "decline"]
           },
           "decision_at": {
             "format": "date-time",
@@ -4447,11 +4641,7 @@
             "type": "string",
             "example": "decline",
             "nullable": true,
-            "enum": [
-              "approve",
-              "conditional_approve",
-              "decline"
-            ]
+            "enum": ["approve", "conditional_approve", "decline"]
           },
           "decision_at": {
             "format": "date-time",
@@ -4543,19 +4733,43 @@
                     "field_name": {
                       "type": "string",
                       "example": "gross_income",
-                      "enum":["gross_income", "gross_income_to_rent_ratio", "net_income", "credit_score", "past_due_account", "unpaid_collections_balance", "bankruptcy_records", "sex_offender_check", "no_credit_score", "housing_court_records", "collections_balance", "debt_to_net_income", "felony_records", "misdemeanor_records", "ofac_records", "other_criminal_records", "all_criminal_records", "income_document_fraud_check"]
+                      "enum": [
+                        "gross_income",
+                        "gross_income_to_rent_ratio",
+                        "net_income",
+                        "credit_score",
+                        "past_due_account",
+                        "unpaid_collections_balance",
+                        "bankruptcy_records",
+                        "sex_offender_check",
+                        "no_credit_score",
+                        "housing_court_records",
+                        "collections_balance",
+                        "debt_to_net_income",
+                        "felony_records",
+                        "misdemeanor_records",
+                        "ofac_records",
+                        "other_criminal_records",
+                        "all_criminal_records",
+                        "income_document_fraud_check"
+                      ]
                     },
                     "field_type": {
                       "type": "string",
                       "example": null,
                       "nullable": true,
-                      "enum":["percentage", "numeric", "within_N_years"]
+                      "enum": ["percentage", "numeric", "within_N_years"]
                     },
                     "group_type": {
                       "type": "string",
                       "example": "anyone_in_group",
                       "nullable": true,
-                      "enum": ["group_combined", "group_average", "anyone_in_group", "everyone_in_group"]
+                      "enum": [
+                        "group_combined",
+                        "group_average",
+                        "anyone_in_group",
+                        "everyone_in_group"
+                      ]
                     },
                     "computed_value": {
                       "type": "number",
