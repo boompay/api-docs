@@ -2845,7 +2845,7 @@
     },
     "/partner/v1/applications/{id}/split": {
       "post": {
-        "operationId": "ApplicationsController_merge",
+        "operationId": "ApplicationsController_split",
         "summary": "Split applicants from a target application into a new application",
         "parameters": [
           {
@@ -2886,7 +2886,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Applications merged successfully",
+            "description": "Application split successfully",
             "content": {
               "application/json": {
                 "schema": {
