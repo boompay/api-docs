@@ -4259,12 +4259,25 @@
             "enum": [
               "pending",
               "started",
-              "finished",
               "submitted",
+              "approved",
+              "approved_with_conditions",
+              "rejected",
               "canceled",
+              "merged",
               "on_hold"
             ],
             "example": "pending"
+          },
+          "application_screening_status": {
+            "type": "string",
+            "enum": [
+              "not_started",
+              "failed",
+              "completed",
+              "processing"
+            ],
+            "example": "not_started"
           },
           "application_started_at": {
             "format": "date-time",
@@ -4365,12 +4378,25 @@
             "enum": [
               "pending",
               "started",
-              "finished",
               "submitted",
+              "approved",
+              "approved_with_conditions",
+              "rejected",
               "canceled",
+              "merged",
               "on_hold"
             ],
             "example": "pending"
+          },
+          "application_screening_status": {
+            "type": "string",
+            "enum": [
+              "not_started",
+              "failed",
+              "completed",
+              "processing"
+            ],
+            "example": "not_started"
           },
           "application_started_at": {
             "format": "date-time",
