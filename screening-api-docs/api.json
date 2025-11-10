@@ -4269,16 +4269,6 @@
             ],
             "example": "pending"
           },
-          "application_screening_status": {
-            "type": "string",
-            "enum": [
-              "not_started",
-              "failed",
-              "completed",
-              "processing"
-            ],
-            "example": "not_started"
-          },
           "application_started_at": {
             "format": "date-time",
             "type": "string",
@@ -4388,16 +4378,6 @@
             ],
             "example": "pending"
           },
-          "application_screening_status": {
-            "type": "string",
-            "enum": [
-              "not_started",
-              "failed",
-              "completed",
-              "processing"
-            ],
-            "example": "not_started"
-          },
           "application_started_at": {
             "format": "date-time",
             "type": "string",
@@ -4490,8 +4470,19 @@
               "approved_with_conditions",
               "rejected",
               "canceled",
+              "merged",
               "on_hold"
             ]
+          },
+          "screening_status": {
+            "type": "string",
+            "enum": [
+              "not_started",
+              "failed",
+              "completed",
+              "processing"
+            ],
+            "example": "not_started"
           },
           "desired_move_in_date": {
             "format": "date-time",
@@ -4636,8 +4627,19 @@
               "approved_with_conditions",
               "rejected",
               "canceled",
+              "merged",
               "on_hold"
             ]
+          },
+          "screening_status": {
+            "type": "string",
+            "enum": [
+              "not_started",
+              "failed",
+              "completed",
+              "processing"
+            ],
+            "example": "not_started"
           },
           "desired_move_in_date": {
             "format": "date-time",
