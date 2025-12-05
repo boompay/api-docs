@@ -2421,13 +2421,141 @@
         ]
       }
     },
-    "/partner/v1/applications/${application_id}/applicants/${applicant_id}/uncancel": {
+    "/partner/v1/applications/{id}/applicants/{applicant_id}/cancel": {
+      "post": {
+        "operationId": "ApplicantsController_cancel",
+        "summary": "Cancel an applicant",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "applicant_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "refund": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Whether to process a refund for the application fee"
+                  },
+                  "refund_amount": {
+                    "type": "number",
+                    "description": "Optional partial refund amount. If not specified, full refund is processed when refund is true"
+                  },
+                  "cancel_application": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Whether to also cancel the entire application when all applicants are canceled"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Applicant cancelled successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicantDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Applicant or application not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Failed to cancel applicant",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Applicants"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/applications/{id}/applicants/{applicant_id}/uncancel": {
       "post": {
         "operationId": "ApplicantsController_uncancel",
         "summary": "Uncancel an applicant",
         "parameters": [
           {
-            "name": "application_id",
+            "name": "id",
             "required": true,
             "in": "path",
             "schema": {
