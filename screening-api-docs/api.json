@@ -3104,54 +3104,92 @@
       "ValidatorResponse": {
         "type": "object",
         "properties": {
-          "statusCode": {
-            "type": "number",
-            "example": 400
-          },
           "error": {
-            "type": "string",
-            "example": "Bad Request"
-          },
-          "message": {
-            "example": [
-              "First name must be a string",
-              "Last name must be a string"
-            ],
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "number",
+                "example": 400
+              },
+              "message": {
+                "type": "string",
+                "example": "First name must be a string, Last name must be a string"
+              },
+              "code": {
+                "type": "string",
+                "example": "validation_error"
+              },
+              "errors": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "example": [
+                  "First name must be a string",
+                  "Last name must be a string"
+                ]
+              }
+            },
+            "required": ["status", "message", "code", "errors"]
           }
         },
-        "required": ["statusCode", "error", "message"]
+        "required": ["error"]
       },
       "TooManyRequestsResponse": {
         "type": "object",
         "properties": {
-          "statusCode": {
-            "type": "number",
-            "example": 429
-          },
           "error": {
-            "type": "string",
-            "example": "Too many requets"
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "number",
+                "example": 429
+              },
+              "message": {
+                "type": "string",
+                "example": "Too many requests"
+              },
+              "code": {
+                "type": "string",
+                "example": "rate_limit_exceeded"
+              }
+            },
+            "required": ["status", "message"]
           }
         },
-        "required": ["statusCode", "error"]
+        "required": ["error"]
       },
       "InternalErrorResponse": {
         "type": "object",
         "properties": {
-          "statusCode": {
-            "type": "number",
-            "example": 500
-          },
           "error": {
-            "type": "string",
-            "example": "Internal Server Error"
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "number",
+                "example": 500
+              },
+              "message": {
+                "type": "string",
+                "example": "An internal error occurred of type abc123. Error ID: uuid-here"
+              },
+              "code": {
+                "type": "string",
+                "example": "api_error"
+              },
+              "error_id": {
+                "type": "string",
+                "example": "550e8400-e29b-41d4-a716-446655440000"
+              },
+              "error_signature": {
+                "type": "string",
+                "example": "abc123def456"
+              }
+            },
+            "required": ["status", "message", "code"]
           }
         },
-        "required": ["statusCode", "error"]
+        "required": ["error"]
       },
       "AuthenticationRequest": {
         "type": "object",
@@ -3180,16 +3218,26 @@
       "Unauthorized": {
         "type": "object",
         "properties": {
-          "statusCode": {
-            "type": "number",
-            "example": 401
-          },
           "error": {
-            "type": "string",
-            "example": "Unauthorized"
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "number",
+                "example": 401
+              },
+              "message": {
+                "type": "string",
+                "example": "Unauthenticated"
+              },
+              "code": {
+                "type": "string",
+                "example": "unauthenticated"
+              }
+            },
+            "required": ["status", "message", "code"]
           }
         },
-        "required": ["statusCode", "error"]
+        "required": ["error"]
       },
       "CreateUser": {
         "type": "object",
@@ -3755,16 +3803,26 @@
       "NotFoundResponse": {
         "type": "object",
         "properties": {
-          "statusCode": {
-            "type": "number",
-            "example": 404
-          },
           "error": {
-            "type": "string",
-            "example": "Not found"
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "number",
+                "example": 404
+              },
+              "message": {
+                "type": "string",
+                "example": "Not Found"
+              },
+              "code": {
+                "type": "string",
+                "example": "not_found"
+              }
+            },
+            "required": ["status", "message", "code"]
           }
         },
-        "required": ["statusCode", "error"]
+        "required": ["error"]
       },
       "UnitList": {
         "type": "object",
@@ -4051,16 +4109,26 @@
       "ForbiddenErrorResponse": {
         "type": "object",
         "properties": {
-          "statusCode": {
-            "type": "number",
-            "example": 403
-          },
           "error": {
-            "type": "string",
-            "example": "Forbidden"
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "number",
+                "example": 403
+              },
+              "message": {
+                "type": "string",
+                "example": "Forbidden"
+              },
+              "code": {
+                "type": "string",
+                "example": "forbidden"
+              }
+            },
+            "required": ["status", "message", "code"]
           }
         },
-        "required": ["statusCode", "error"]
+        "required": ["error"]
       },
       "UpdateProperty": {
         "type": "object",
