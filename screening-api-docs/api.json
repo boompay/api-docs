@@ -3139,22 +3139,8 @@
         "type": "object",
         "properties": {
           "error": {
-            "type": "object",
-            "properties": {
-              "status": {
-                "type": "number",
-                "example": 429
-              },
-              "message": {
-                "type": "string",
-                "example": "Too many requests"
-              },
-              "code": {
-                "type": "string",
-                "example": "rate_limit_exceeded"
-              }
-            },
-            "required": ["status", "message"]
+            "type": "string",
+            "example": "Too many requests. Please try again later."
           }
         },
         "required": ["error"]
