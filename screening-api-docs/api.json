@@ -850,6 +850,258 @@
         ]
       }
     },
+    "/partner/v1/properties/{id}/set_bank_account": {
+      "post": {
+        "operationId": "PropertiesController_setBankAccount",
+        "summary": "Set bank account for a property",
+        "description": "Associates a bank account with a property. Only available for partners with per_property billing type.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Property ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetBankAccountRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Bank account successfully set",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PropertyList"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed to update property bank account",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Partner billing type must be per_property",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Property or bank account not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Properties"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/bank_accounts": {
+      "get": {
+        "operationId": "BankAccountsController_findAll",
+        "summary": "List all bank accounts",
+        "description": "Returns all bank accounts associated with the partner. Soft-deleted accounts are excluded.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List of bank accounts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/BankAccount"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Bank Accounts"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/bank_accounts/{id}": {
+      "get": {
+        "operationId": "BankAccountsController_findOne",
+        "summary": "Get bank account by ID",
+        "description": "Returns a single bank account by its ID. Returns 404 if the account is soft-deleted or belongs to a different partner.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Bank account ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Bank account details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BankAccount"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bank account not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Bank Accounts"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/partner/v1/units": {
       "get": {
         "operationId": "UnitsController_findAll",
@@ -3599,6 +3851,12 @@
             "type": "string",
             "example": "San Francisco",
             "nullable": true
+          },
+          "bank_account_id": {
+            "type": "string",
+            "example": "abc123",
+            "nullable": true,
+            "description": "The ID of the bank account associated with this property (only applicable for partners with per_property billing)"
           }
         },
         "required": [
@@ -3950,6 +4208,12 @@
             "items": {
               "$ref": "#/components/schemas/UnitList"
             }
+          },
+          "bank_account_id": {
+            "type": "string",
+            "example": "abc123",
+            "nullable": true,
+            "description": "The ID of the bank account associated with this property (only applicable for partners with per_property billing)"
           }
         },
         "required": ["id", "address", "created_at", "updated_at", "units"]
@@ -7704,6 +7968,45 @@
             }
           }
         }
+      },
+      "BankAccount": {
+        "type": "object",
+        "description": "Bank account information",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "abc123",
+            "description": "Unique identifier for the bank account"
+          },
+          "name": {
+            "type": "string",
+            "example": "Main Operating Account",
+            "description": "Name of the bank account"
+          },
+          "last4": {
+            "type": "string",
+            "example": "1234",
+            "description": "Last 4 digits of the bank account number"
+          },
+          "routing_number": {
+            "type": "string",
+            "example": "021000021",
+            "description": "Bank routing number"
+          }
+        },
+        "required": ["id", "name", "last4", "routing_number"]
+      },
+      "SetBankAccountRequest": {
+        "type": "object",
+        "description": "Request body for setting a bank account on a property",
+        "properties": {
+          "bank_account_id": {
+            "type": "string",
+            "example": "abc123",
+            "description": "The ID of the bank account to associate with the property"
+          }
+        },
+        "required": ["bank_account_id"]
       }
     }
   }
