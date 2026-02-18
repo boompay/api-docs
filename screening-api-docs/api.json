@@ -3323,6 +3323,943 @@
           }
         ]
       }
+    },
+    "/partner/v1/leads/activity_logs": {
+      "get": {
+        "operationId": "LeadsController_getActivityLogs",
+        "summary": "Get activity timeline for all leads",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "activity_type",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/LeadActivityLog"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": ["Leads"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/leads": {
+      "post": {
+        "operationId": "LeadsController_create",
+        "summary": "Create a lead",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateLeadRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Lead"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "422": {
+            "description": "Could not create lead"
+          }
+        },
+        "tags": ["Leads"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/leads/{id}": {
+      "get": {
+        "operationId": "LeadsController_findById",
+        "summary": "Get lead detail",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Lead"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "tags": ["Leads"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "LeadsController_update",
+        "summary": "Update lead",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateLeadRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Lead"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation failed"
+          }
+        },
+        "tags": ["Leads"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/leads/{id}/issue_access_token": {
+      "post": {
+        "operationId": "LeadsController_issueAccessToken",
+        "summary": "Issue lead SDK access token",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeadIssueAccessToken"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "tags": ["Leads"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/leads/{id}/apply": {
+      "post": {
+        "operationId": "LeadsController_apply",
+        "summary": "Convert lead to application",
+        "description": "Creates a new application from the lead, or uncancels an existing canceled application if the feature is enabled.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationList"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "tags": ["Leads"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/leads/{id}/activity_logs": {
+      "get": {
+        "operationId": "LeadsController_getLeadActivityLogs",
+        "summary": "Get activity timeline for a specific lead",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "activity_type",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/LeadActivityLog"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "tags": ["Leads"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/leads/{id}/verifications/identity/expire": {
+      "post": {
+        "operationId": "LeadsController_expireIdentityVerification",
+        "summary": "Expire lead identity verification",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Identity verification expired successfully"
+          },
+          "400": {
+            "description": "No finished identity verification found for this lead"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "tags": ["Leads"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/billing/statements": {
+      "get": {
+        "operationId": "BillingStatementsController_findAll",
+        "summary": "Get billing statements for partner",
+        "parameters": [
+          { "name": "page", "required": false, "in": "query", "schema": { "default": 1, "type": "number" } },
+          { "name": "per_page", "required": false, "in": "query", "schema": { "default": 10, "type": "number" } },
+          { "name": "start_date", "required": false, "in": "query", "schema": { "type": "string", "format": "date", "example": "2024-01-01" } },
+          { "name": "end_date", "required": false, "in": "query", "schema": { "type": "string", "format": "date", "example": "2024-12-31" } }
+        ],
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "allOf": [{ "$ref": "#/components/schemas/PaginatedResponse" }, { "properties": { "items": { "type": "array", "items": { "$ref": "#/components/schemas/BillingStatement" } } } }] } } } },
+          "401": { "description": "Unauthorized" }
+        },
+        "tags": ["Billing"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/partner/v1/billing/statements/{id}": {
+      "get": {
+        "operationId": "BillingStatementsController_findById",
+        "summary": "Get billing statement by ID",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BillingStatement" } } } },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "Statement not found" }
+        },
+        "tags": ["Billing"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/partner/v1/billing/statements/{id}/activities": {
+      "get": {
+        "operationId": "BillingStatementsController_getActivities",
+        "summary": "Get billing activities for a statement",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } },
+          { "name": "page", "required": false, "in": "query", "schema": { "default": 1, "type": "number" } },
+          { "name": "per_page", "required": false, "in": "query", "schema": { "default": 10, "type": "number" } }
+        ],
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "allOf": [{ "$ref": "#/components/schemas/PaginatedResponse" }, { "properties": { "items": { "type": "array", "items": { "$ref": "#/components/schemas/BillingActivity" } } } }] } } } },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "Statement not found" }
+        },
+        "tags": ["Billing"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/partner/v1/roles": {
+      "get": {
+        "operationId": "RolesController_findAll",
+        "summary": "List all roles for partner",
+        "parameters": [
+          { "name": "page", "required": false, "in": "query", "schema": { "default": 1, "type": "number" } },
+          { "name": "per_page", "required": false, "in": "query", "schema": { "default": 10, "type": "number" } }
+        ],
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "allOf": [{ "$ref": "#/components/schemas/PaginatedResponse" }, { "properties": { "items": { "type": "array", "items": { "$ref": "#/components/schemas/Role" } } } }] } } } },
+          "401": { "description": "Unauthorized" }
+        },
+        "tags": ["Roles"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/partner/v1/property_groups": {
+      "get": {
+        "operationId": "PropertyGroupsController_findAll",
+        "summary": "Get property groups",
+        "parameters": [
+          { "name": "page", "required": false, "in": "query", "schema": { "default": 1, "type": "number" } },
+          { "name": "per_page", "required": false, "in": "query", "schema": { "default": 10, "type": "number" } }
+        ],
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "allOf": [{ "$ref": "#/components/schemas/PaginatedResponse" }, { "properties": { "items": { "type": "array", "items": { "$ref": "#/components/schemas/PropertyGroup" } } } }] } } } },
+          "401": { "description": "Unauthorized" }
+        },
+        "tags": ["Property Groups"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/partner/v1/property_groups/{id}": {
+      "get": {
+        "operationId": "PropertyGroupsController_findById",
+        "summary": "Get property group",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PropertyGroupDetailed" } } } },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "Not found" }
+        },
+        "tags": ["Property Groups"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/partner/v1/customers": {
+      "get": {
+        "operationId": "CustomersController_findAll",
+        "summary": "Get customers",
+        "parameters": [
+          { "name": "page", "required": false, "in": "query", "schema": { "default": 1, "type": "number" } },
+          { "name": "per_page", "required": false, "in": "query", "schema": { "default": 10, "type": "number" } }
+        ],
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "allOf": [{ "$ref": "#/components/schemas/PaginatedResponse" }, { "properties": { "items": { "type": "array", "items": { "$ref": "#/components/schemas/Customer" } } } }] } } } },
+          "401": { "description": "Unauthorized" }
+        },
+        "tags": ["Customers"],
+        "security": [{ "bearer": [] }]
+      },
+      "post": {
+        "operationId": "CustomersController_create",
+        "summary": "Create customer for partner",
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateCustomerRequest" } } } },
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PartnersCustomer" } } } },
+          "401": { "description": "Unauthorized" },
+          "422": { "description": "Could not create customer" }
+        },
+        "tags": ["Customers"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/partner/v1/customers/check": {
+      "post": {
+        "operationId": "CustomersController_check",
+        "summary": "Check if customer can enroll",
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateCustomerRequest" } } } },
+        "responses": {
+          "204": { "description": "Customer can be enrolled" },
+          "401": { "description": "Unauthorized" },
+          "422": { "description": "Customer cannot be enrolled" }
+        },
+        "tags": ["Customers"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/partner/v1/customers/{id}": {
+      "get": {
+        "operationId": "CustomersController_findById",
+        "summary": "Get customer's personal details",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PartnersCustomer" } } } },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "Not found" }
+        },
+        "tags": ["Customers"],
+        "security": [{ "bearer": [] }]
+      },
+      "patch": {
+        "operationId": "CustomersController_update",
+        "summary": "Update customer's personal details",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "requestBody": { "required": false, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateCustomerRequest" } } } },
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PartnersCustomer" } } } },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "Not found" },
+          "422": { "description": "Unprocessable entity" }
+        },
+        "tags": ["Customers"],
+        "security": [{ "bearer": [] }]
+      },
+      "delete": {
+        "operationId": "CustomersController_unenroll",
+        "summary": "Unenroll customer",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "responses": {
+          "204": { "description": "Customer unenrolled successfully" },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "Not found" }
+        },
+        "tags": ["Customers"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/partner/v1/customers/{id}/issue_access_token": {
+      "post": {
+        "operationId": "CustomersController_issueAccessToken",
+        "summary": "Issue customer SDK access token",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CustomerIssueAccessToken" } } } },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "Not found" }
+        },
+        "tags": ["Customers"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/partner/v1/customers/{id}/issues": {
+      "get": {
+        "operationId": "CustomersController_getIssues",
+        "summary": "List unresolved issues for a customer",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "type": "object", "properties": { "issues": { "type": "array", "items": { "type": "string" } } } } } } },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "Not found" }
+        },
+        "tags": ["Customers"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/partner/v1/customers/{id}/partner/plaid/tokens": {
+      "get": {
+        "operationId": "CustomersController_getPlaidTokens",
+        "summary": "List Plaid tokens for a customer",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "allOf": [{ "$ref": "#/components/schemas/PaginatedResponse" }, { "properties": { "items": { "type": "array", "items": { "$ref": "#/components/schemas/PlaidToken" } } } }] } } } },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "Not found" }
+        },
+        "tags": ["Customers"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/partner/v1/customers/{id}/partner/plaid/link": {
+      "post": {
+        "operationId": "CustomersController_linkPlaid",
+        "summary": "Link Plaid processor token for a customer",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "properties": { "processor_token": { "type": "string" }, "relay_token": { "type": "string" } } } } } },
+        "responses": {
+          "200": { "description": "Plaid token linked successfully" },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "Not found" },
+          "422": { "description": "Unprocessable entity" }
+        },
+        "tags": ["Customers"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/partner/v1/customers/{id}/partner/plaid/unlink": {
+      "post": {
+        "operationId": "CustomersController_unlinkPlaid",
+        "summary": "Unlink Plaid processor token for a customer",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "properties": { "processor_token": { "type": "string" } }, "required": ["processor_token"] } } } },
+        "responses": {
+          "204": { "description": "Plaid token unlinked successfully" },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "Not found" },
+          "422": { "description": "Unprocessable entity" }
+        },
+        "tags": ["Customers"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/partner/v1/customers/{id}/ledgers": {
+      "get": {
+        "operationId": "CustomersController_getLedgers",
+        "summary": "Get customer's ledgers",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "responses": {
+          "200": { "description": "List of ledgers" },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "Not found" }
+        },
+        "tags": ["Customers"],
+        "security": [{ "bearer": [] }]
+      },
+      "post": {
+        "operationId": "CustomersController_linkLedger",
+        "summary": "Link customer's ledger",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "properties": { "service_name": { "type": "string", "example": "chime" }, "authorization_code": { "type": "string" } }, "required": ["service_name", "authorization_code"] } } } },
+        "responses": {
+          "200": { "description": "Ledger linked successfully" },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "Not found" },
+          "422": { "description": "Unprocessable entity" }
+        },
+        "tags": ["Customers"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/partner/v1/customers/{id}/ledgers/{ledger_id}": {
+      "get": {
+        "operationId": "CustomersController_getLedgerById",
+        "summary": "Get customer's ledger by ID",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } },
+          { "name": "ledger_id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Ledger details" },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "Not found" }
+        },
+        "tags": ["Customers"],
+        "security": [{ "bearer": [] }]
+      },
+      "delete": {
+        "operationId": "CustomersController_unlinkLedger",
+        "summary": "Unlink customer's ledger",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } },
+          { "name": "ledger_id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "204": { "description": "Ledger unlinked successfully" },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "Not found" }
+        },
+        "tags": ["Customers"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/partner/v1/enrollments": {
+      "get": {
+        "operationId": "EnrollmentsController_findAll",
+        "summary": "Get enrollments",
+        "parameters": [
+          { "name": "page", "required": false, "in": "query", "schema": { "default": 1, "type": "number" } },
+          { "name": "per_page", "required": false, "in": "query", "schema": { "default": 10, "type": "number" } },
+          { "name": "customer_id", "required": false, "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "allOf": [{ "$ref": "#/components/schemas/PaginatedResponse" }, { "properties": { "items": { "type": "array", "items": { "$ref": "#/components/schemas/Enrollment" } } } }] } } } },
+          "401": { "description": "Unauthorized" }
+        },
+        "tags": ["Enrollments"],
+        "security": [{ "bearer": [] }]
+      },
+      "post": {
+        "operationId": "EnrollmentsController_create",
+        "summary": "Create enrollment for partner",
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateEnrollmentRequest" } } } },
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Enrollment" } } } },
+          "400": { "description": "Customer already has active enrollment" },
+          "401": { "description": "Unauthorized" }
+        },
+        "tags": ["Enrollments"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/partner/v1/enrollments/{id}": {
+      "get": {
+        "operationId": "EnrollmentsController_findById",
+        "summary": "Get an enrollment details",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Enrollment" } } } },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "Not found" }
+        },
+        "tags": ["Enrollments"],
+        "security": [{ "bearer": [] }]
+      },
+      "patch": {
+        "operationId": "EnrollmentsController_update",
+        "summary": "Update enrollment details",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "requestBody": { "required": false, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateEnrollmentRequest" } } } },
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Enrollment" } } } },
+          "401": { "description": "Unauthorized" }
+        },
+        "tags": ["Enrollments"],
+        "security": [{ "bearer": [] }]
+      },
+      "delete": {
+        "operationId": "EnrollmentsController_delete",
+        "summary": "Delete an enrollment",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "responses": {
+          "200": { "description": "Enrollment deleted" },
+          "401": { "description": "Unauthorized" }
+        },
+        "tags": ["Enrollments"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/partner/v1/enrollments/{id}/landlord": {
+      "patch": {
+        "operationId": "EnrollmentsController_updateLandlord",
+        "summary": "Update enrollment's landlord details",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "requestBody": { "required": false, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateLandlordRequest" } } } },
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Enrollment" } } } },
+          "401": { "description": "Unauthorized" }
+        },
+        "tags": ["Enrollments"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/partner/v1/enrollments/{id}/enroll": {
+      "post": {
+        "operationId": "EnrollmentsController_enroll",
+        "summary": "Enroll completed enrollment",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Enrollment" } } } },
+          "401": { "description": "Unauthorized" },
+          "422": { "description": "Could not submit enrollment" }
+        },
+        "tags": ["Enrollments"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/partner/v1/enrollments/{id}/add_products": {
+      "post": {
+        "operationId": "EnrollmentsController_addProducts",
+        "summary": "Add product to an enrolled enrollment",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "properties": { "products": { "type": "array", "items": { "type": "string", "enum": ["past_reporting"] } } }, "required": ["products"] } } } },
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Enrollment" } } } },
+          "401": { "description": "Unauthorized" },
+          "422": { "description": "Failed to add products" }
+        },
+        "tags": ["Enrollments"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/partner/v1/enrollments/{id}/report_rental_payments": {
+      "post": {
+        "operationId": "EnrollmentsController_reportRentalPayments",
+        "summary": "Verify rental payments",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "properties": { "rental_payments": { "type": "array", "items": { "type": "object", "properties": { "for_month": { "type": "string", "example": "2024-01" }, "no_data": { "type": "boolean" }, "months_delinquency": { "type": "integer" } }, "required": ["for_month", "no_data", "months_delinquency"] } } }, "required": ["rental_payments"] } } } },
+        "responses": {
+          "200": { "description": "Rental payments verified" },
+          "401": { "description": "Unauthorized" },
+          "422": { "description": "Failed to verify rental payments" }
+        },
+        "tags": ["Enrollments"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/partner/v1/billing/activities": {
+      "get": {
+        "operationId": "BillingActivitiesController_findAll",
+        "summary": "Get billing activities for partner",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "start_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2024-01-01"
+            }
+          },
+          {
+            "name": "end_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2024-12-31"
+            }
+          },
+          {
+            "name": "statement_id",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "applicant_id",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/BillingActivity"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": ["Billing"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
     }
   },
   "info": {
@@ -8007,6 +8944,495 @@
           }
         },
         "required": ["bank_account_id"]
+      },
+      "Lead": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "abc123"
+          },
+          "first_name": {
+            "type": "string",
+            "example": "John",
+            "nullable": true
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Doe",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "example": "john@example.com",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "example": "+14155552671",
+            "nullable": true
+          },
+          "external_id": {
+            "type": "string",
+            "example": "ext_123",
+            "nullable": true
+          },
+          "identity_verification_finished": {
+            "type": "boolean",
+            "example": false
+          },
+          "finished_identity_verification_status": {
+            "type": "string",
+            "example": "verified",
+            "nullable": true
+          },
+          "property_id": {
+            "type": "string",
+            "example": "prop_abc",
+            "nullable": true
+          },
+          "unit_id": {
+            "type": "string",
+            "example": "unit_abc",
+            "nullable": true
+          },
+          "applicant_id": {
+            "type": "string",
+            "example": "applicant_abc",
+            "nullable": true,
+            "description": "The ID of the applicant associated with this lead, if they have started an application."
+          },
+          "application_id": {
+            "type": "string",
+            "example": "app_abc",
+            "nullable": true,
+            "description": "The ID of the application associated with this lead, if one exists."
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-01-01T00:00:00.000Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-01-01T00:00:00.000Z"
+          }
+        }
+      },
+      "LeadActivityLog": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "activity_type": {
+            "type": "string",
+            "example": "lead_created"
+          },
+          "title": {
+            "type": "string",
+            "example": "Lead created",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "example": "Lead was created via API",
+            "nullable": true
+          },
+          "occurred_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "actor_type": {
+            "type": "string",
+            "example": "partner_user",
+            "nullable": true
+          },
+          "actor_name": {
+            "type": "string",
+            "example": "John Doe",
+            "nullable": true
+          },
+          "metadata": {
+            "type": "object",
+            "nullable": true
+          },
+          "lead_id": {
+            "type": "string",
+            "example": "lead_abc",
+            "nullable": true
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-01-01T00:00:00.000Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-01-01T00:00:00.000Z"
+          }
+        }
+      },
+      "LeadIssueAccessToken": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "example": "access_key-jwt_token",
+            "description": "SDK access token in the format {partner_access_key}-{jwt_token}"
+          }
+        }
+      },
+      "CreateLeadRequest": {
+        "type": "object",
+        "properties": {
+          "unit_id": {
+            "type": "string",
+            "example": "unit_abc",
+            "description": "The ID of the unit the lead is interested in"
+          },
+          "external_id": {
+            "type": "string",
+            "example": "ext_123",
+            "nullable": true
+          },
+          "first_name": {
+            "type": "string",
+            "example": "John",
+            "nullable": true
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Doe",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "example": "john@example.com",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "example": "+14155552671",
+            "nullable": true
+          }
+        },
+        "required": ["unit_id"]
+      },
+      "UpdateLeadRequest": {
+        "type": "object",
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "example": "John"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "john@example.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "+14155552671"
+          },
+          "external_id": {
+            "type": "string",
+            "example": "ext_123"
+          }
+        }
+      },
+      "BillingActivity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "abc123"
+          },
+          "description": {
+            "type": "string",
+            "example": "Screening fee",
+            "nullable": true
+          },
+          "category": {
+            "type": "string",
+            "example": "screening",
+            "nullable": true
+          },
+          "billing_type": {
+            "type": "string",
+            "example": "per_applicant",
+            "nullable": true
+          },
+          "subject_type": {
+            "type": "string",
+            "example": "applicant",
+            "nullable": true,
+            "enum": ["applicant", "verification", "lead", "customer", "reporting_account", "identity_verification"]
+          },
+          "subject_id": {
+            "type": "string",
+            "example": "subj_abc",
+            "nullable": true
+          },
+          "amount": {
+            "type": "object",
+            "properties": {
+              "cents": {
+                "type": "number",
+                "example": 4000
+              },
+              "currency": {
+                "type": "string",
+                "example": "USD"
+              }
+            }
+          },
+          "statement_id": {
+            "type": "string",
+            "example": "stmt_abc",
+            "nullable": true
+          },
+          "bank_account": {
+            "$ref": "#/components/schemas/BankAccount",
+            "nullable": true
+          },
+          "product": {
+            "type": "string",
+            "example": "boom_screen",
+            "nullable": true
+          },
+          "property_name": {
+            "type": "string",
+            "example": "Sunset Apartments",
+            "nullable": true
+          },
+          "one_line_address": {
+            "type": "string",
+            "example": "123 Main St, San Francisco, CA 94105",
+            "nullable": true
+          },
+          "unit": {
+            "type": "string",
+            "example": "Unit 4B",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "example": "applicant@example.com",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "example": "John Doe",
+            "nullable": true
+          },
+          "property_group_name": {
+            "type": "string",
+            "example": "West Coast Properties",
+            "nullable": true
+          },
+          "verification_name": {
+            "type": "string",
+            "example": "Identity Verification",
+            "nullable": true
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-01-01T00:00:00.000Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-01-01T00:00:00.000Z",
+            "nullable": true
+          }
+        }
+      },
+      "BillingStatement": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "example": "stmt_abc" },
+          "status": { "type": "string", "example": "pending", "nullable": true },
+          "started_at": { "type": "string", "format": "date-time", "example": "2024-01-01T00:00:00.000Z" },
+          "ended_at": { "type": "string", "format": "date-time", "example": "2024-01-31T23:59:59.000Z" },
+          "created_at": { "type": "string", "format": "date-time", "example": "2024-01-01T00:00:00.000Z" },
+          "updated_at": { "type": "string", "format": "date-time", "example": "2024-01-01T00:00:00.000Z", "nullable": true },
+          "balance": {
+            "type": "object",
+            "properties": {
+              "cents": { "type": "number", "example": 4000 },
+              "currency": { "type": "string", "example": "USD" }
+            }
+          },
+          "bank_account": { "$ref": "#/components/schemas/BankAccount", "nullable": true }
+        }
+      },
+      "Role": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "example": "role_abc" },
+          "name": { "type": "string", "example": "Admin" },
+          "role_type": { "type": "string", "example": "admin", "nullable": true },
+          "permissions": { "type": "array", "items": { "type": "string" }, "nullable": true }
+        }
+      },
+      "PropertyGroup": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "example": "pg_abc" },
+          "name": { "type": "string", "example": "West Coast Portfolio" },
+          "verification_template_id": { "type": "string", "example": "template_abc", "nullable": true },
+          "created_at": { "type": "string", "format": "date-time", "example": "2024-01-01T00:00:00.000Z" }
+        }
+      },
+      "PropertyGroupDetailed": {
+        "allOf": [
+          { "$ref": "#/components/schemas/PropertyGroup" },
+          {
+            "type": "object",
+            "properties": {
+              "properties": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/Property" }
+              }
+            }
+          }
+        ]
+      },
+      "Customer": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "example": "cust_abc" },
+          "first_name": { "type": "string", "example": "John", "nullable": true },
+          "last_name": { "type": "string", "example": "Doe", "nullable": true },
+          "phone": { "type": "string", "example": "+14155552671", "nullable": true },
+          "email": { "type": "string", "example": "john@example.com", "nullable": true },
+          "dob": { "type": "string", "format": "date", "example": "1990-01-01", "nullable": true }
+        }
+      },
+      "PartnersCustomer": {
+        "allOf": [
+          { "$ref": "#/components/schemas/Customer" },
+          {
+            "type": "object",
+            "properties": {
+              "access_token": { "type": "string", "example": "access_key-jwt_token", "nullable": true }
+            }
+          }
+        ]
+      },
+      "CustomerIssueAccessToken": {
+        "type": "object",
+        "properties": {
+          "access_token": { "type": "string", "example": "access_key-jwt_token", "description": "SDK access token in the format {partner_access_key}-{jwt_token}" }
+        }
+      },
+      "CreateCustomerRequest": {
+        "type": "object",
+        "properties": {
+          "first_name": { "type": "string", "example": "John" },
+          "last_name": { "type": "string", "example": "Doe" },
+          "phone": { "type": "string", "example": "+14155552671" },
+          "email": { "type": "string", "example": "john@example.com" },
+          "dob": { "type": "string", "format": "date", "example": "1990-01-01", "nullable": true },
+          "ssn": { "type": "string", "example": "123-45-6789", "nullable": true },
+          "processor_tokens": { "type": "array", "items": { "type": "string" }, "nullable": true },
+          "chime_authorization_code": { "type": "string", "nullable": true }
+        },
+        "required": ["first_name", "last_name", "phone", "email"]
+      },
+      "UpdateCustomerRequest": {
+        "type": "object",
+        "properties": {
+          "first_name": { "type": "string", "example": "John" },
+          "last_name": { "type": "string", "example": "Doe" },
+          "phone": { "type": "string", "example": "+14155552671" },
+          "email": { "type": "string", "example": "john@example.com" },
+          "dob": { "type": "string", "format": "date", "example": "1990-01-01" },
+          "ssn": { "type": "string", "example": "123-45-6789" }
+        }
+      },
+      "PlaidToken": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "example": "plaid_abc" },
+          "status": { "type": "string", "example": "active", "nullable": true },
+          "created_at": { "type": "string", "format": "date-time", "example": "2024-01-01T00:00:00.000Z" }
+        }
+      },
+      "Enrollment": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "example": "enroll_abc" },
+          "status": { "type": "string", "example": "enrolled", "nullable": true },
+          "customer_id": { "type": "string", "example": "cust_abc" },
+          "move_in_date": { "type": "string", "format": "date", "example": "2024-01-01", "nullable": true },
+          "lease_end_date": { "type": "string", "format": "date", "example": "2025-01-01", "nullable": true },
+          "lease_signed_date": { "type": "string", "format": "date", "example": "2023-12-15", "nullable": true },
+          "lease_month_to_month": { "type": "boolean", "example": false, "nullable": true },
+          "monthly_rent_amount": { "type": "number", "example": 2000.0 },
+          "monthly_rent_day_of_month": { "type": "integer", "example": 1, "nullable": true },
+          "checked_out": { "type": "boolean", "example": true },
+          "allow_landlord_contact": { "type": "boolean", "example": false, "nullable": true },
+          "products": { "type": "array", "items": { "type": "string" }, "nullable": true },
+          "issues": { "type": "array", "items": { "type": "string" } },
+          "address": { "type": "object", "nullable": true },
+          "landlord": { "type": "object", "nullable": true },
+          "rental_verifications": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "CreateEnrollmentRequest": {
+        "type": "object",
+        "properties": {
+          "customer_id": { "type": "string", "example": "cust_abc" },
+          "move_in_date": { "type": "string", "format": "date", "example": "2024-01-01" },
+          "lease_end_date": { "type": "string", "format": "date", "example": "2025-01-01" },
+          "lease_month_to_month": { "type": "boolean", "example": false },
+          "monthly_rent_amount": { "type": "number", "example": 2000.0 },
+          "opt_out": { "type": "boolean", "example": false },
+          "address": {
+            "type": "object",
+            "properties": {
+              "street": { "type": "string", "example": "123 Main St" },
+              "city": { "type": "string", "example": "San Francisco" },
+              "state": { "type": "string", "example": "CA" },
+              "zip": { "type": "string", "example": "94105" }
+            }
+          }
+        },
+        "required": ["customer_id", "address"]
+      },
+      "UpdateEnrollmentRequest": {
+        "type": "object",
+        "properties": {
+          "move_in_date": { "type": "string", "format": "date", "example": "2024-01-01" },
+          "lease_end_date": { "type": "string", "format": "date", "example": "2025-01-01" },
+          "moved_out_date": { "type": "string", "format": "date", "example": "2024-06-01" },
+          "monthly_rent_amount": { "type": "number", "example": 2000.0 },
+          "lease_month_to_month": { "type": "boolean", "example": false },
+          "address": { "type": "object" }
+        }
+      },
+      "UpdateLandlordRequest": {
+        "type": "object",
+        "properties": {
+          "contact_first_name": { "type": "string", "example": "Jane" },
+          "contact_last_name": { "type": "string", "example": "Smith" },
+          "company_name": { "type": "string", "example": "Acme Properties" },
+          "type": { "type": "string", "example": "company" },
+          "allow_landlord_contact": { "type": "boolean", "example": false },
+          "phone": { "type": "string", "example": "+14155552671" },
+          "email": { "type": "string", "example": "landlord@example.com" }
+        }
       }
     }
   }
