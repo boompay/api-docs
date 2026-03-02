@@ -4126,6 +4126,304 @@
           }
         ]
       }
+    },
+    "/partner/v1/billing/statements": {
+      "get": {
+        "operationId": "BillingStatementsController_findAll",
+        "summary": "Get billing statements for partner",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "start_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2024-01-01"
+            }
+          },
+          {
+            "name": "end_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2024-12-31"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/BillingStatement"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": [
+          "Billing"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/billing/statements/{id}": {
+      "get": {
+        "operationId": "BillingStatementsController_findById",
+        "summary": "Get billing statement by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillingStatement"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Statement not found"
+          }
+        },
+        "tags": [
+          "Billing"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/billing/statements/{id}/activities": {
+      "get": {
+        "operationId": "BillingStatementsController_getActivities",
+        "summary": "Get billing activities for a statement",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 10,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/BillingActivity"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Statement not found"
+          }
+        },
+        "tags": [
+          "Billing"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/billing/activities": {
+      "get": {
+        "operationId": "BillingActivitiesController_findAll",
+        "summary": "Get billing activities for partner",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "start_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2024-01-01"
+            }
+          },
+          {
+            "name": "end_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2024-12-31"
+            }
+          },
+          {
+            "name": "statement_id",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "applicant_id",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/BillingActivity"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": [
+          "Billing"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
     }
   },
   "info": {
