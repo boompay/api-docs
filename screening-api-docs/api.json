@@ -3323,6 +3323,448 @@
           }
         ]
       }
+    },
+    "/partner/v1/leads": {
+      "get": {
+        "operationId": "LeadsController_findAll",
+        "summary": "List leads, optionally filtered by email and/or phone",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "email",
+            "required": false,
+            "in": "query",
+            "description": "Filter leads by email address",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "phone",
+            "required": false,
+            "in": "query",
+            "description": "Filter leads by phone number",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Lead"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Leads"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/leads/{lead_id}": {
+      "patch": {
+        "operationId": "LeadsController_update",
+        "summary": "Update lead (including stage and source)",
+        "parameters": [
+          {
+            "name": "lead_id",
+            "required": true,
+            "in": "path",
+            "description": "The obfuscated lead ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateLeadRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Lead"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Leads"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/stages": {
+      "get": {
+        "operationId": "StagesController_findAll",
+        "summary": "List stages by kind",
+        "parameters": [
+          {
+            "name": "kind",
+            "required": true,
+            "in": "query",
+            "description": "Stage kind (e.g. 'lead')",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "stages": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Stage"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Stages"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/lead_sources": {
+      "get": {
+        "operationId": "LeadSourcesController_findAll",
+        "summary": "List lead sources",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LeadSource"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Lead Sources"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "LeadSourcesController_create",
+        "summary": "Create a lead source",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateLeadSourceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeadSource"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed or duplicate lead source",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "DuplicateName": {
+                    "summary": "Lead source name already exists",
+                    "value": {
+                      "error": {
+                        "message": "A partner lead source with this name already exists",
+                        "status": 400
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Could not create lead source",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "Could not create lead source",
+                    "status": 422
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Lead Sources"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
     }
   },
   "info": {
@@ -8007,6 +8449,246 @@
           }
         },
         "required": ["bank_account_id"]
+      },
+      "Lead": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "123456"
+          },
+          "first_name": {
+            "type": "string",
+            "example": "John",
+            "nullable": true
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Doe",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "example": "john@example.com",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "example": "15551234567",
+            "nullable": true
+          },
+          "identity_verification_finished": {
+            "type": "boolean",
+            "example": false
+          },
+          "finished_identity_verification_status": {
+            "type": "string",
+            "example": "verified",
+            "nullable": true
+          },
+          "external_id": {
+            "type": "string",
+            "example": "ext-123",
+            "nullable": true
+          },
+          "source": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LeadSource"
+              }
+            ]
+          },
+          "property_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
+          },
+          "unit_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
+          },
+          "applicant_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
+          },
+          "application_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
+          },
+          "stage": {
+            "type": "object",
+            "nullable": true,
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "123456"
+              },
+              "name": {
+                "type": "string",
+                "example": "New"
+              }
+            }
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          }
+        },
+        "required": ["id", "created_at", "updated_at"]
+      },
+      "UpdateLeadRequest": {
+        "type": "object",
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "example": "John"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "john@example.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "15551234567"
+          },
+          "external_id": {
+            "type": "string",
+            "example": "ext-123"
+          },
+          "lead_stage_id": {
+            "type": "string",
+            "example": "123456",
+            "description": "The obfuscated ID of the stage to assign to the lead"
+          },
+          "lead_source_id": {
+            "type": "string",
+            "example": "123456",
+            "description": "The obfuscated ID of the lead source to assign to the lead"
+          }
+        }
+      },
+      "LeadSource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "123456"
+          },
+          "name": {
+            "type": "string",
+            "example": "Website"
+          },
+          "source_type": {
+            "type": "string",
+            "example": "partner",
+            "description": "Either 'boom' (system default) or 'partner' (custom)"
+          },
+          "is_active": {
+            "type": "boolean",
+            "example": true
+          },
+          "display_order": {
+            "type": "number",
+            "example": 1,
+            "nullable": true
+          },
+          "can_edit": {
+            "type": "boolean",
+            "example": true,
+            "description": "Whether this source can be edited (partner sources only)"
+          },
+          "can_delete": {
+            "type": "boolean",
+            "example": true,
+            "description": "Whether this source can be deleted"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          }
+        },
+        "required": ["id", "name", "source_type", "is_active", "created_at", "updated_at"]
+      },
+      "CreateLeadSourceRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Website"
+          },
+          "is_active": {
+            "type": "boolean",
+            "example": true,
+            "default": true
+          }
+        },
+        "required": ["name"]
+      },
+      "Stage": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "123456"
+          },
+          "name": {
+            "type": "string",
+            "example": "New"
+          },
+          "color": {
+            "type": "string",
+            "example": "#FF5733"
+          },
+          "is_fixed": {
+            "type": "boolean",
+            "example": false
+          },
+          "position": {
+            "type": "number",
+            "example": 1
+          }
+        },
+        "required": ["id", "name", "color", "is_fixed", "position"]
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "A partner lead source with this name already exists"
+              },
+              "status": {
+                "type": "number",
+                "example": 400
+              }
+            },
+            "required": ["message", "status"]
+          }
+        },
+        "required": ["error"]
       }
     }
   }
