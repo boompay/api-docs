@@ -3432,6 +3432,157 @@
       "post": {
         "operationId": "LeadsController_create",
         "summary": "Create a lead",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateLeadRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Lead"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Could not create lead",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Leads"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/leads/bulk": {
+      "post": {
+        "operationId": "LeadsController_bulkCreate",
+        "summary": "Bulk create leads (max 100 per request)",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BulkCreateLeadsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns an array of results, each with a status of success or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BulkCreateLeadResult"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Array exceeds 100 items",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Leads"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "LeadsController_create",
+        "summary": "Create a lead",
         "requestBody": {
           "required": true,
           "content": {
@@ -9204,6 +9355,92 @@
           }
         },
         "required": ["id", "created_at", "updated_at"]
+      },
+      "CreateLeadRequest": {
+        "type": "object",
+        "properties": {
+          "unit_id": {
+            "type": "string",
+            "example": "123456",
+            "description": "The obfuscated ID of the unit the lead is interested in"
+          },
+          "external_id": {
+            "type": "string",
+            "example": "ext-123",
+            "nullable": true,
+            "description": "External identifier for the lead in partner's system"
+          },
+          "first_name": {
+            "type": "string",
+            "example": "John",
+            "nullable": true
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Doe",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "example": "john@example.com",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "example": "15551234567",
+            "nullable": true
+          }
+        },
+        "required": ["unit_id"]
+      },
+      "BulkCreateLeadsRequest": {
+        "type": "object",
+        "properties": {
+          "leads": {
+            "type": "array",
+            "description": "Array of lead objects to create (max 100)",
+            "maxItems": 100,
+            "items": {
+              "$ref": "#/components/schemas/CreateLeadRequest"
+            }
+          }
+        },
+        "required": ["leads"]
+      },
+      "BulkCreateLeadResult": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["success", "error"],
+            "example": "success"
+          },
+          "lead": {
+            "nullable": true,
+            "description": "The created lead (present when status is success)",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Lead"
+              }
+            ]
+          },
+          "error": {
+            "type": "object",
+            "nullable": true,
+            "description": "Error details (present when status is error)",
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "Unit not found"
+              },
+              "unit_id": {
+                "type": "string",
+                "example": "123456"
+              }
+            }
+          }
+        },
+        "required": ["status"]
       },
       "UpdateLeadRequest": {
         "type": "object",
