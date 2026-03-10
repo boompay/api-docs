@@ -3579,20 +3579,22 @@
             "bearer": []
           }
         ]
-      },
-      "post": {
-        "operationId": "LeadsController_create",
-        "summary": "Create a lead",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateLeadRequest"
-              }
+      }
+    },
+    "/partner/v1/leads/{lead_id}": {
+      "get": {
+        "operationId": "LeadsController_findById",
+        "summary": "Get lead detail",
+        "parameters": [
+          {
+            "name": "lead_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
             }
           }
-        },
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -3607,8 +3609,8 @@
           "401": {
             "description": "Unauthorized"
           },
-          "422": {
-            "description": "Could not create lead"
+          "404": {
+            "description": "Not found"
           }
         },
         "tags": [
@@ -3619,9 +3621,7 @@
             "bearer": []
           }
         ]
-      }
-    },
-    "/partner/v1/leads/{lead_id}": {
+      },
       "patch": {
         "operationId": "LeadsController_update",
         "summary": "Update lead (including stage and source)",
@@ -3797,55 +3797,13 @@
         ]
       }
     },
-    "/partner/v1/leads/{id}": {
-      "get": {
-        "operationId": "LeadsController_findById",
-        "summary": "Get lead detail",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Lead"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "404": {
-            "description": "Not found"
-          }
-        },
-        "tags": [
-          "Leads"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/partner/v1/leads/{id}/activity_logs": {
+    "/partner/v1/leads/{lead_id}/activity_logs": {
       "get": {
         "operationId": "LeadsController_getLeadActivityLogs",
         "summary": "Get activity timeline for a specific lead",
         "parameters": [
           {
-            "name": "id",
+            "name": "lead_id",
             "required": true,
             "in": "path",
             "schema": {
@@ -3921,14 +3879,14 @@
         ]
       }
     },
-    "/partner/v1/leads/{id}/apply": {
+    "/partner/v1/leads/{lead_id}/apply": {
       "post": {
         "operationId": "LeadsController_apply",
         "summary": "Convert lead to application",
         "description": "Creates a new application from the lead, or uncancels an existing canceled application if the feature is enabled.",
         "parameters": [
           {
-            "name": "id",
+            "name": "lead_id",
             "required": true,
             "in": "path",
             "schema": {
@@ -3967,13 +3925,13 @@
         ]
       }
     },
-    "/partner/v1/leads/{id}/issue_access_token": {
+    "/partner/v1/leads/{lead_id}/issue_access_token": {
       "post": {
         "operationId": "LeadsController_issueAccessToken",
         "summary": "Issue lead SDK access token",
         "parameters": [
           {
-            "name": "id",
+            "name": "lead_id",
             "required": true,
             "in": "path",
             "schema": {
@@ -4009,13 +3967,13 @@
         ]
       }
     },
-    "/partner/v1/leads/{id}/verifications/identity/expire": {
+    "/partner/v1/leads/{lead_id}/verifications/identity/expire": {
       "post": {
         "operationId": "LeadsController_expireIdentityVerification",
         "summary": "Expire lead identity verification",
         "parameters": [
           {
-            "name": "id",
+            "name": "lead_id",
             "required": true,
             "in": "path",
             "schema": {
