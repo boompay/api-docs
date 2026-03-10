@@ -3582,6 +3582,46 @@
       }
     },
     "/partner/v1/leads/{lead_id}": {
+      "get": {
+        "operationId": "LeadsController_findById",
+        "summary": "Get lead detail",
+        "parameters": [
+          {
+            "name": "lead_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Lead"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "tags": [
+          "Leads"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
       "patch": {
         "operationId": "LeadsController_update",
         "summary": "Update lead (including stage and source)",
@@ -3679,6 +3719,285 @@
           }
         },
         "tags": ["Leads"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/leads/activity_logs": {
+      "get": {
+        "operationId": "LeadsController_getActivityLogs",
+        "summary": "Get activity timeline for all leads",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "activity_type",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/LeadActivityLog"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": [
+          "Leads"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/leads/{lead_id}/activity_logs": {
+      "get": {
+        "operationId": "LeadsController_getLeadActivityLogs",
+        "summary": "Get activity timeline for a specific lead",
+        "parameters": [
+          {
+            "name": "lead_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "activity_type",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/LeadActivityLog"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "tags": [
+          "Leads"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/leads/{lead_id}/apply": {
+      "post": {
+        "operationId": "LeadsController_apply",
+        "summary": "Convert lead to application",
+        "description": "Creates a new application from the lead, or uncancels an existing canceled application if the feature is enabled.",
+        "parameters": [
+          {
+            "name": "lead_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationList"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "tags": [
+          "Leads"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/leads/{lead_id}/issue_access_token": {
+      "post": {
+        "operationId": "LeadsController_issueAccessToken",
+        "summary": "Issue lead SDK access token",
+        "parameters": [
+          {
+            "name": "lead_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeadIssueAccessToken"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "tags": [
+          "Leads"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/leads/{lead_id}/verifications/identity/expire": {
+      "post": {
+        "operationId": "LeadsController_expireIdentityVerification",
+        "summary": "Expire lead identity verification",
+        "parameters": [
+          {
+            "name": "lead_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Identity verification expired successfully"
+          },
+          "400": {
+            "description": "No finished identity verification found for this lead"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "tags": [
+          "Leads"
+        ],
         "security": [
           {
             "bearer": []
@@ -3910,6 +4229,304 @@
           }
         },
         "tags": ["Lead Sources"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/billing/statements": {
+      "get": {
+        "operationId": "BillingStatementsController_findAll",
+        "summary": "Get billing statements for partner",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "start_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2024-01-01"
+            }
+          },
+          {
+            "name": "end_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2024-12-31"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/BillingStatement"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": [
+          "Billing"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/billing/statements/{id}": {
+      "get": {
+        "operationId": "BillingStatementsController_findById",
+        "summary": "Get billing statement by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillingStatement"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Statement not found"
+          }
+        },
+        "tags": [
+          "Billing"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/billing/statements/{id}/activities": {
+      "get": {
+        "operationId": "BillingStatementsController_getActivities",
+        "summary": "Get billing activities for a statement",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 10,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/BillingActivity"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Statement not found"
+          }
+        },
+        "tags": [
+          "Billing"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/billing/activities": {
+      "get": {
+        "operationId": "BillingActivitiesController_findAll",
+        "summary": "Get billing activities for partner",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "start_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2024-01-01"
+            }
+          },
+          {
+            "name": "end_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2024-12-31"
+            }
+          },
+          {
+            "name": "statement_id",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "applicant_id",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/BillingActivity"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": [
+          "Billing"
+        ],
         "security": [
           {
             "bearer": []
@@ -8906,6 +9523,279 @@
           }
         },
         "required": ["id", "name", "color", "is_fixed", "position"]
+      },
+      "CreateLeadRequest": {
+        "type": "object",
+        "properties": {
+          "unit_id": {
+            "type": "string",
+            "example": "unit_abc",
+            "description": "The ID of the unit the lead is interested in"
+          },
+          "external_id": {
+            "type": "string",
+            "example": "ext_123",
+            "nullable": true
+          },
+          "first_name": {
+            "type": "string",
+            "example": "John",
+            "nullable": true
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Doe",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "example": "john@example.com",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "example": "+14155552671",
+            "nullable": true
+          }
+        },
+        "required": [
+          "unit_id"
+        ]
+      },
+      "LeadActivityLog": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "activity_type": {
+            "type": "string",
+            "example": "lead_created"
+          },
+          "title": {
+            "type": "string",
+            "example": "Lead created",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "example": "Lead was created via API",
+            "nullable": true
+          },
+          "occurred_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "actor_type": {
+            "type": "string",
+            "example": "partner_user",
+            "nullable": true
+          },
+          "actor_name": {
+            "type": "string",
+            "example": "John Doe",
+            "nullable": true
+          },
+          "metadata": {
+            "type": "object",
+            "nullable": true
+          },
+          "lead_id": {
+            "type": "string",
+            "example": "lead_abc",
+            "nullable": true
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-01-01T00:00:00.000Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-01-01T00:00:00.000Z"
+          }
+        }
+      },
+      "LeadIssueAccessToken": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "example": "access_key-jwt_token",
+            "description": "SDK access token in the format {partner_access_key}-{jwt_token}"
+          }
+        }
+      },
+      "BillingActivity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "abc123"
+          },
+          "description": {
+            "type": "string",
+            "example": "Screening fee",
+            "nullable": true
+          },
+          "category": {
+            "type": "string",
+            "example": "screening",
+            "nullable": true
+          },
+          "billing_type": {
+            "type": "string",
+            "example": "per_applicant",
+            "nullable": true
+          },
+          "subject_type": {
+            "type": "string",
+            "example": "applicant",
+            "nullable": true,
+            "enum": [
+              "applicant",
+              "verification",
+              "lead",
+              "customer",
+              "reporting_account",
+              "identity_verification"
+            ]
+          },
+          "subject_id": {
+            "type": "string",
+            "example": "subj_abc",
+            "nullable": true
+          },
+          "amount": {
+            "type": "object",
+            "properties": {
+              "cents": {
+                "type": "number",
+                "example": 4000
+              },
+              "currency": {
+                "type": "string",
+                "example": "USD"
+              }
+            }
+          },
+          "statement_id": {
+            "type": "string",
+            "example": "stmt_abc",
+            "nullable": true
+          },
+          "bank_account": {
+            "$ref": "#/components/schemas/BankAccount",
+            "nullable": true
+          },
+          "product": {
+            "type": "string",
+            "example": "boom_screen",
+            "nullable": true
+          },
+          "property_name": {
+            "type": "string",
+            "example": "Sunset Apartments",
+            "nullable": true
+          },
+          "one_line_address": {
+            "type": "string",
+            "example": "123 Main St, San Francisco, CA 94105",
+            "nullable": true
+          },
+          "unit": {
+            "type": "string",
+            "example": "Unit 4B",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "example": "applicant@example.com",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "example": "John Doe",
+            "nullable": true
+          },
+          "property_group_name": {
+            "type": "string",
+            "example": "West Coast Properties",
+            "nullable": true
+          },
+          "verification_name": {
+            "type": "string",
+            "example": "Identity Verification",
+            "nullable": true
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-01-01T00:00:00.000Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-01-01T00:00:00.000Z",
+            "nullable": true
+          }
+        }
+      },
+      "BillingStatement": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "stmt_abc"
+          },
+          "status": {
+            "type": "string",
+            "example": "pending",
+            "nullable": true
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-01-01T00:00:00.000Z"
+          },
+          "ended_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-01-31T23:59:59.000Z"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-01-01T00:00:00.000Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "balance": {
+            "type": "object",
+            "properties": {
+              "cents": {
+                "type": "number",
+                "example": 4000
+              },
+              "currency": {
+                "type": "string",
+                "example": "USD"
+              }
+            }
+          },
+          "bank_account": {
+            "$ref": "#/components/schemas/BankAccount",
+            "nullable": true
+          }
+        }
       },
       "ErrorResponse": {
         "type": "object",
