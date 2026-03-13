@@ -6168,6 +6168,7 @@
             "type": "string",
             "example": "decline",
             "nullable": true,
+            "description": "The application recommendation. Returns null if any submitted applicant has a failed identity verification that has not been manually overridden.",
             "enum": ["approve", "conditional_approve", "decline"]
           },
           "decision_at": {
@@ -6325,6 +6326,7 @@
             "type": "string",
             "example": "decline",
             "nullable": true,
+            "description": "The application recommendation. Returns null if any submitted applicant has a failed identity verification that has not been manually overridden.",
             "enum": ["approve", "conditional_approve", "decline"]
           },
           "decision_at": {
