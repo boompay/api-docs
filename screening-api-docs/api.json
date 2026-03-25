@@ -4533,6 +4533,272 @@
           }
         ]
       }
+    },
+    "/partner/v1/applications/activity_logs": {
+      "get": {
+        "operationId": "ApplicationActivityLogsController_findAll",
+        "summary": "List activity logs for all applications",
+        "description": "Returns a paginated list of activity log events across all of the partner's applications. Useful for BI tools to track application lifecycle events, identify who decisioned each application, and monitor activity metrics.",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "event_type",
+            "required": false,
+            "in": "query",
+            "description": "Filter by a specific event type",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "invited",
+                "resent_invite",
+                "submitted",
+                "group_submitted",
+                "decision_made",
+                "decision_email_sent",
+                "credit_report_sent",
+                "auto_approved",
+                "canadian_criminal_report_invited",
+                "canceled",
+                "uncanceled",
+                "invite_canceled",
+                "remove_criminal_report",
+                "requested_pet_screening",
+                "request_retry_identity_verification",
+                "create_retry_identity_verification_link",
+                "complete_request_retry_identity_verification",
+                "cancel_request_retry_identity_verification",
+                "discount_applied",
+                "discount_removed",
+                "landlord_survey_sent",
+                "landlord_survey_manual_resent",
+                "landlord_survey_first_nudge",
+                "landlord_survey_second_nudge",
+                "landlord_survey_final_nudge",
+                "verification_override",
+                "income_override",
+                "placed_on_hold",
+                "resumed",
+                "failed_identity_verification_manual_override",
+                "role_changed",
+                "name_changed",
+                "report_run_manually",
+                "verified_income_adjusted",
+                "income_reverify",
+                "income_reverify_completed",
+                "split_application",
+                "created_from_split",
+                "application_merged",
+                "application_rent_adjusted",
+                "application_rent_automatically_adjusted",
+                "applicant_pet_rent_adjusted",
+                "applicant_housing_assistance_adjusted",
+                "idv_data_updated",
+                "verification_template_overridden",
+                "verification_template_changed",
+                "push_applicants_to_property_management_system",
+                "application_assigned",
+                "fee_refunded",
+                "desired_move_in_date_updated"
+              ]
+            }
+          },
+          {
+            "name": "from_date",
+            "required": false,
+            "in": "query",
+            "description": "Filter events on or after this date (ISO 8601)",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "to_date",
+            "required": false,
+            "in": "query",
+            "description": "Filter events on or before this date (ISO 8601)",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated list of activity logs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/ActivityLog"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Activity Logs"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/applications/{id}/activity_logs": {
+      "get": {
+        "operationId": "ApplicationActivityLogsController_findByApplication",
+        "summary": "List activity logs for a specific application",
+        "description": "Returns all activity log events and notes for a specific application. Includes the same events shown in the activity log in the Partner Experience portal.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The obfuscated application ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "events[]",
+            "required": false,
+            "in": "query",
+            "description": "Filter by one or more event types. Include \"note\" to filter for notes. When omitted, all events and notes are returned.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of activity logs for the application",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "activity_logs": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ActivityLog"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Activity Logs"],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
     }
   },
   "info": {
@@ -5253,6 +5519,72 @@
           }
         },
         "required": ["total_count", "page_count", "current_page", "has_more"]
+      },
+      "ActivityLog": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "The activity log event ID",
+            "example": 12345
+          },
+          "application_id": {
+            "type": "string",
+            "description": "The obfuscated application ID this event belongs to",
+            "example": "app_abc123def456"
+          },
+          "event_type": {
+            "type": "string",
+            "description": "Machine-readable event type identifier. Use for filtering and grouping in BI tools.",
+            "example": "decision_made"
+          },
+          "event_description": {
+            "type": "string",
+            "description": "Human-readable description of the event",
+            "example": "Decision Made"
+          },
+          "actor": {
+            "$ref": "#/components/schemas/ActivityLogActor"
+          },
+          "details": {
+            "type": "object",
+            "description": "Event-specific data. Structure varies by event type.",
+            "example": {
+              "status": "approved",
+              "decision_at": "2025-01-15T10:30:00Z"
+            }
+          },
+          "occurred_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the event occurred",
+            "example": "2025-01-15T10:30:00Z"
+          }
+        },
+        "required": ["id", "application_id", "event_type", "event_description", "actor", "details", "occurred_at"]
+      },
+      "ActivityLogActor": {
+        "type": "object",
+        "description": "The user or system that initiated the event",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "The type of actor",
+            "enum": ["partner_user", "applicant", "partner", "system"],
+            "example": "partner_user"
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name of the actor",
+            "example": "Jane Smith"
+          },
+          "role": {
+            "type": "string",
+            "description": "Role of the actor (only present for partner_user actors)",
+            "example": "admin"
+          }
+        },
+        "required": ["type", "name"]
       },
       "NotFoundResponse": {
         "type": "object",
