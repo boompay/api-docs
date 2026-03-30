@@ -6824,6 +6824,13 @@
               }
             },
             "nullable": false
+          },
+          "evaluated_rule_sets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApplicationDetail/properties/evaluated_rule_set"
+            },
+            "nullable": false
           }
         },
         "required": [
