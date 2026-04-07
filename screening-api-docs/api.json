@@ -6284,6 +6284,26 @@
           "updated_at"
         ]
       },
+      "Assignee": {
+        "type": "object",
+        "description": "A partner user assigned to an application",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "abc123",
+            "description": "Obfuscated partner user ID"
+          },
+          "email": {
+            "type": "string",
+            "example": "user@example.com"
+          },
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          }
+        },
+        "required": ["id", "email", "name"]
+      },
       "ApplicantList": {
         "type": "object",
         "properties": {
@@ -6647,6 +6667,13 @@
             "items": {
               "type": "string"
             }
+          },
+          "assignees": {
+            "type": "array",
+            "description": "List of partner users assigned to this application",
+            "items": {
+              "$ref": "#/components/schemas/Assignee"
+            }
           }
         },
         "required": [
@@ -6804,6 +6831,13 @@
             "type": "array",
             "items": {
               "type": "string"
+            }
+          },
+          "assignees": {
+            "type": "array",
+            "description": "List of partner users assigned to this application",
+            "items": {
+              "$ref": "#/components/schemas/Assignee"
             }
           },
           "pet_rent_value": {
