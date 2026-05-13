@@ -4899,12 +4899,20 @@
         ]
       }
     },
-    "/partner/v1/leads/identity_verifications": {
+    "/partner/v1/leads/{lead_id}/identity_verification": {
       "get": {
-        "operationId": "LeadsController_getIdentityVerifications",
-        "summary": "Get IDV results for all leads",
-        "description": "Returns all identity verification results for the partner's leads. Supports pagination and scoped API key restrictions.",
+        "operationId": "LeadsController_getLeadIdentityVerifications",
+        "summary": "Get identity verifications for a lead",
+        "description": "Returns all identity verification results for the specified lead. Supports pagination.",
         "parameters": [
+          {
+            "name": "lead_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "page",
             "required": false,
@@ -4951,6 +4959,9 @@
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
           }
         },
         "tags": [
