@@ -4899,7 +4899,7 @@
         ]
       }
     },
-    "/partner/v1/leads/{lead_id}/identity_verification": {
+    "/partner/v1/leads/{lead_id}/identity_verifications": {
       "get": {
         "operationId": "LeadsController_getLeadIdentityVerifications",
         "summary": "Get identity verifications for a lead",
@@ -10707,10 +10707,57 @@
             "type": "string",
             "description": "Obfuscated lead ID"
           },
-          "lead_external_id": {
+          "first_name": {
+            "type": "string",
+            "description": "Lead first name"
+          },
+          "last_name": {
+            "type": "string",
+            "description": "Lead last name"
+          },
+          "email": {
+            "type": "string",
+            "nullable": true,
+            "description": "Lead primary email"
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true,
+            "description": "Lead primary phone"
+          },
+          "external_id": {
             "type": "string",
             "nullable": true,
             "description": "External ID of the lead as provided by the partner"
+          },
+          "external_customer_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "External customer ID (same as external_id)"
+          },
+          "property_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "Obfuscated property ID"
+          },
+          "unit_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "Obfuscated unit ID"
+          },
+          "application_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "Obfuscated application ID associated with the lead"
+          },
+          "applicant_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "Obfuscated applicant ID associated with the lead"
+          },
+          "identity_verification_finished": {
+            "type": "boolean",
+            "description": "Whether the lead has a finished identity verification"
           },
           "provider": {
             "type": "string",
