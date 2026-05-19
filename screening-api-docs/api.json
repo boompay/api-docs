@@ -67,7 +67,9 @@
             }
           }
         },
-        "tags": ["Authentication"]
+        "tags": [
+          "Authentication"
+        ]
       }
     },
     "/partner/v1/users": {
@@ -137,7 +139,9 @@
             }
           }
         },
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "security": [
           {
             "bearer": []
@@ -231,7 +235,9 @@
             }
           }
         },
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "security": [
           {
             "bearer": []
@@ -315,7 +321,9 @@
             }
           }
         },
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "security": [
           {
             "bearer": []
@@ -387,7 +395,9 @@
             }
           }
         },
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "security": [
           {
             "bearer": []
@@ -452,7 +462,9 @@
             }
           }
         },
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "security": [
           {
             "bearer": []
@@ -548,7 +560,9 @@
             }
           }
         },
-        "tags": ["Properties"],
+        "tags": [
+          "Properties"
+        ],
         "security": [
           {
             "bearer": []
@@ -621,7 +635,9 @@
             }
           }
         },
-        "tags": ["Properties"],
+        "tags": [
+          "Properties"
+        ],
         "security": [
           {
             "bearer": []
@@ -695,7 +711,9 @@
             }
           }
         },
-        "tags": ["Properties"],
+        "tags": [
+          "Properties"
+        ],
         "security": [
           {
             "bearer": []
@@ -777,7 +795,9 @@
             }
           }
         },
-        "tags": ["Properties"],
+        "tags": [
+          "Properties"
+        ],
         "security": [
           {
             "bearer": []
@@ -842,7 +862,9 @@
             }
           }
         },
-        "tags": ["Properties"],
+        "tags": [
+          "Properties"
+        ],
         "security": [
           {
             "bearer": []
@@ -948,7 +970,9 @@
             }
           }
         },
-        "tags": ["Properties"],
+        "tags": [
+          "Properties"
+        ],
         "security": [
           {
             "bearer": []
@@ -1018,7 +1042,9 @@
             }
           }
         },
-        "tags": ["Bank Accounts"],
+        "tags": [
+          "Bank Accounts"
+        ],
         "security": [
           {
             "bearer": []
@@ -1094,7 +1120,9 @@
             }
           }
         },
-        "tags": ["Bank Accounts"],
+        "tags": [
+          "Bank Accounts"
+        ],
         "security": [
           {
             "bearer": []
@@ -1206,7 +1234,9 @@
             }
           }
         },
-        "tags": ["Units"],
+        "tags": [
+          "Units"
+        ],
         "security": [
           {
             "bearer": []
@@ -1279,7 +1309,9 @@
             }
           }
         },
-        "tags": ["Units"],
+        "tags": [
+          "Units"
+        ],
         "security": [
           {
             "bearer": []
@@ -1353,7 +1385,9 @@
             }
           }
         },
-        "tags": ["Units"],
+        "tags": [
+          "Units"
+        ],
         "security": [
           {
             "bearer": []
@@ -1435,7 +1469,9 @@
             }
           }
         },
-        "tags": ["Units"],
+        "tags": [
+          "Units"
+        ],
         "security": [
           {
             "bearer": []
@@ -1500,7 +1536,9 @@
             }
           }
         },
-        "tags": ["Units"],
+        "tags": [
+          "Units"
+        ],
         "security": [
           {
             "bearer": []
@@ -1537,7 +1575,10 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": ["true", "false"]
+              "enum": [
+                "true",
+                "false"
+              ]
             }
           },
           {
@@ -1646,7 +1687,9 @@
             }
           }
         },
-        "tags": ["Magic links"],
+        "tags": [
+          "Magic links"
+        ],
         "security": [
           {
             "bearer": []
@@ -1720,7 +1763,9 @@
             }
           }
         },
-        "tags": ["Magic links"],
+        "tags": [
+          "Magic links"
+        ],
         "security": [
           {
             "bearer": []
@@ -1872,7 +1917,9 @@
             }
           }
         },
-        "tags": ["Applications"],
+        "tags": [
+          "Applications"
+        ],
         "security": [
           {
             "bearer": []
@@ -1946,7 +1993,9 @@
             }
           }
         },
-        "tags": ["Applications"],
+        "tags": [
+          "Applications"
+        ],
         "security": [
           {
             "bearer": []
@@ -2028,7 +2077,9 @@
             }
           }
         },
-        "tags": ["Applications"],
+        "tags": [
+          "Applications"
+        ],
         "security": [
           {
             "bearer": []
@@ -2110,7 +2161,9 @@
             }
           }
         },
-        "tags": ["Applications"],
+        "tags": [
+          "Applications"
+        ],
         "security": [
           {
             "bearer": []
@@ -2210,7 +2263,9 @@
             }
           }
         },
-        "tags": ["Applications"],
+        "tags": [
+          "Applications"
+        ],
         "security": [
           {
             "bearer": []
@@ -2292,7 +2347,9 @@
             }
           }
         },
-        "tags": ["Applications"],
+        "tags": [
+          "Applications"
+        ],
         "security": [
           {
             "bearer": []
@@ -2382,7 +2439,9 @@
             }
           }
         },
-        "tags": ["Applications"],
+        "tags": [
+          "Applications"
+        ],
         "security": [
           {
             "bearer": []
@@ -2480,7 +2539,9 @@
             }
           }
         },
-        "tags": ["Applications"],
+        "tags": [
+          "Applications"
+        ],
         "security": [
           {
             "bearer": []
@@ -2514,7 +2575,9 @@
                     "description": "Whether to refund the application upon cancellation"
                   }
                 },
-                "required": ["refund"]
+                "required": [
+                  "refund"
+                ]
               }
             }
           }
@@ -2591,7 +2654,9 @@
             }
           }
         },
-        "tags": ["Applications"],
+        "tags": [
+          "Applications"
+        ],
         "security": [
           {
             "bearer": []
@@ -2665,7 +2730,9 @@
             }
           }
         },
-        "tags": ["Applications"],
+        "tags": [
+          "Applications"
+        ],
         "security": [
           {
             "bearer": []
@@ -2793,7 +2860,9 @@
             }
           }
         },
-        "tags": ["Applicants"],
+        "tags": [
+          "Applicants"
+        ],
         "security": [
           {
             "bearer": []
@@ -2875,7 +2944,9 @@
             }
           }
         },
-        "tags": ["Applicants"],
+        "tags": [
+          "Applicants"
+        ],
         "security": [
           {
             "bearer": []
@@ -2962,7 +3033,9 @@
             }
           }
         },
-        "tags": ["Applicants"],
+        "tags": [
+          "Applicants"
+        ],
         "security": [
           {
             "bearer": []
@@ -3044,7 +3117,9 @@
             }
           }
         },
-        "tags": ["Applications"],
+        "tags": [
+          "Applications"
+        ],
         "security": [
           {
             "bearer": []
@@ -3127,7 +3202,9 @@
             }
           }
         },
-        "tags": ["Applications"],
+        "tags": [
+          "Applications"
+        ],
         "security": [
           {
             "bearer": []
@@ -3215,7 +3292,9 @@
             }
           }
         },
-        "tags": ["Applications"],
+        "tags": [
+          "Applications"
+        ],
         "security": [
           {
             "bearer": []
@@ -3316,7 +3395,9 @@
             }
           }
         },
-        "tags": ["Applications"],
+        "tags": [
+          "Applications"
+        ],
         "security": [
           {
             "bearer": []
@@ -3422,7 +3503,9 @@
             }
           }
         },
-        "tags": ["Leads"],
+        "tags": [
+          "Leads"
+        ],
         "security": [
           {
             "bearer": []
@@ -3495,7 +3578,9 @@
             }
           }
         },
-        "tags": ["Leads"],
+        "tags": [
+          "Leads"
+        ],
         "security": [
           {
             "bearer": []
@@ -3573,7 +3658,9 @@
             }
           }
         },
-        "tags": ["Leads"],
+        "tags": [
+          "Leads"
+        ],
         "security": [
           {
             "bearer": []
@@ -3718,7 +3805,9 @@
             }
           }
         },
-        "tags": ["Leads"],
+        "tags": [
+          "Leads"
+        ],
         "security": [
           {
             "bearer": []
@@ -4070,7 +4159,9 @@
             }
           }
         },
-        "tags": ["Stages"],
+        "tags": [
+          "Stages"
+        ],
         "security": [
           {
             "bearer": []
@@ -4128,7 +4219,9 @@
             }
           }
         },
-        "tags": ["Lead Sources"],
+        "tags": [
+          "Lead Sources"
+        ],
         "security": [
           {
             "bearer": []
@@ -4228,7 +4321,9 @@
             }
           }
         },
-        "tags": ["Lead Sources"],
+        "tags": [
+          "Lead Sources"
+        ],
         "security": [
           {
             "bearer": []
@@ -4696,7 +4791,9 @@
             }
           }
         },
-        "tags": ["Activity Logs"],
+        "tags": [
+          "Activity Logs"
+        ],
         "security": [
           {
             "bearer": []
@@ -4792,7 +4889,84 @@
             }
           }
         },
-        "tags": ["Activity Logs"],
+        "tags": [
+          "Activity Logs"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/leads/{lead_id}/identity_verifications": {
+      "get": {
+        "operationId": "LeadsController_getLeadIdentityVerifications",
+        "summary": "Get identity verifications for a lead",
+        "description": "Returns all identity verification results for the specified lead. Supports pagination.",
+        "parameters": [
+          {
+            "name": "lead_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": 20,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/LeadIdentityVerification"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "tags": [
+          "Leads"
+        ],
         "security": [
           {
             "bearer": []
@@ -4858,10 +5032,17 @@
                 ]
               }
             },
-            "required": ["status", "message", "code", "errors"]
+            "required": [
+              "status",
+              "message",
+              "code",
+              "errors"
+            ]
           }
         },
-        "required": ["error"]
+        "required": [
+          "error"
+        ]
       },
       "TooManyRequestsResponse": {
         "type": "object",
@@ -4871,7 +5052,9 @@
             "example": "Too many requests. Please try again later."
           }
         },
-        "required": ["error"]
+        "required": [
+          "error"
+        ]
       },
       "InternalErrorResponse": {
         "type": "object",
@@ -4900,10 +5083,16 @@
                 "example": "abc123def456"
               }
             },
-            "required": ["status", "message", "code"]
+            "required": [
+              "status",
+              "message",
+              "code"
+            ]
           }
         },
-        "required": ["error"]
+        "required": [
+          "error"
+        ]
       },
       "AuthenticationRequest": {
         "type": "object",
@@ -4917,7 +5106,10 @@
             "example": "secret_key"
           }
         },
-        "required": ["access_key", "secret_key"]
+        "required": [
+          "access_key",
+          "secret_key"
+        ]
       },
       "AuthenticationResponse": {
         "type": "object",
@@ -4927,7 +5119,9 @@
             "example": "auth_token"
           }
         },
-        "required": ["auth_token"]
+        "required": [
+          "auth_token"
+        ]
       },
       "Unauthorized": {
         "type": "object",
@@ -4948,10 +5142,16 @@
                 "example": "unauthenticated"
               }
             },
-            "required": ["status", "message", "code"]
+            "required": [
+              "status",
+              "message",
+              "code"
+            ]
           }
         },
-        "required": ["error"]
+        "required": [
+          "error"
+        ]
       },
       "CreateUser": {
         "type": "object",
@@ -4970,7 +5170,10 @@
             "default": "property_manager"
           }
         },
-        "required": ["name", "email"]
+        "required": [
+          "name",
+          "email"
+        ]
       },
       "Address": {
         "type": "object",
@@ -5077,7 +5280,12 @@
             "example": "2021-01-01T00:00:00.000Z"
           }
         },
-        "required": ["id", "active", "link", "created_at"]
+        "required": [
+          "id",
+          "active",
+          "link",
+          "created_at"
+        ]
       },
       "Money": {
         "type": "object",
@@ -5092,7 +5300,9 @@
             "default": "USD"
           }
         },
-        "required": ["cents"]
+        "required": [
+          "cents"
+        ]
       },
       "RuleSet": {
         "type": "object",
@@ -5100,7 +5310,10 @@
           "rule_set_type": {
             "type": "string",
             "example": "approve",
-            "enum": ["approve", "decline"]
+            "enum": [
+              "approve",
+              "decline"
+            ]
           },
           "rules": {
             "type": "array",
@@ -5135,7 +5348,11 @@
                   "type": "string",
                   "example": null,
                   "nullable": true,
-                  "enum": ["percentage", "numeric", "within_N_years"]
+                  "enum": [
+                    "percentage",
+                    "numeric",
+                    "within_N_years"
+                  ]
                 },
                 "group_type": {
                   "type": "string",
@@ -5176,7 +5393,14 @@
                 "operator": {
                   "type": "string",
                   "example": ">=",
-                  "enum": [">=", "<=", ">", "<", "==", "!="]
+                  "enum": [
+                    ">=",
+                    "<=",
+                    ">",
+                    "<",
+                    "==",
+                    "!="
+                  ]
                 }
               }
             }
@@ -5238,7 +5462,10 @@
             "$ref": "#/components/schemas/VerificationSchemaType"
           }
         },
-        "required": ["applicant", "co_signer"]
+        "required": [
+          "applicant",
+          "co_signer"
+        ]
       },
       "VerificationScreeningCriteria": {
         "type": "object",
@@ -5454,7 +5681,12 @@
             "example": "2021-01-01T00:00:00.000Z"
           }
         },
-        "required": ["id", "name", "verification_template_id", "created_at"]
+        "required": [
+          "id",
+          "name",
+          "verification_template_id",
+          "created_at"
+        ]
       },
       "User": {
         "type": "object",
@@ -5536,7 +5768,12 @@
             }
           }
         },
-        "required": ["id", "name", "email", "role"]
+        "required": [
+          "id",
+          "name",
+          "email",
+          "role"
+        ]
       },
       "UpdateUser": {
         "type": "object",
@@ -5607,7 +5844,12 @@
             "example": false
           }
         },
-        "required": ["total_count", "page_count", "current_page", "has_more"]
+        "required": [
+          "total_count",
+          "page_count",
+          "current_page",
+          "has_more"
+        ]
       },
       "ActivityLog": {
         "type": "object",
@@ -5650,7 +5892,15 @@
             "example": "2025-01-15T10:30:00Z"
           }
         },
-        "required": ["id", "application_id", "event_type", "event_description", "actor", "details", "occurred_at"]
+        "required": [
+          "id",
+          "application_id",
+          "event_type",
+          "event_description",
+          "actor",
+          "details",
+          "occurred_at"
+        ]
       },
       "ActivityLogActor": {
         "type": "object",
@@ -5659,7 +5909,12 @@
           "type": {
             "type": "string",
             "description": "The type of actor",
-            "enum": ["partner_user", "applicant", "partner", "system"],
+            "enum": [
+              "partner_user",
+              "applicant",
+              "partner",
+              "system"
+            ],
             "example": "partner_user"
           },
           "name": {
@@ -5673,7 +5928,10 @@
             "example": "admin"
           }
         },
-        "required": ["type", "name"]
+        "required": [
+          "type",
+          "name"
+        ]
       },
       "NotFoundResponse": {
         "type": "object",
@@ -5694,10 +5952,16 @@
                 "example": "not_found"
               }
             },
-            "required": ["status", "message", "code"]
+            "required": [
+              "status",
+              "message",
+              "code"
+            ]
           }
         },
-        "required": ["error"]
+        "required": [
+          "error"
+        ]
       },
       "UnitList": {
         "type": "object",
@@ -5847,7 +6111,13 @@
             "description": "The ID of the bank account associated with this property (only applicable for partners with per_property billing)"
           }
         },
-        "required": ["id", "address", "created_at", "updated_at", "units"]
+        "required": [
+          "id",
+          "address",
+          "created_at",
+          "updated_at",
+          "units"
+        ]
       },
       "CreateAddress": {
         "type": "object",
@@ -5874,7 +6144,12 @@
             "example": "12345"
           }
         },
-        "required": ["address1", "city", "state_or_province", "postal_code"]
+        "required": [
+          "address1",
+          "city",
+          "state_or_province",
+          "postal_code"
+        ]
       },
       "CreatePropertyUnit": {
         "type": "object",
@@ -5985,7 +6260,9 @@
             "nullable": true
           }
         },
-        "required": ["address"]
+        "required": [
+          "address"
+        ]
       },
       "ForbiddenErrorResponse": {
         "type": "object",
@@ -6006,10 +6283,16 @@
                 "example": "forbidden"
               }
             },
-            "required": ["status", "message", "code"]
+            "required": [
+              "status",
+              "message",
+              "code"
+            ]
           }
         },
-        "required": ["error"]
+        "required": [
+          "error"
+        ]
       },
       "UpdateProperty": {
         "type": "object",
@@ -6147,7 +6430,11 @@
             "nullable": true
           }
         },
-        "required": ["title", "property_id", "occupied"]
+        "required": [
+          "title",
+          "property_id",
+          "occupied"
+        ]
       },
       "UpdateUnit": {
         "type": "object",
@@ -6192,7 +6479,9 @@
             "example": true
           }
         },
-        "required": ["active"]
+        "required": [
+          "active"
+        ]
       },
       "VerificationProgress": {
         "type": "object",
@@ -6206,7 +6495,10 @@
             "example": 5
           }
         },
-        "required": ["total_steps", "filled_steps"]
+        "required": [
+          "total_steps",
+          "filled_steps"
+        ]
       },
       "VerificationList": {
         "type": "object",
@@ -6302,7 +6594,11 @@
             "example": "John Doe"
           }
         },
-        "required": ["id", "email", "name"]
+        "required": [
+          "id",
+          "email",
+          "name"
+        ]
       },
       "ApplicantList": {
         "type": "object",
@@ -6338,7 +6634,10 @@
           "role": {
             "type": "string",
             "example": "applicant",
-            "enum": ["applicant", "co_signer"]
+            "enum": [
+              "applicant",
+              "co_signer"
+            ]
           },
           "invited_at": {
             "format": "date-time",
@@ -6447,7 +6746,10 @@
           "role": {
             "type": "string",
             "example": "applicant",
-            "enum": ["applicant", "co_signer"]
+            "enum": [
+              "applicant",
+              "co_signer"
+            ]
           },
           "invited_at": {
             "format": "date-time",
@@ -6610,7 +6912,11 @@
             "example": "decline",
             "nullable": true,
             "description": "The application recommendation. Returns null if any submitted applicant has a failed identity verification that has not been manually overridden.",
-            "enum": ["approve", "conditional_approve", "decline"]
+            "enum": [
+              "approve",
+              "conditional_approve",
+              "decline"
+            ]
           },
           "decision_at": {
             "format": "date-time",
@@ -6662,7 +6968,9 @@
             "example": "https://boompay.app/applications/1234567890"
           },
           "adverse_action_reasons": {
-            "example": ["condition"],
+            "example": [
+              "condition"
+            ],
             "type": "array",
             "items": {
               "type": "string"
@@ -6775,7 +7083,11 @@
             "example": "decline",
             "nullable": true,
             "description": "The application recommendation. Returns null if any submitted applicant has a failed identity verification that has not been manually overridden.",
-            "enum": ["approve", "conditional_approve", "decline"]
+            "enum": [
+              "approve",
+              "conditional_approve",
+              "decline"
+            ]
           },
           "decision_at": {
             "format": "date-time",
@@ -6827,7 +7139,9 @@
             "example": "https://boompay.app/applications/1234567890"
           },
           "adverse_action_reasons": {
-            "example": ["condition"],
+            "example": [
+              "condition"
+            ],
             "type": "array",
             "items": {
               "type": "string"
@@ -6885,7 +7199,9 @@
         "type": "object",
         "properties": {
           "conditions": {
-            "example": ["condition"],
+            "example": [
+              "condition"
+            ],
             "type": "array",
             "items": {
               "type": "string"
@@ -6917,7 +7233,9 @@
         "type": "object",
         "properties": {
           "reasons": {
-            "example": ["reason"],
+            "example": [
+              "reason"
+            ],
             "type": "array",
             "items": {
               "type": "string"
@@ -6936,7 +7254,9 @@
             "example": "note message"
           }
         },
-        "required": ["reasons"]
+        "required": [
+          "reasons"
+        ]
       },
       "RentalApplicationEmergencyContact": {
         "type": "object",
@@ -6954,7 +7274,11 @@
             "example": "1234567890"
           }
         },
-        "required": ["last_name", "first_name", "phone_number"]
+        "required": [
+          "last_name",
+          "first_name",
+          "phone_number"
+        ]
       },
       "RentalApplicationReport": {
         "type": "object",
@@ -7070,7 +7394,10 @@
             "example": "Apartment"
           }
         },
-        "required": ["rent", "housing_type"]
+        "required": [
+          "rent",
+          "housing_type"
+        ]
       },
       "HouseHistoryReport": {
         "type": "object",
@@ -7113,7 +7440,10 @@
             "example": "123456789"
           }
         },
-        "required": ["type", "value"]
+        "required": [
+          "type",
+          "value"
+        ]
       },
       "Asset": {
         "type": "object",
@@ -7139,7 +7469,13 @@
             "example": "jpg"
           }
         },
-        "required": ["url", "content_type", "filename", "size", "extension"]
+        "required": [
+          "url",
+          "content_type",
+          "filename",
+          "size",
+          "extension"
+        ]
       },
       "File": {
         "type": "object",
@@ -7148,7 +7484,9 @@
             "$ref": "#/components/schemas/Asset"
           }
         },
-        "required": ["asset"]
+        "required": [
+          "asset"
+        ]
       },
       "IdentityVerificationDocuments": {
         "type": "object",
@@ -7163,7 +7501,11 @@
             "$ref": "#/components/schemas/File"
           }
         },
-        "required": ["face", "original_front", "original_back"]
+        "required": [
+          "face",
+          "original_front",
+          "original_back"
+        ]
       },
       "IdentityVerificationReport": {
         "type": "object",
@@ -7362,7 +7704,11 @@
             }
           }
         },
-        "required": ["message", "consumer_statement", "results"]
+        "required": [
+          "message",
+          "consumer_statement",
+          "results"
+        ]
       },
       "CriminalReportSubject": {
         "type": "object",
@@ -7485,7 +7831,12 @@
             "nullable": true
           }
         },
-        "required": ["case_number", "state", "jurisdiction", "comments"]
+        "required": [
+          "case_number",
+          "state",
+          "jurisdiction",
+          "comments"
+        ]
       },
       "CriminalReportOffense": {
         "type": "object",
@@ -7623,7 +7974,11 @@
             }
           }
         },
-        "required": ["subject", "case_details", "offenses"]
+        "required": [
+          "subject",
+          "case_details",
+          "offenses"
+        ]
       },
       "CriminalReport": {
         "type": "object",
@@ -7650,7 +8005,12 @@
             }
           }
         },
-        "required": ["message", "disclaimer", "consumer_statement", "results"]
+        "required": [
+          "message",
+          "disclaimer",
+          "consumer_statement",
+          "results"
+        ]
       },
       "CreditReportHitCode": {
         "type": "object",
@@ -7666,7 +8026,10 @@
             "nullable": true
           }
         },
-        "required": ["code", "description"]
+        "required": [
+          "code",
+          "description"
+        ]
       },
       "CreditReportPersonalData": {
         "type": "object",
@@ -7718,7 +8081,10 @@
             "nullable": true
           }
         },
-        "required": ["code", "description"]
+        "required": [
+          "code",
+          "description"
+        ]
       },
       "CreditReportBankruptcyDetail": {
         "type": "object",
@@ -7815,13 +8181,19 @@
             "nullable": true
           }
         },
-        "required": ["inquirer", "date"]
+        "required": [
+          "inquirer",
+          "date"
+        ]
       },
       "CreditReportConsumerInformation": {
         "type": "object",
         "properties": {
           "other_names": {
-            "examples": ["John Doe", "JD"],
+            "examples": [
+              "John Doe",
+              "JD"
+            ],
             "nullable": true,
             "type": "array",
             "items": {
@@ -7943,7 +8315,10 @@
             "nullable": true
           }
         },
-        "required": ["code", "description"]
+        "required": [
+          "code",
+          "description"
+        ]
       },
       "CreditReportCollection": {
         "type": "object",
@@ -8068,7 +8443,10 @@
             "nullable": true
           }
         },
-        "required": ["code", "description"]
+        "required": [
+          "code",
+          "description"
+        ]
       },
       "CreditReportAccountType": {
         "type": "object",
@@ -8084,7 +8462,10 @@
             "nullable": true
           }
         },
-        "required": ["code", "description"]
+        "required": [
+          "code",
+          "description"
+        ]
       },
       "CreditReportRate": {
         "type": "object",
@@ -8100,7 +8481,10 @@
             "nullable": true
           }
         },
-        "required": ["code", "description"]
+        "required": [
+          "code",
+          "description"
+        ]
       },
       "CreditReportTermsDuration": {
         "type": "object",
@@ -8116,7 +8500,10 @@
             "nullable": true
           }
         },
-        "required": ["code", "description"]
+        "required": [
+          "code",
+          "description"
+        ]
       },
       "CreditReportTermsFrequency": {
         "type": "object",
@@ -8132,7 +8519,10 @@
             "nullable": true
           }
         },
-        "required": ["code", "description"]
+        "required": [
+          "code",
+          "description"
+        ]
       },
       "CreditorClassification": {
         "type": "object",
@@ -8148,7 +8538,10 @@
             "nullable": true
           }
         },
-        "required": ["code", "description"]
+        "required": [
+          "code",
+          "description"
+        ]
       },
       "CreditReportPaymentHistory": {
         "type": "object",
@@ -8163,7 +8556,10 @@
             "nullable": true
           }
         },
-        "required": ["code", "description"]
+        "required": [
+          "code",
+          "description"
+        ]
       },
       "CreditReportAccountOverview": {
         "type": "object",
@@ -8496,7 +8892,11 @@
             "nullable": true
           }
         },
-        "required": ["statement", "date_reported", "date_purged"]
+        "required": [
+          "statement",
+          "date_reported",
+          "date_purged"
+        ]
       },
       "CreditReportType": {
         "type": "object",
@@ -8512,7 +8912,10 @@
             "nullable": true
           }
         },
-        "required": ["code", "description"]
+        "required": [
+          "code",
+          "description"
+        ]
       },
       "CreditReportAlertContact": {
         "type": "object",
@@ -8541,7 +8944,10 @@
             "nullable": true
           },
           "phone_numbers": {
-            "examples": ["(504) 113-1705", "(504) 113-1705"],
+            "examples": [
+              "(504) 113-1705",
+              "(504) 113-1705"
+            ],
             "nullable": true,
             "type": "array",
             "items": {
@@ -8710,7 +9116,12 @@
             "example": "John"
           }
         },
-        "required": ["email", "phone", "last_name", "first_name"]
+        "required": [
+          "email",
+          "phone",
+          "last_name",
+          "first_name"
+        ]
       },
       "IncomeVerificationPreTaxIncome": {
         "type": "object",
@@ -8723,7 +9134,10 @@
             "example": 1000
           }
         },
-        "required": ["income_type", "income_amount"]
+        "required": [
+          "income_type",
+          "income_amount"
+        ]
       },
       "IncomeVerificationMethod": {
         "type": "object",
@@ -8739,7 +9153,10 @@
             "example": "Paystub"
           }
         },
-        "required": ["pay_stub_files", "verification_type"]
+        "required": [
+          "pay_stub_files",
+          "verification_type"
+        ]
       },
       "IncomeVerificationEmployment": {
         "type": "object",
@@ -8794,7 +9211,11 @@
             "$ref": "#/components/schemas/Money"
           }
         },
-        "required": ["employment", "income_source", "monthly_income"]
+        "required": [
+          "employment",
+          "income_source",
+          "monthly_income"
+        ]
       },
       "IncomeVerificationReport": {
         "type": "object",
@@ -8840,7 +9261,11 @@
             "example": "USD"
           }
         },
-        "required": ["amount", "iso_currency_code", "unofficial_currency_code"]
+        "required": [
+          "amount",
+          "iso_currency_code",
+          "unofficial_currency_code"
+        ]
       },
       "VerifiedTransaction": {
         "type": "object",
@@ -8946,13 +9371,18 @@
             "example": "Value"
           }
         },
-        "required": ["data"]
+        "required": [
+          "data"
+        ]
       },
       "VerifiedBankOwner": {
         "type": "object",
         "properties": {
           "names": {
-            "example": ["John", "Doe"],
+            "example": [
+              "John",
+              "Doe"
+            ],
             "type": "array",
             "items": {
               "type": "string"
@@ -8980,7 +9410,12 @@
             }
           }
         },
-        "required": ["names", "emails", "addresses", "phone_numbers"]
+        "required": [
+          "names",
+          "emails",
+          "addresses",
+          "phone_numbers"
+        ]
       },
       "VerifiedBankIncomeSource": {
         "type": "object",
@@ -9144,7 +9579,9 @@
             "example": "123"
           },
           "routing_numbers": {
-            "example": ["123"],
+            "example": [
+              "123"
+            ],
             "type": "array",
             "items": {
               "type": "string"
@@ -9304,7 +9741,9 @@
             "example": "Bank"
           },
           "flow_types": {
-            "example": ["payroll_digital_income"],
+            "example": [
+              "payroll_digital_income"
+            ],
             "type": "array",
             "items": {
               "type": "string"
@@ -9582,7 +10021,12 @@
             "description": "Bank routing number"
           }
         },
-        "required": ["id", "name", "last4", "routing_number"]
+        "required": [
+          "id",
+          "name",
+          "last4",
+          "routing_number"
+        ]
       },
       "SetBankAccountRequest": {
         "type": "object",
@@ -9594,7 +10038,9 @@
             "description": "The ID of the bank account to associate with the property"
           }
         },
-        "required": ["bank_account_id"]
+        "required": [
+          "bank_account_id"
+        ]
       },
       "Lead": {
         "type": "object",
@@ -9690,7 +10136,11 @@
             "example": "2021-01-01T00:00:00.000Z"
           }
         },
-        "required": ["id", "created_at", "updated_at"]
+        "required": [
+          "id",
+          "created_at",
+          "updated_at"
+        ]
       },
       "CreateLeadRequest": {
         "type": "object",
@@ -9727,7 +10177,9 @@
             "nullable": true
           }
         },
-        "required": ["unit_id"]
+        "required": [
+          "unit_id"
+        ]
       },
       "BulkCreateLeadsRequest": {
         "type": "object",
@@ -9741,14 +10193,19 @@
             }
           }
         },
-        "required": ["leads"]
+        "required": [
+          "leads"
+        ]
       },
       "BulkCreateLeadResult": {
         "type": "object",
         "properties": {
           "status": {
             "type": "string",
-            "enum": ["success", "error"],
+            "enum": [
+              "success",
+              "error"
+            ],
             "example": "success"
           },
           "lead": {
@@ -9776,7 +10233,9 @@
             }
           }
         },
-        "required": ["status"]
+        "required": [
+          "status"
+        ]
       },
       "UpdateLeadRequest": {
         "type": "object",
@@ -9859,7 +10318,14 @@
             "example": "2021-01-01T00:00:00.000Z"
           }
         },
-        "required": ["id", "name", "source_type", "is_active", "created_at", "updated_at"]
+        "required": [
+          "id",
+          "name",
+          "source_type",
+          "is_active",
+          "created_at",
+          "updated_at"
+        ]
       },
       "CreateLeadSourceRequest": {
         "type": "object",
@@ -9874,7 +10340,9 @@
             "default": true
           }
         },
-        "required": ["name"]
+        "required": [
+          "name"
+        ]
       },
       "Stage": {
         "type": "object",
@@ -9900,7 +10368,13 @@
             "example": 1
           }
         },
-        "required": ["id", "name", "color", "is_fixed", "position"]
+        "required": [
+          "id",
+          "name",
+          "color",
+          "is_fixed",
+          "position"
+        ]
       },
       "LeadActivityLog": {
         "type": "object",
@@ -10152,10 +10626,187 @@
                 "example": 400
               }
             },
-            "required": ["message", "status"]
+            "required": [
+              "message",
+              "status"
+            ]
           }
         },
-        "required": ["error"]
+        "required": [
+          "error"
+        ]
+      },
+      "LeadIdentityVerificationChecks": {
+        "type": "object",
+        "properties": {
+          "basic": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "KYC check result. true = passed, false = failed, null = not run"
+          },
+          "document": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Documentary verification result"
+          },
+          "risk": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Risk check result"
+          },
+          "identity_abuse": {
+            "type": "object",
+            "nullable": true,
+            "properties": {
+              "synthetic_identity": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "number"
+                  },
+                  "passed": {
+                    "type": "boolean"
+                  },
+                  "risk_level": {
+                    "type": "string",
+                    "enum": [
+                      "low",
+                      "medium",
+                      "high"
+                    ]
+                  }
+                }
+              },
+              "stolen_identity": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "number"
+                  },
+                  "passed": {
+                    "type": "boolean"
+                  },
+                  "risk_level": {
+                    "type": "string",
+                    "enum": [
+                      "low",
+                      "medium",
+                      "high"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "LeadIdentityVerification": {
+        "type": "object",
+        "properties": {
+          "lead_id": {
+            "type": "string",
+            "description": "Obfuscated lead ID"
+          },
+          "first_name": {
+            "type": "string",
+            "description": "Lead first name"
+          },
+          "last_name": {
+            "type": "string",
+            "description": "Lead last name"
+          },
+          "email": {
+            "type": "string",
+            "nullable": true,
+            "description": "Lead primary email"
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true,
+            "description": "Lead primary phone"
+          },
+          "external_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "External ID of the lead as provided by the partner"
+          },
+          "external_customer_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "External customer ID (same as external_id)"
+          },
+          "property_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "Obfuscated property ID"
+          },
+          "unit_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "Obfuscated unit ID"
+          },
+          "application_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "Obfuscated application ID associated with the lead"
+          },
+          "applicant_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "Obfuscated applicant ID associated with the lead"
+          },
+          "identity_verification_finished": {
+            "type": "boolean",
+            "description": "Whether the lead has a finished identity verification"
+          },
+          "provider": {
+            "type": "string",
+            "example": "plaid",
+            "description": "IDV provider"
+          },
+          "kind": {
+            "type": "string",
+            "example": "automatic",
+            "description": "Type of identity verification"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "active",
+              "finished",
+              "failed",
+              "review_required",
+              "canceled",
+              "expired"
+            ],
+            "description": "Current status of the identity verification"
+          },
+          "finished_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Timestamp when verification was finished"
+          },
+          "failed_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Timestamp when verification failed"
+          },
+          "checks": {
+            "$ref": "#/components/schemas/LeadIdentityVerificationChecks",
+            "description": "Individual check results"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
       }
     }
   }
