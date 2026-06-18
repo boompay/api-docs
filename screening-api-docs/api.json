@@ -4973,6 +4973,76 @@
           }
         ]
       }
+    },
+    "/crm/v1/public/listings/{partner_slug}/by_external_id/{external_id}": {
+      "get": {
+        "operationId": "PublicListingsController_lookupByExternalId",
+        "summary": "Look up a listing's quick-action links (public, no auth)",
+        "description": "Resolves a single CRM listing by the partner's own `external_id` and returns the quick-action links that BoomScreen and the CRM surface for it \u2014 the **Apply Now** magic link, the **Contact Us** page, and the **Request a Showing** page \u2014 along with availability flags for each action and the obfuscated Boom identifiers for the resolved property and unit.\n\nThis endpoint is **unauthenticated**: it is meant to be embedded on partner-hosted listing pages (websites, syndication widgets) so the page can render the correct Boom call-to-action buttons without any credentials. It is keyed by the partner's URL `slug` and the listing's `external_id` (the id you assigned when creating the unit/property), so no Boom-internal ids are needed to call it.\n\n**External id collisions:** a unit and a property under the same partner may share an `external_id`, so the namespace is disambiguated by the `type` query parameter (defaults to `unit`). There is no fallback between the two \u2014 if `type=unit` finds nothing, the property namespace is not searched.\n\n**Action availability:** each `*_url` is non-null only when the corresponding `*_available` flag is `true`; otherwise it is `null`. Availability is derived from the property's listing template:\n- `magic_link` (Apply Now) is present only for a `unit` lookup where the unit is available for application, has a magic link, and the template does not hide the Apply Now button.\n- `contact_us_*` is available unless the template explicitly hides the Contact Us button.\n- `request_showing_*` is available only when the template enables the Request Showing button and at least one showing-related flow (self-reported prescreening, identity verification, or showing scheduling) is enabled.\n\n**View tracking:** by default each successful fetch is counted as a listing view (recorded asynchronously and deduplicated). Set `tracking=false` for previews, bots, or server-side rendering where the request is not a genuine visitor view.",
+        "parameters": [
+          {
+            "name": "partner_slug",
+            "required": true,
+            "in": "path",
+            "description": "The partner's URL slug.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "external_id",
+            "required": true,
+            "in": "path",
+            "description": "The listing's external id, as assigned by the partner when the unit (or property) was created.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "required": false,
+            "in": "query",
+            "description": "Which entity the `external_id` refers to. Unit and property external ids may collide, so this disambiguates the lookup; there is no fallback between the two.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "unit",
+                "property"
+              ],
+              "default": "unit"
+            }
+          },
+          {
+            "name": "tracking",
+            "required": false,
+            "in": "query",
+            "description": "Whether to count this fetch as a listing view. Set `false` for previews/bots/SSR so the request is not recorded as a visitor view.",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Listing resolved; quick-action links returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicListing"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No matching listing found for the given partner slug and external id (under the requested `type`)."
+          }
+        },
+        "tags": [
+          "Public Listings"
+        ],
+        "security": []
+      }
     }
   },
   "info": {
@@ -10805,6 +10875,47 @@
           "updated_at": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "PublicListing": {
+        "type": "object",
+        "properties": {
+          "magic_link": {
+            "type": "string",
+            "nullable": true,
+            "description": "The **Apply Now** magic link \u2014 the application URL for the unit. Null when the lookup is not a unit, the unit is unavailable for application, the listing template hides the Apply Now button, or no magic link exists."
+          },
+          "contact_us_url": {
+            "type": "string",
+            "nullable": true,
+            "description": "URL of the **Contact Us** page for this listing. Null when `contact_us_available` is false."
+          },
+          "request_showing_url": {
+            "type": "string",
+            "nullable": true,
+            "description": "URL of the **Request a Showing** page for this listing. Null when `request_showing_available` is false."
+          },
+          "contact_us_available": {
+            "type": "boolean",
+            "description": "Whether the Contact Us action is enabled for this listing's template."
+          },
+          "request_showing_available": {
+            "type": "boolean",
+            "description": "Whether the Request a Showing action is enabled \u2014 requires the template to enable the button and at least one of self-reported prescreening, identity verification, or showing scheduling."
+          },
+          "property_id": {
+            "type": "string",
+            "description": "Obfuscated Boom property id for the resolved listing."
+          },
+          "unit_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "Obfuscated Boom unit id. Present for a `unit` lookup; null for a `property` lookup."
+          },
+          "partner_slug": {
+            "type": "string",
+            "description": "The partner's URL slug, echoed back from the request."
           }
         }
       }
