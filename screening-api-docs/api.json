@@ -4984,7 +4984,7 @@
             "name": "partner_slug",
             "required": true,
             "in": "path",
-            "description": "The partner's URL slug (e.g. `knights1-management-inc`).",
+            "description": "The partner's URL slug.",
             "schema": {
               "type": "string"
             }
