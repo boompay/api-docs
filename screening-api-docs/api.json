@@ -1803,7 +1803,18 @@
             "schema": {
               "type": "array",
               "items": {
-                "type": "string"
+                "type": "string",
+                "enum": [
+                  "pending",
+                  "started",
+                  "submitted",
+                  "approved",
+                  "approved_with_conditions",
+                  "rejected",
+                  "canceled",
+                  "merged",
+                  "on_hold"
+                ]
               }
             }
           },
