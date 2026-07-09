@@ -1797,11 +1797,14 @@
             }
           },
           {
-            "name": "status",
+            "name": "status[]",
             "required": false,
             "in": "query",
             "schema": {
-              "type": "string"
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
             }
           },
           {
