@@ -11008,9 +11008,9 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "number",
-            "example": 12345,
-            "description": "Boom listing ID."
+            "type": "string",
+            "description": "Obfuscated Boom listing ID.",
+            "example": "aB3xQ9pL"
           },
           "title": {
             "type": "string",
@@ -11104,11 +11104,6 @@
             "description": "Public listing page URL - the same URL included in the partner's generic XML feed."
           },
           "content_changed_at": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "last_updated": {
             "type": "string",
             "format": "date-time",
             "nullable": true
