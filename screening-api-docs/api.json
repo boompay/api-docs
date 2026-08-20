@@ -10271,6 +10271,13 @@
             "format": "date-time",
             "type": "string",
             "example": "2021-01-01T00:00:00.000Z"
+          },
+          "verification_last_updated_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z",
+            "nullable": true,
+            "description": "Timestamp of the most recent identity verification activity (created or completed) for this lead. Null if no verification has occurred. Tracked separately from updated_at, which only reflects direct edits to the lead."
           }
         },
         "required": [
