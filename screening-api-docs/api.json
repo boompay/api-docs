@@ -3675,6 +3675,7 @@
       "get": {
         "operationId": "LeadsController_findById",
         "summary": "Get lead detail",
+        "description": "Returns the full detail for a lead.\n\n**Deleted leads:** if the lead has been deleted, this endpoint still responds with `200` but returns a slim `DeletedLead` record rather than the full lead, so you can distinguish a deleted lead from one that never existed. A lead id that was never issued returns `404`. All other lead endpoints (update, apply, and the verification actions) return `404` for a deleted lead.",
         "parameters": [
           {
             "name": "lead_id",
@@ -3687,11 +3688,18 @@
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "A full lead record, or a slim DeletedLead record if the lead has been deleted.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Lead"
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Lead"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DeletedLead"
+                    }
+                  ]
                 }
               }
             }
@@ -3700,7 +3708,7 @@
             "description": "Unauthorized"
           },
           "404": {
-            "description": "Not found"
+            "description": "Not found (no lead with this id was ever issued)"
           }
         },
         "tags": [
@@ -10290,6 +10298,11 @@
             "example": "ext-123",
             "nullable": true
           },
+          "is_deleted": {
+            "type": "boolean",
+            "example": false,
+            "description": "Whether the lead has been deleted. Always false on this full record. A deleted lead is instead returned from the lead detail endpoint as a slim DeletedLead record (see GET /partner/v1/leads/{lead_id})."
+          },
           "source": {
             "nullable": true,
             "allOf": [
@@ -10354,6 +10367,32 @@
           "id",
           "created_at",
           "updated_at"
+        ]
+      },
+      "DeletedLead": {
+        "type": "object",
+        "description": "Slim representation returned by the lead detail endpoint for a lead that has been deleted. It carries only the identifiers needed to reconcile against your own system; no personal information or other lead fields are included.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "aB3xQ9pL",
+            "description": "Boom's identifier for the lead."
+          },
+          "external_id": {
+            "type": "string",
+            "example": "ext-123",
+            "nullable": true,
+            "description": "The external identifier you assigned to the lead in your own system, if any."
+          },
+          "is_deleted": {
+            "type": "boolean",
+            "example": true,
+            "description": "Always true for this record."
+          }
+        },
+        "required": [
+          "id",
+          "is_deleted"
         ]
       },
       "CreateLeadRequest": {
