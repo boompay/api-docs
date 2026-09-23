@@ -2514,7 +2514,7 @@
                       },
                       "allow_landlord_contact": true,
                       "products": [
-                        "past_reporting"
+                        "ongoing"
                       ]
                     }
                   ],
@@ -2625,7 +2625,8 @@
                   "address2": "Apt 4B",
                   "city": "San Jose",
                   "state_or_province": "CA",
-                  "postal_code": "95112"
+                  "postal_code": "95112",
+                  "country": "US"
                 }
               }
             }
@@ -2682,7 +2683,7 @@
                   },
                   "allow_landlord_contact": true,
                   "products": [
-                    "past_reporting"
+                    "ongoing"
                   ]
                 }
               }
@@ -2876,7 +2877,7 @@
                   },
                   "allow_landlord_contact": true,
                   "products": [
-                    "past_reporting"
+                    "ongoing"
                   ]
                 }
               }
@@ -3033,7 +3034,7 @@
                   },
                   "allow_landlord_contact": true,
                   "products": [
-                    "past_reporting"
+                    "ongoing"
                   ]
                 }
               }
@@ -3343,7 +3344,7 @@
                   },
                   "allow_landlord_contact": true,
                   "products": [
-                    "past_reporting"
+                    "ongoing"
                   ]
                 }
               }
@@ -3531,7 +3532,7 @@
                   },
                   "allow_landlord_contact": true,
                   "products": [
-                    "past_reporting"
+                    "ongoing"
                   ]
                 }
               }
@@ -3762,7 +3763,7 @@
                   },
                   "allow_landlord_contact": true,
                   "products": [
-                    "past_reporting"
+                    "ongoing"
                   ]
                 }
               }
@@ -4186,7 +4187,7 @@
             "properties": {
               "message": {
                 "type": "string",
-                "example": "Customer already have active enrollment"
+                "example": "Could not create enrollment"
               },
               "status": {
                 "type": "integer",
@@ -4199,11 +4200,21 @@
               "request_id": {
                 "type": "string",
                 "example": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+              },
+              "errors": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "example": [
+                  "Address country is missing"
+                ],
+                "description": "Present when several reasons apply."
               }
             }
           }
         },
-        "description": "Generic business-rule failure. `code` is present on most paths; a few legacy business errors carry only `message`."
+        "description": "Generic business-rule failure. `code` is present on most paths; a few legacy business errors carry only `message` (and sometimes `errors`)."
       },
       "ValidationError": {
         "type": "object",
@@ -4611,6 +4622,12 @@
             "type": "boolean",
             "example": true,
             "description": "True when a following page exists."
+          },
+          "extra": {
+            "nullable": true,
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Reserved for endpoint-specific metadata. Usually null; may be absent."
           }
         },
         "description": "Envelope shared by every list endpoint. See the Pagination guide for ordering guarantees."
@@ -4682,22 +4699,38 @@
       },
       "AddressInput": {
         "type": "object",
-        "description": "address1, city, state_or_province and postal_code must be supplied together.",
+        "required": [
+          "address1",
+          "city",
+          "state_or_province",
+          "postal_code",
+          "country"
+        ],
+        "description": "Enrollment addresses require address1, city, state_or_province, postal_code and country (ISO 3166-1 alpha-2).",
         "properties": {
           "address1": {
-            "type": "string"
+            "type": "string",
+            "example": "123 Main St"
           },
           "address2": {
-            "type": "string"
+            "type": "string",
+            "example": "Apt 4B"
           },
           "city": {
-            "type": "string"
+            "type": "string",
+            "example": "San Jose"
           },
           "state_or_province": {
-            "type": "string"
+            "type": "string",
+            "example": "CA"
           },
           "postal_code": {
-            "type": "string"
+            "type": "string",
+            "example": "95112"
+          },
+          "country": {
+            "type": "string",
+            "example": "US"
           },
           "lat": {
             "type": "number",
@@ -5060,8 +5093,9 @@
               "type": "string"
             },
             "example": [
-              "past_reporting"
-            ]
+              "ongoing"
+            ],
+            "description": "Reporting products on the enrollment, e.g. `ongoing`, `past_reporting`."
           }
         }
       },
