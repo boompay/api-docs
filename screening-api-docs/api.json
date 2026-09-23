@@ -24,6 +24,11 @@
                   "$ref": "#/components/schemas/AuthenticationResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -33,6 +38,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -44,15 +54,37 @@
                   "$ref": "#/components/schemas/Unauthorized"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -64,12 +96,19 @@
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           }
         },
         "tags": [
           "Authentication"
-        ]
+        ],
+        "security": [],
+        "summary": "Exchange API key pair for a JWT"
       }
     },
     "/partner/v1/users": {
@@ -96,6 +135,11 @@
                   "$ref": "#/components/schemas/User"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -105,6 +149,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -116,15 +165,37 @@
                   "$ref": "#/components/schemas/Unauthorized"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -135,6 +206,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -157,8 +233,9 @@
             "required": false,
             "in": "query",
             "schema": {
-              "default": 1,
-              "type": "number"
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
             }
           },
           {
@@ -166,9 +243,12 @@
             "required": false,
             "in": "query",
             "schema": {
-              "default": 10,
-              "type": "number"
-            }
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 20
+            },
+            "description": "Values above 1000 are clamped to 1000."
           },
           {
             "name": "search",
@@ -202,6 +282,11 @@
                   ]
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "401": {
@@ -212,15 +297,37 @@
                   "$ref": "#/components/schemas/Unauthorized"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -231,6 +338,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -278,6 +390,11 @@
                   "$ref": "#/components/schemas/User"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -287,6 +404,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -298,15 +420,37 @@
                   "$ref": "#/components/schemas/Unauthorized"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -317,6 +461,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -352,6 +501,11 @@
                   "$ref": "#/components/schemas/User"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "401": {
@@ -361,6 +515,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/Unauthorized"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -372,15 +531,37 @@
                   "$ref": "#/components/schemas/NotFoundResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -391,6 +572,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -419,7 +605,12 @@
         ],
         "responses": {
           "204": {
-            "description": "No content"
+            "description": "No content",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           },
           "401": {
             "description": "",
@@ -428,6 +619,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/Unauthorized"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -439,15 +635,37 @@
                   "$ref": "#/components/schemas/NotFoundResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -458,6 +676,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -482,8 +705,9 @@
             "required": false,
             "in": "query",
             "schema": {
-              "default": 1,
-              "type": "number"
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
             }
           },
           {
@@ -491,9 +715,12 @@
             "required": false,
             "in": "query",
             "schema": {
-              "default": 10,
-              "type": "number"
-            }
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 20
+            },
+            "description": "Values above 1000 are clamped to 1000."
           },
           {
             "name": "external_id",
@@ -502,6 +729,26 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "updated_at_from_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Only records updated on or after this date (UTC day start)."
+          },
+          {
+            "name": "updated_at_to_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Only records updated on or before this date (UTC day end)."
           }
         ],
         "responses": {
@@ -527,6 +774,11 @@
                   ]
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -537,15 +789,37 @@
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -556,6 +830,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -592,6 +871,11 @@
                   "$ref": "#/components/schemas/PropertyDetail"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -601,6 +885,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -612,15 +901,37 @@
                   "$ref": "#/components/schemas/ForbiddenErrorResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -631,6 +942,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -668,6 +984,11 @@
                   "$ref": "#/components/schemas/PropertyDetail"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -677,6 +998,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -688,15 +1014,37 @@
                   "$ref": "#/components/schemas/NotFoundResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -707,6 +1055,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -752,6 +1105,11 @@
                   "$ref": "#/components/schemas/PropertyDetail"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -761,6 +1119,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -772,15 +1135,37 @@
                   "$ref": "#/components/schemas/NotFoundResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -791,6 +1176,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -819,7 +1209,12 @@
         ],
         "responses": {
           "204": {
-            "description": "No content"
+            "description": "No content",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           },
           "400": {
             "description": "",
@@ -828,6 +1223,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -839,15 +1239,37 @@
                   "$ref": "#/components/schemas/NotFoundResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -858,6 +1280,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -907,6 +1334,11 @@
                   "$ref": "#/components/schemas/PropertyList"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -916,6 +1348,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -927,6 +1364,11 @@
                   "$ref": "#/components/schemas/Unauthorized"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "403": {
@@ -936,6 +1378,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -947,15 +1394,37 @@
                   "$ref": "#/components/schemas/NotFoundResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -966,6 +1435,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -1009,6 +1483,11 @@
                   ]
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "401": {
@@ -1019,15 +1498,37 @@
                   "$ref": "#/components/schemas/Unauthorized"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -1038,6 +1539,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -1077,6 +1583,11 @@
                   "$ref": "#/components/schemas/BankAccount"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "401": {
@@ -1086,6 +1597,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/Unauthorized"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -1097,15 +1613,37 @@
                   "$ref": "#/components/schemas/NotFoundResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -1116,6 +1654,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -1140,8 +1683,9 @@
             "required": false,
             "in": "query",
             "schema": {
-              "default": 1,
-              "type": "number"
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
             }
           },
           {
@@ -1149,9 +1693,12 @@
             "required": false,
             "in": "query",
             "schema": {
-              "default": 10,
-              "type": "number"
-            }
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 20
+            },
+            "description": "Values above 1000 are clamped to 1000."
           },
           {
             "name": "property_id",
@@ -1176,6 +1723,26 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "updated_at_from_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Only records updated on or after this date (UTC day start)."
+          },
+          {
+            "name": "updated_at_to_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Only records updated on or before this date (UTC day end)."
           }
         ],
         "responses": {
@@ -1201,6 +1768,11 @@
                   ]
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -1211,15 +1783,37 @@
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -1230,6 +1824,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -1266,6 +1865,11 @@
                   "$ref": "#/components/schemas/UnitDetail"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -1275,6 +1879,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -1286,15 +1895,37 @@
                   "$ref": "#/components/schemas/ForbiddenErrorResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -1305,6 +1936,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -1342,6 +1978,11 @@
                   "$ref": "#/components/schemas/UnitDetail"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -1351,6 +1992,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -1362,15 +2008,37 @@
                   "$ref": "#/components/schemas/NotFoundResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -1381,6 +2049,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -1426,6 +2099,11 @@
                   "$ref": "#/components/schemas/UnitDetail"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -1435,6 +2113,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -1446,15 +2129,37 @@
                   "$ref": "#/components/schemas/NotFoundResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -1465,6 +2170,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -1493,7 +2203,12 @@
         ],
         "responses": {
           "204": {
-            "description": "No content"
+            "description": "No content",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           },
           "400": {
             "description": "",
@@ -1502,6 +2217,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -1513,15 +2233,37 @@
                   "$ref": "#/components/schemas/NotFoundResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -1532,6 +2274,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -1556,8 +2303,9 @@
             "required": false,
             "in": "query",
             "schema": {
-              "default": 1,
-              "type": "number"
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
             }
           },
           {
@@ -1565,9 +2313,12 @@
             "required": false,
             "in": "query",
             "schema": {
-              "default": 10,
-              "type": "number"
-            }
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 20
+            },
+            "description": "Values above 1000 are clamped to 1000."
           },
           {
             "name": "active",
@@ -1610,9 +2361,9 @@
             "required": false,
             "in": "query",
             "schema": {
-              "type": "string"
-            },
-            "nullable": true
+              "type": "string",
+              "nullable": true
+            }
           },
           {
             "name": "property_external_id",
@@ -1654,6 +2405,11 @@
                   ]
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -1664,15 +2420,37 @@
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -1683,6 +2461,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -1730,6 +2513,11 @@
                   "$ref": "#/components/schemas/MagicLink"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -1740,15 +2528,37 @@
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -1759,6 +2569,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -1783,8 +2598,9 @@
             "required": false,
             "in": "query",
             "schema": {
-              "default": 1,
-              "type": "number"
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
             }
           },
           {
@@ -1792,9 +2608,12 @@
             "required": false,
             "in": "query",
             "schema": {
-              "default": 10,
-              "type": "number"
-            }
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 20
+            },
+            "description": "Values above 1000 are clamped to 1000."
           },
           {
             "name": "status[]",
@@ -1881,11 +2700,21 @@
                           "items": {
                             "$ref": "#/components/schemas/ApplicationList"
                           }
+                        },
+                        "last_page": {
+                          "type": "boolean",
+                          "deprecated": true,
+                          "description": "Inverse of `has_more`; kept for existing integrations."
                         }
                       }
                     }
                   ]
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -1897,15 +2726,37 @@
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -1916,6 +2767,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -1953,6 +2809,11 @@
                   "$ref": "#/components/schemas/ApplicationDetail"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -1962,6 +2823,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -1973,15 +2839,37 @@
                   "$ref": "#/components/schemas/NotFoundResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -1992,6 +2880,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -2039,6 +2932,11 @@
                   "$ref": "#/components/schemas/ApplicationList"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -2052,20 +2950,50 @@
                   "ApplicationOnHold": {
                     "summary": "Application is on hold",
                     "value": {
-                      "message": "This action cannot be performed because the application is currently on hold"
+                      "error": {
+                        "message": "This action cannot be performed because the application is currently on hold",
+                        "status": 400,
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d",
+                        "code": "validation_error",
+                        "errors": [
+                          "This action cannot be performed because the application is currently on hold"
+                        ]
+                      }
                     }
                   }
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -2076,6 +3004,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -2123,6 +3056,11 @@
                   "$ref": "#/components/schemas/ApplicationList"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -2136,20 +3074,50 @@
                   "ApplicationOnHold": {
                     "summary": "Application is on hold",
                     "value": {
-                      "message": "This action cannot be performed because the application is currently on hold"
+                      "error": {
+                        "message": "This action cannot be performed because the application is currently on hold",
+                        "status": 400,
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d",
+                        "code": "validation_error",
+                        "errors": [
+                          "This action cannot be performed because the application is currently on hold"
+                        ]
+                      }
                     }
                   }
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -2160,6 +3128,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -2215,6 +3188,11 @@
                   "$ref": "#/components/schemas/VerificationDetail"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -2228,10 +3206,23 @@
                   "ApplicationOnHold": {
                     "summary": "Application is on hold",
                     "value": {
-                      "message": "This action cannot be performed because the application is currently on hold"
+                      "error": {
+                        "message": "This action cannot be performed because the application is currently on hold",
+                        "status": 400,
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d",
+                        "code": "validation_error",
+                        "errors": [
+                          "This action cannot be performed because the application is currently on hold"
+                        ]
+                      }
                     }
                   }
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -2243,15 +3234,37 @@
                   "$ref": "#/components/schemas/NotFoundResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -2262,6 +3275,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -2307,6 +3325,11 @@
                   "$ref": "#/components/schemas/ApplicantDetails"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -2316,6 +3339,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -2327,15 +3355,37 @@
                   "$ref": "#/components/schemas/NotFoundResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -2346,6 +3396,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -2399,6 +3454,11 @@
                   "$ref": "#/components/schemas/VerificationDetail"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -2408,6 +3468,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -2419,15 +3484,37 @@
                   "$ref": "#/components/schemas/NotFoundResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -2438,6 +3525,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -2454,7 +3546,7 @@
     },
     "/partner/v1/applications/{id}/applicants/{applicant_id}/verifications/{verification_id}/rerun": {
       "post": {
-        "operationId": "ApplicationsController_findReport",
+        "operationId": "ApplicationsController_rerunVerification",
         "summary": "Rerun verification with report by id",
         "parameters": [
           {
@@ -2491,6 +3583,11 @@
                   "$ref": "#/components/schemas/VerificationDetail"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -2504,10 +3601,23 @@
                   "ApplicationOnHold": {
                     "summary": "Application is on hold",
                     "value": {
-                      "message": "This action cannot be performed because the application is currently on hold"
+                      "error": {
+                        "message": "This action cannot be performed because the application is currently on hold",
+                        "status": 400,
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d",
+                        "code": "validation_error",
+                        "errors": [
+                          "This action cannot be performed because the application is currently on hold"
+                        ]
+                      }
                     }
                   }
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -2519,15 +3629,37 @@
                   "$ref": "#/components/schemas/NotFoundResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -2538,6 +3670,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -2594,6 +3731,11 @@
                   "$ref": "#/components/schemas/ApplicationDetail"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -2607,22 +3749,51 @@
                   "AlreadyCancelled": {
                     "summary": "Application already cancelled",
                     "value": {
-                      "message": "This application has already been cancelled"
+                      "error": {
+                        "message": "This application has already been cancelled",
+                        "status": 400,
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d",
+                        "code": "validation_error",
+                        "errors": [
+                          "This application has already been cancelled"
+                        ]
+                      }
                     }
                   },
                   "AlreadyApproved": {
                     "summary": "Application already approved",
                     "value": {
-                      "message": "This application has already been approved and cannot be cancelled"
+                      "error": {
+                        "message": "This application has already been approved and cannot be cancelled",
+                        "status": 400,
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d",
+                        "code": "validation_error",
+                        "errors": [
+                          "This application has already been approved and cannot be cancelled"
+                        ]
+                      }
                     }
                   },
                   "AlreadyDeclined": {
                     "summary": "Application already rejected",
                     "value": {
-                      "message": "This application has already been rejected and cannot be cancelled"
+                      "error": {
+                        "message": "This application has already been rejected and cannot be cancelled",
+                        "status": 400,
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d",
+                        "code": "validation_error",
+                        "errors": [
+                          "This application has already been rejected and cannot be cancelled"
+                        ]
+                      }
                     }
                   }
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -2634,6 +3805,11 @@
                   "$ref": "#/components/schemas/NotFoundResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
@@ -2644,6 +3820,23 @@
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
             }
           },
           "500": {
@@ -2653,6 +3846,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -2690,6 +3888,11 @@
                   "$ref": "#/components/schemas/ApplicationDetail"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -2699,6 +3902,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -2710,6 +3918,11 @@
                   "$ref": "#/components/schemas/NotFoundResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
@@ -2720,6 +3933,23 @@
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
             }
           },
           "500": {
@@ -2729,6 +3959,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -2800,6 +4035,11 @@
                   "$ref": "#/components/schemas/ApplicantDetails"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -2809,6 +4049,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -2820,6 +4065,11 @@
                   "$ref": "#/components/schemas/Unauthorized"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "404": {
@@ -2829,6 +4079,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/NotFoundResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -2840,6 +4095,11 @@
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
@@ -2850,6 +4110,23 @@
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
             }
           },
           "500": {
@@ -2859,6 +4136,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -2904,6 +4186,11 @@
                   "$ref": "#/components/schemas/ApplicantDetails"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -2913,6 +4200,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -2924,6 +4216,11 @@
                   "$ref": "#/components/schemas/NotFoundResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
@@ -2934,6 +4231,23 @@
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
             }
           },
           "500": {
@@ -2943,6 +4257,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -2993,6 +4312,11 @@
                   ]
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "401": {
@@ -3001,6 +4325,208 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Applicants"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List additional documents for an applicant"
+      },
+      "post": {
+        "operationId": "ApplicantsController_createAdditionalDocuments",
+        "summary": "Upload additional documents for an applicant",
+        "description": "Multipart upload of one or more documents (pay stubs, IDs, letters). Returns the created documents.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "documents"
+                ],
+                "properties": {
+                  "documents": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "document_type",
+                        "file"
+                      ],
+                      "properties": {
+                        "document_type": {
+                          "type": "string",
+                          "example": "pay_stub"
+                        },
+                        "file": {
+                          "type": "string",
+                          "format": "binary"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "encoding": {
+                "documents": {
+                  "contentType": "multipart/form-data"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Documents created",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/AdditionalDocument"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid document payload",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
                 }
               }
             }
@@ -3013,15 +4539,37 @@
                   "$ref": "#/components/schemas/NotFoundResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -3032,6 +4580,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -3069,6 +4622,11 @@
                   "$ref": "#/components/schemas/ApplicationDetail"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -3082,10 +4640,23 @@
                   "InvalidStatus": {
                     "summary": "Application not in submitted status",
                     "value": {
-                      "message": "Only submitted applications can be put on hold"
+                      "error": {
+                        "message": "Only submitted applications can be put on hold",
+                        "status": 400,
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d",
+                        "code": "validation_error",
+                        "errors": [
+                          "Only submitted applications can be put on hold"
+                        ]
+                      }
                     }
                   }
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -3097,6 +4668,11 @@
                   "$ref": "#/components/schemas/NotFoundResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
@@ -3107,6 +4683,23 @@
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
             }
           },
           "500": {
@@ -3116,6 +4709,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -3154,6 +4752,11 @@
                   "$ref": "#/components/schemas/ApplicationDetail"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -3167,10 +4770,23 @@
                   "InvalidStatus": {
                     "summary": "Application not in on_hold status",
                     "value": {
-                      "message": "Only on_hold applications can be resumed"
+                      "error": {
+                        "message": "Only on_hold applications can be resumed",
+                        "status": 400,
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d",
+                        "code": "validation_error",
+                        "errors": [
+                          "Only on_hold applications can be resumed"
+                        ]
+                      }
                     }
                   }
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -3182,6 +4798,11 @@
                   "$ref": "#/components/schemas/NotFoundResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
@@ -3192,6 +4813,23 @@
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
             }
           },
           "500": {
@@ -3201,6 +4839,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -3252,6 +4895,11 @@
                   "$ref": "#/components/schemas/ApplicationDetail"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -3261,6 +4909,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -3272,6 +4925,11 @@
                   "$ref": "#/components/schemas/NotFoundResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
@@ -3282,6 +4940,23 @@
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
             }
           },
           "500": {
@@ -3291,6 +4966,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -3355,6 +5035,11 @@
                   "$ref": "#/components/schemas/ApplicationDetail"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -3364,6 +5049,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -3375,6 +5065,11 @@
                   "$ref": "#/components/schemas/NotFoundResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
@@ -3385,6 +5080,23 @@
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
             }
           },
           "500": {
@@ -3394,6 +5106,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -3418,8 +5135,9 @@
             "required": false,
             "in": "query",
             "schema": {
-              "default": 1,
-              "type": "number"
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
             }
           },
           {
@@ -3427,9 +5145,12 @@
             "required": false,
             "in": "query",
             "schema": {
-              "default": 10,
-              "type": "number"
-            }
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 20
+            },
+            "description": "Values above 1000 are clamped to 1000."
           },
           {
             "name": "email",
@@ -3448,6 +5169,26 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "updated_at_from_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Only records updated on or after this date (UTC day start)."
+          },
+          {
+            "name": "updated_at_to_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Only records updated on or before this date (UTC day end)."
           }
         ],
         "responses": {
@@ -3473,6 +5214,11 @@
                   ]
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "401": {
@@ -3483,15 +5229,37 @@
                   "$ref": "#/components/schemas/Unauthorized"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -3502,6 +5270,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -3538,6 +5311,11 @@
                   "$ref": "#/components/schemas/Lead"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "401": {
@@ -3547,6 +5325,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/Unauthorized"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -3558,15 +5341,37 @@
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -3577,6 +5382,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -3618,6 +5428,11 @@
                   }
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "401": {
@@ -3627,6 +5442,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/Unauthorized"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -3638,15 +5458,37 @@
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -3657,6 +5499,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -3702,13 +5549,28 @@
                   ]
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           },
           "404": {
-            "description": "Not found (no lead with this id was ever issued)"
+            "description": "Not found (no lead with this id was ever issued)",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           }
         },
         "tags": [
@@ -3753,6 +5615,11 @@
                   "$ref": "#/components/schemas/Lead"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -3762,6 +5629,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -3773,6 +5645,11 @@
                   "$ref": "#/components/schemas/Unauthorized"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "404": {
@@ -3782,6 +5659,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/NotFoundResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -3793,15 +5675,37 @@
                   "$ref": "#/components/schemas/ValidatorResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -3812,6 +5716,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -3836,8 +5745,9 @@
             "required": false,
             "in": "query",
             "schema": {
-              "default": 1,
-              "type": "number"
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
             }
           },
           {
@@ -3845,9 +5755,12 @@
             "required": false,
             "in": "query",
             "schema": {
-              "default": 10,
-              "type": "number"
-            }
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 20
+            },
+            "description": "Values above 1000 are clamped to 1000."
           },
           {
             "name": "activity_type",
@@ -3881,10 +5794,20 @@
                   ]
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           }
         },
         "tags": [
@@ -3915,8 +5838,9 @@
             "required": false,
             "in": "query",
             "schema": {
-              "default": 1,
-              "type": "number"
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
             }
           },
           {
@@ -3924,9 +5848,12 @@
             "required": false,
             "in": "query",
             "schema": {
-              "default": 10,
-              "type": "number"
-            }
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 20
+            },
+            "description": "Values above 1000 are clamped to 1000."
           },
           {
             "name": "activity_type",
@@ -3960,13 +5887,28 @@
                   ]
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           },
           "404": {
-            "description": "Not found"
+            "description": "Not found",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           }
         },
         "tags": [
@@ -4003,16 +5945,36 @@
                   "$ref": "#/components/schemas/ApplicationList"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
-            "description": "Bad request"
+            "description": "Bad request",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           },
           "404": {
-            "description": "Not found"
+            "description": "Not found",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           }
         },
         "tags": [
@@ -4048,13 +6010,28 @@
                   "$ref": "#/components/schemas/LeadIssueAccessToken"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           },
           "404": {
-            "description": "Not found"
+            "description": "Not found",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           }
         },
         "tags": [
@@ -4083,16 +6060,36 @@
         ],
         "responses": {
           "204": {
-            "description": "Identity verification expired successfully"
+            "description": "Identity verification expired successfully",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           },
           "400": {
-            "description": "No finished identity verification found for this lead"
+            "description": "No finished identity verification found for this lead",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           },
           "404": {
-            "description": "Not found"
+            "description": "Not found",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           }
         },
         "tags": [
@@ -4137,6 +6134,11 @@
                   }
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "401": {
@@ -4147,15 +6149,37 @@
                   "$ref": "#/components/schemas/Unauthorized"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -4166,6 +6190,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -4197,6 +6226,11 @@
                   }
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "401": {
@@ -4207,15 +6241,37 @@
                   "$ref": "#/components/schemas/Unauthorized"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -4226,6 +6282,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -4262,6 +6323,11 @@
                   "$ref": "#/components/schemas/LeadSource"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "400": {
@@ -4277,11 +6343,17 @@
                     "value": {
                       "error": {
                         "message": "A partner lead source with this name already exists",
-                        "status": 400
+                        "status": 400,
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
                       }
                     }
                   }
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -4292,6 +6364,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/Unauthorized"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -4305,19 +6382,42 @@
                 "example": {
                   "error": {
                     "message": "Could not create lead source",
-                    "status": 422
+                    "status": 422,
+                    "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
                   }
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -4328,6 +6428,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -4352,8 +6457,9 @@
             "required": false,
             "in": "query",
             "schema": {
-              "default": 1,
-              "type": "number"
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
             }
           },
           {
@@ -4361,9 +6467,12 @@
             "required": false,
             "in": "query",
             "schema": {
-              "default": 10,
-              "type": "number"
-            }
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 20
+            },
+            "description": "Values above 1000 are clamped to 1000."
           },
           {
             "name": "start_date",
@@ -4409,10 +6518,20 @@
                   ]
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           }
         },
         "tags": [
@@ -4448,13 +6567,28 @@
                   "$ref": "#/components/schemas/BillingStatement"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           },
           "404": {
-            "description": "Statement not found"
+            "description": "Statement not found",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           }
         },
         "tags": [
@@ -4485,8 +6619,9 @@
             "required": false,
             "in": "query",
             "schema": {
-              "default": 1,
-              "type": "number"
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
             }
           },
           {
@@ -4494,9 +6629,12 @@
             "required": false,
             "in": "query",
             "schema": {
-              "default": 10,
-              "type": "number"
-            }
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 20
+            },
+            "description": "Values above 1000 are clamped to 1000."
           }
         ],
         "responses": {
@@ -4522,13 +6660,28 @@
                   ]
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           },
           "404": {
-            "description": "Statement not found"
+            "description": "Statement not found",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           }
         },
         "tags": [
@@ -4551,8 +6704,9 @@
             "required": false,
             "in": "query",
             "schema": {
-              "default": 1,
-              "type": "number"
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
             }
           },
           {
@@ -4560,9 +6714,12 @@
             "required": false,
             "in": "query",
             "schema": {
-              "default": 10,
-              "type": "number"
-            }
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 20
+            },
+            "description": "Values above 1000 are clamped to 1000."
           },
           {
             "name": "start_date",
@@ -4624,10 +6781,20 @@
                   ]
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           }
         },
         "tags": [
@@ -4651,8 +6818,9 @@
             "required": false,
             "in": "query",
             "schema": {
-              "default": 1,
-              "type": "number"
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
             }
           },
           {
@@ -4660,9 +6828,12 @@
             "required": false,
             "in": "query",
             "schema": {
-              "default": 10,
-              "type": "number"
-            }
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 20
+            },
+            "description": "Values above 1000 are clamped to 1000."
           },
           {
             "name": "event_type",
@@ -4769,6 +6940,11 @@
                   ]
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "401": {
@@ -4779,15 +6955,37 @@
                   "$ref": "#/components/schemas/Unauthorized"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -4798,6 +6996,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -4857,6 +7060,11 @@
                   }
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "401": {
@@ -4866,6 +7074,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/Unauthorized"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           },
@@ -4877,15 +7090,37 @@
                   "$ref": "#/components/schemas/NotFoundResponse"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "429": {
-            "description": "",
+            "description": "Rate limit exceeded",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TooManyRequestsResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
               }
             }
           },
@@ -4896,6 +7131,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
                 }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -4929,8 +7169,9 @@
             "required": false,
             "in": "query",
             "schema": {
-              "default": 1,
-              "type": "number"
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
             }
           },
           {
@@ -4938,9 +7179,12 @@
             "required": false,
             "in": "query",
             "schema": {
-              "default": 20,
-              "type": "number"
-            }
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 20
+            },
+            "description": "Values above 1000 are clamped to 1000."
           }
         ],
         "responses": {
@@ -4966,13 +7210,28 @@
                   ]
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           },
           "404": {
-            "description": "Not found"
+            "description": "Not found",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           }
         },
         "tags": [
@@ -4989,7 +7248,7 @@
       "get": {
         "operationId": "PublicListingsController_lookupByExternalId",
         "summary": "Look up a listing's quick-action links (public, no auth)",
-        "description": "Resolves a single CRM listing by the partner's own `external_id` and returns the quick-action links that BoomScreen and the CRM surface for it \u2014 the **Apply Now** magic link, the **Contact Us** page, and the **Request a Showing** page \u2014 along with availability flags for each action and the obfuscated Boom identifiers for the resolved property and unit.\n\nThis endpoint is **unauthenticated**: it is meant to be embedded on partner-hosted listing pages (websites, syndication widgets) so the page can render the correct Boom call-to-action buttons without any credentials. It is keyed by the partner's URL `slug` and the listing's `external_id` (the id you assigned when creating the unit/property), so no Boom-internal ids are needed to call it.\n\n**External id collisions:** a unit and a property under the same partner may share an `external_id`, so the namespace is disambiguated by the `type` query parameter (defaults to `unit`). There is no fallback between the two \u2014 if `type=unit` finds nothing, the property namespace is not searched.\n\n**Action availability:** each `*_url` is non-null only when the corresponding `*_available` flag is `true`; otherwise it is `null`. Availability is derived from the property's listing template:\n- `magic_link` (Apply Now) is present only for a `unit` lookup where the unit is available for application, has a magic link, and the template does not hide the Apply Now button.\n- `contact_us_*` is available unless the template explicitly hides the Contact Us button.\n- `request_showing_*` is available only when the template enables the Request Showing button and at least one showing-related flow (self-reported prescreening, identity verification, or showing scheduling) is enabled.\n\n**View tracking:** by default each successful fetch is counted as a listing view (recorded asynchronously and deduplicated). Set `tracking=false` for previews, bots, or server-side rendering where the request is not a genuine visitor view.",
+        "description": "Resolves a single CRM listing by the partner's own `external_id` and returns the quick-action links that BoomScreen and the CRM surface for it — the **Apply Now** magic link, the **Contact Us** page, and the **Request a Showing** page — along with availability flags for each action and the obfuscated Boom identifiers for the resolved property and unit.\n\nThis endpoint is **unauthenticated**: it is meant to be embedded on partner-hosted listing pages (websites, syndication widgets) so the page can render the correct Boom call-to-action buttons without any credentials. It is keyed by the partner's URL `slug` and the listing's `external_id` (the id you assigned when creating the unit/property), so no Boom-internal ids are needed to call it.\n\n**External id collisions:** a unit and a property under the same partner may share an `external_id`, so the namespace is disambiguated by the `type` query parameter (defaults to `unit`). There is no fallback between the two — if `type=unit` finds nothing, the property namespace is not searched.\n\n**Action availability:** each `*_url` is non-null only when the corresponding `*_available` flag is `true`; otherwise it is `null`. Availability is derived from the property's listing template:\n- `magic_link` (Apply Now) is present only for a `unit` lookup where the unit is available for application, has a magic link, and the template does not hide the Apply Now button.\n- `contact_us_*` is available unless the template explicitly hides the Contact Us button.\n- `request_showing_*` is available only when the template enables the Request Showing button and at least one showing-related flow (self-reported prescreening, identity verification, or showing scheduling) is enabled.\n\n**View tracking:** by default each successful fetch is counted as a listing view (recorded asynchronously and deduplicated). Set `tracking=false` for previews, bots, or server-side rendering where the request is not a genuine visitor view.",
         "parameters": [
           {
             "name": "partner_slug",
@@ -5043,10 +7302,20 @@
                   "$ref": "#/components/schemas/PublicListing"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "404": {
-            "description": "No matching listing found for the given partner slug and external id (under the requested `type`)."
+            "description": "No matching listing found for the given partner slug and external id (under the requested `type`).",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           }
         },
         "tags": [
@@ -5113,10 +7382,20 @@
                   "$ref": "#/components/schemas/PublicListing"
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "404": {
-            "description": "No matching listing found for the given partner slug and internal id (under the requested `type`)."
+            "description": "No matching listing found for the given partner slug and internal id (under the requested `type`).",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           }
         },
         "tags": [
@@ -5136,8 +7415,9 @@
             "required": false,
             "in": "query",
             "schema": {
-              "default": 1,
-              "type": "number"
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
             }
           },
           {
@@ -5145,9 +7425,12 @@
             "required": false,
             "in": "query",
             "schema": {
-              "default": 20,
-              "type": "number"
-            }
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 20
+            },
+            "description": "Values above 1000 are clamped to 1000."
           }
         ],
         "responses": {
@@ -5173,10 +7456,20 @@
                   ]
                 }
               }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
             }
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           }
         },
         "tags": [
@@ -5192,12 +7485,12 @@
   },
   "info": {
     "title": "BoomScreen API",
-    "description": "Boom Pay screening API documentation",
+    "description": "Tenant screening (BoomScreen) and leasing CRM endpoints of the Boom Partner API.\n\n**Authentication.** `POST /partner/v1/authenticate` with your API key pair returns a JWT; send it as `Authorization: Bearer <token>`. Keys are created self-serve under Settings → API. Read-only keys may only call GET endpoints (writes return 403 `forbidden`). Keys scoped to owners or property groups only see matching records.\n\n**Conventions.** Every response carries an `X-Request-Id` header. Errors use one envelope: `{\"error\": {\"message\", \"status\", \"code\", \"request_id\"}}`. Lists use one envelope with `page` / `per_page` (max 1000) and a deterministic order. 429 responses carry `Retry-After`. See the Errors, Pagination, Rate limits and Versioning guides on docs.boompay.app.\n\nRent reporting (BoomReport) endpoints are documented in the companion BoomReport API specification.",
     "version": "1.0",
     "contact": {
-      "name": "Boom Pay",
+      "name": "Boom",
       "url": "https://www.boompay.app/",
-      "email": ""
+      "email": "support@boompay.app"
     }
   },
   "tags": [],
@@ -5245,13 +7538,18 @@
                   "First name must be a string",
                   "Last name must be a string"
                 ]
+              },
+              "request_id": {
+                "type": "string",
+                "example": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
               }
             },
             "required": [
               "status",
               "message",
               "code",
-              "errors"
+              "errors",
+              "request_id"
             ]
           }
         },
@@ -5261,15 +7559,38 @@
       },
       "TooManyRequestsResponse": {
         "type": "object",
-        "properties": {
-          "error": {
-            "type": "string",
-            "example": "Too many requests. Please try again later."
-          }
-        },
         "required": [
           "error"
-        ]
+        ],
+        "properties": {
+          "error": {
+            "type": "object",
+            "required": [
+              "message",
+              "status",
+              "request_id",
+              "code"
+            ],
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "Too many requests. Please try again later."
+              },
+              "status": {
+                "type": "integer",
+                "example": 429
+              },
+              "code": {
+                "type": "string",
+                "example": "rate_limited"
+              },
+              "request_id": {
+                "type": "string",
+                "example": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+              }
+            }
+          }
+        }
       },
       "InternalErrorResponse": {
         "type": "object",
@@ -5296,12 +7617,17 @@
               "error_signature": {
                 "type": "string",
                 "example": "abc123def456"
+              },
+              "request_id": {
+                "type": "string",
+                "example": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
               }
             },
             "required": [
               "status",
               "message",
-              "code"
+              "code",
+              "request_id"
             ]
           }
         },
@@ -5350,17 +7676,22 @@
               },
               "message": {
                 "type": "string",
-                "example": "Unauthenticated"
+                "example": "Unauthorized"
               },
               "code": {
                 "type": "string",
                 "example": "unauthenticated"
+              },
+              "request_id": {
+                "type": "string",
+                "example": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
               }
             },
             "required": [
               "status",
               "message",
-              "code"
+              "code",
+              "request_id"
             ]
           }
         },
@@ -6057,6 +8388,12 @@
           "has_more": {
             "type": "boolean",
             "example": false
+          },
+          "object": {
+            "type": "string",
+            "enum": [
+              "list"
+            ]
           }
         },
         "required": [
@@ -6064,7 +8401,8 @@
           "page_count",
           "current_page",
           "has_more"
-        ]
+        ],
+        "description": "Envelope shared by every list endpoint. `per_page` is capped at 1000; ordering is deterministic (see the Pagination guide)."
       },
       "ActivityLog": {
         "type": "object",
@@ -6165,12 +8503,17 @@
               "code": {
                 "type": "string",
                 "example": "not_found"
+              },
+              "request_id": {
+                "type": "string",
+                "example": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
               }
             },
             "required": [
               "status",
               "message",
-              "code"
+              "code",
+              "request_id"
             ]
           }
         },
@@ -6496,12 +8839,17 @@
               "code": {
                 "type": "string",
                 "example": "forbidden"
+              },
+              "request_id": {
+                "type": "string",
+                "example": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
               }
             },
             "required": [
               "status",
               "message",
-              "code"
+              "code",
+              "request_id"
             ]
           }
         },
@@ -7071,7 +9419,8 @@
               {
                 "$ref": "#/components/schemas/Money"
               }
-            ]
+            ],
+            "type": "object"
           },
           "status": {
             "type": "string",
@@ -7160,7 +9509,8 @@
               {
                 "$ref": "#/components/schemas/Money"
               }
-            ]
+            ],
+            "type": "object"
           },
           "pending_magic_links": {
             "type": "array",
@@ -7242,7 +9592,8 @@
               {
                 "$ref": "#/components/schemas/Money"
               }
-            ]
+            ],
+            "type": "object"
           },
           "status": {
             "type": "string",
@@ -7331,7 +9682,8 @@
               {
                 "$ref": "#/components/schemas/Money"
               }
-            ]
+            ],
+            "type": "object"
           },
           "pending_magic_links": {
             "type": "array",
@@ -7370,8 +9722,13 @@
             }
           },
           "pet_rent_value": {
-            "$ref": "#/components/schemas/Money",
-            "nullable": true
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ],
+            "type": "object"
           },
           "pets_count": {
             "type": "number",
@@ -7384,12 +9741,22 @@
             "nullable": true
           },
           "voucher_amount": {
-            "$ref": "#/components/schemas/Money",
-            "nullable": true
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ],
+            "type": "object"
           },
           "evaluated_rule_set": {
-            "$ref": "#/components/schemas/RuleSet",
-            "nullable": false
+            "nullable": false,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RuleSet"
+              }
+            ],
+            "type": "object"
           },
           "evaluated_rule_sets": {
             "type": "array",
@@ -8405,15 +10772,15 @@
         "type": "object",
         "properties": {
           "other_names": {
-            "examples": [
-              "John Doe",
-              "JD"
-            ],
             "nullable": true,
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "example": [
+              "John Doe",
+              "JD"
+            ]
           },
           "death_date": {
             "type": "string",
@@ -8564,7 +10931,8 @@
               {
                 "$ref": "#/components/schemas/CreditReportStatus"
               }
-            ]
+            ],
+            "type": "object"
           },
           "narrative_codes": {
             "nullable": true,
@@ -8584,7 +10952,8 @@
               {
                 "$ref": "#/components/schemas/Money"
               }
-            ]
+            ],
+            "type": "object"
           },
           "balance": {
             "nullable": true,
@@ -8592,7 +10961,8 @@
               {
                 "$ref": "#/components/schemas/Money"
               }
-            ]
+            ],
+            "type": "object"
           }
         },
         "required": [
@@ -8795,7 +11165,8 @@
               {
                 "$ref": "#/components/schemas/CreditReportAccountOwner"
               }
-            ]
+            ],
+            "type": "object"
           },
           "account_type": {
             "nullable": true,
@@ -8803,7 +11174,8 @@
               {
                 "$ref": "#/components/schemas/CreditReportAccountType"
               }
-            ]
+            ],
+            "type": "object"
           },
           "balance": {
             "nullable": true,
@@ -8811,7 +11183,8 @@
               {
                 "$ref": "#/components/schemas/Money"
               }
-            ]
+            ],
+            "type": "object"
           },
           "high_credit": {
             "nullable": true,
@@ -8819,7 +11192,8 @@
               {
                 "$ref": "#/components/schemas/Money"
               }
-            ]
+            ],
+            "type": "object"
           },
           "credit_limit": {
             "nullable": true,
@@ -8827,7 +11201,8 @@
               {
                 "$ref": "#/components/schemas/Money"
               }
-            ]
+            ],
+            "type": "object"
           },
           "scheduled_payment_amount": {
             "nullable": true,
@@ -8835,7 +11210,8 @@
               {
                 "$ref": "#/components/schemas/Money"
               }
-            ]
+            ],
+            "type": "object"
           },
           "months_reviewed": {
             "type": "string",
@@ -8848,7 +11224,8 @@
               {
                 "$ref": "#/components/schemas/CreditReportRate"
               }
-            ]
+            ],
+            "type": "object"
           },
           "date_opened": {
             "type": "string",
@@ -8871,7 +11248,8 @@
               {
                 "$ref": "#/components/schemas/Money"
               }
-            ]
+            ],
+            "type": "object"
           },
           "last_activity_date": {
             "type": "string",
@@ -8891,7 +11269,8 @@
               {
                 "$ref": "#/components/schemas/Money"
               }
-            ]
+            ],
+            "type": "object"
           },
           "ballon_payment_date": {
             "type": "string",
@@ -8904,7 +11283,8 @@
               {
                 "$ref": "#/components/schemas/Money"
               }
-            ]
+            ],
+            "type": "object"
           },
           "actual_payment_amount": {
             "nullable": true,
@@ -8912,7 +11292,8 @@
               {
                 "$ref": "#/components/schemas/Money"
               }
-            ]
+            ],
+            "type": "object"
           },
           "last_payment_date": {
             "type": "string",
@@ -8925,7 +11306,8 @@
               {
                 "$ref": "#/components/schemas/CreditReportTermsDuration"
               }
-            ]
+            ],
+            "type": "object"
           },
           "terms_frequency": {
             "nullable": true,
@@ -8933,7 +11315,8 @@
               {
                 "$ref": "#/components/schemas/CreditReportTermsFrequency"
               }
-            ]
+            ],
+            "type": "object"
           },
           "deferred_payment_start": {
             "type": "string",
@@ -8986,7 +11369,8 @@
               {
                 "$ref": "#/components/schemas/CreditorClassification"
               }
-            ]
+            ],
+            "type": "object"
           },
           "original_creditor_name": {
             "type": "string",
@@ -9141,7 +11525,8 @@
               {
                 "$ref": "#/components/schemas/CreditReportType"
               }
-            ]
+            ],
+            "type": "object"
           },
           "date_reported": {
             "type": "string",
@@ -9159,15 +11544,15 @@
             "nullable": true
           },
           "phone_numbers": {
-            "examples": [
-              "(504) 113-1705",
-              "(504) 113-1705"
-            ],
             "nullable": true,
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "example": [
+              "(504) 113-1705",
+              "(504) 113-1705"
+            ]
           },
           "address": {
             "type": "string",
@@ -9228,7 +11613,8 @@
               {
                 "$ref": "#/components/schemas/CreditReportPersonalData"
               }
-            ]
+            ],
+            "type": "object"
           },
           "bankruptcy_details": {
             "nullable": true,
@@ -9250,7 +11636,8 @@
               {
                 "$ref": "#/components/schemas/CreditReportConsumerInformation"
               }
-            ]
+            ],
+            "type": "object"
           },
           "collections": {
             "nullable": true,
@@ -9293,7 +11680,8 @@
               {
                 "$ref": "#/components/schemas/CreditReportAlertsAndTriggers"
               }
-            ]
+            ],
+            "type": "object"
           }
         },
         "required": [
@@ -9342,7 +11730,7 @@
         "type": "object",
         "properties": {
           "income_type": {
-            "type": "Type"
+            "type": "string"
           },
           "income_amount": {
             "type": "number",
@@ -9553,7 +11941,8 @@
               {
                 "$ref": "#/components/schemas/BankIncomeTotalAmount"
               }
-            ]
+            ],
+            "type": "object"
           },
           "transactions": {
             "type": "array",
@@ -10309,7 +12698,8 @@
               {
                 "$ref": "#/components/schemas/LeadSource"
               }
-            ]
+            ],
+            "type": "object"
           },
           "property_id": {
             "type": "string",
@@ -10468,7 +12858,8 @@
               {
                 "$ref": "#/components/schemas/Lead"
               }
-            ]
+            ],
+            "type": "object"
           },
           "error": {
             "type": "object",
@@ -10756,8 +13147,13 @@
             "nullable": true
           },
           "bank_account": {
-            "$ref": "#/components/schemas/BankAccount",
-            "nullable": true
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BankAccount"
+              }
+            ],
+            "type": "object"
           },
           "product": {
             "type": "string",
@@ -10859,8 +13255,13 @@
             }
           },
           "bank_account": {
-            "$ref": "#/components/schemas/BankAccount",
-            "nullable": true
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BankAccount"
+              }
+            ],
+            "type": "object"
           }
         }
       },
@@ -10877,11 +13278,16 @@
               "status": {
                 "type": "number",
                 "example": 400
+              },
+              "request_id": {
+                "type": "string",
+                "example": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
               }
             },
             "required": [
               "message",
-              "status"
+              "status",
+              "request_id"
             ]
           }
         },
@@ -11067,7 +13473,7 @@
           "magic_link": {
             "type": "string",
             "nullable": true,
-            "description": "The **Apply Now** magic link \u2014 the application URL for the unit. Null when the lookup is not a unit, the unit is unavailable for application, the listing template hides the Apply Now button, or no magic link exists."
+            "description": "The **Apply Now** magic link — the application URL for the unit. Null when the lookup is not a unit, the unit is unavailable for application, the listing template hides the Apply Now button, or no magic link exists."
           },
           "contact_us_url": {
             "type": "string",
@@ -11085,7 +13491,7 @@
           },
           "request_showing_available": {
             "type": "boolean",
-            "description": "Whether the Request a Showing action is enabled \u2014 requires the template to enable the button and at least one of self-reported prescreening, identity verification, or showing scheduling."
+            "description": "Whether the Request a Showing action is enabled — requires the template to enable the button and at least one of self-reported prescreening, identity verification, or showing scheduling."
           },
           "property_id": {
             "type": "string",
@@ -11192,8 +13598,18 @@
             "nullable": true
           },
           "primary_image_url": {
-            "nullable": true,
-            "description": "The listing's primary image. Shape varies by source: a plain URL string, an empty object when no image is set, or an object such as { \"full\": ..., \"small\": ... } or { \"url\": ..., \"alt\": ... }."
+            "description": "The listing's primary image. Shape varies by source: a plain URL string, an empty object when no image is set, or an object such as { \"full\": ..., \"small\": ... } or { \"url\": ..., \"alt\": ... }.",
+            "anyOf": [
+              {
+                "type": "string",
+                "nullable": true
+              },
+              {
+                "type": "object",
+                "nullable": true,
+                "additionalProperties": true
+              }
+            ]
           },
           "gallery_urls": {
             "type": "array",
@@ -11231,7 +13647,8 @@
               }
             ],
             "nullable": true,
-            "description": "Null when the listing has no listing template (no lead-capture actions available)."
+            "description": "Null when the listing has no listing template (no lead-capture actions available).",
+            "type": "object"
           }
         },
         "required": [
@@ -11239,7 +13656,154 @@
           "address",
           "monthly_rent_amount"
         ]
+      },
+      "MethodNotAllowedResponse": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "object",
+            "required": [
+              "message",
+              "status",
+              "request_id",
+              "code"
+            ],
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "405 Not Allowed"
+              },
+              "status": {
+                "type": "integer",
+                "example": 405
+              },
+              "code": {
+                "type": "string",
+                "example": "method_not_allowed"
+              },
+              "request_id": {
+                "type": "string",
+                "example": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+              }
+            }
+          }
+        }
+      },
+      "ConflictResponse": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "object",
+            "required": [
+              "message",
+              "status",
+              "request_id",
+              "code"
+            ],
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "Cannot transition status via :approve from :approved"
+              },
+              "status": {
+                "type": "integer",
+                "example": 409
+              },
+              "code": {
+                "type": "string",
+                "example": "invalid_state_transition"
+              },
+              "request_id": {
+                "type": "string",
+                "example": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+              }
+            }
+          }
+        }
+      },
+      "InvalidRequestBodyResponse": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "object",
+            "required": [
+              "message",
+              "status",
+              "request_id",
+              "code"
+            ],
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "The request body is not valid application/json"
+              },
+              "status": {
+                "type": "integer",
+                "example": 400
+              },
+              "code": {
+                "type": "string",
+                "example": "invalid_request_body"
+              },
+              "request_id": {
+                "type": "string",
+                "example": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+              }
+            }
+          }
+        }
+      }
+    },
+    "headers": {
+      "X-Request-Id": {
+        "description": "Correlation id for this request. Quote it when contacting support. Supply your own (1–128 chars of A-Z, a-z, 0-9, `_`, `.`, `-`) and it is echoed back; otherwise one is generated.",
+        "schema": {
+          "type": "string",
+          "example": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+        }
+      },
+      "Retry-After": {
+        "description": "Seconds to wait before retrying.",
+        "schema": {
+          "type": "integer",
+          "example": 37
+        }
+      },
+      "X-RateLimit-Limit": {
+        "description": "Requests allowed per rolling minute for this client.",
+        "schema": {
+          "type": "integer",
+          "example": 650
+        }
+      },
+      "X-RateLimit-Remaining": {
+        "description": "Requests remaining in the current window (0 when throttled).",
+        "schema": {
+          "type": "integer",
+          "example": 0
+        }
+      },
+      "X-RateLimit-Reset": {
+        "description": "Unix timestamp (seconds) when the window resets.",
+        "schema": {
+          "type": "integer",
+          "example": 1767225637
+        }
       }
     }
-  }
+  },
+  "security": [
+    {
+      "bearer": []
+    }
+  ]
 }
