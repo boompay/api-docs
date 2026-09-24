@@ -1717,28 +1717,11 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "Unlinked",
+          "204": {
+            "description": "Unlinked; empty body",
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PartnerCustomerWithPlaidToken"
-                },
-                "example": {
-                  "id": "3YhTq9ZkLp2",
-                  "first_name": "Jane",
-                  "last_name": "Doe",
-                  "phone": "+14085551234",
-                  "email": "jane.doe@example.com",
-                  "dob": "1990-04-12",
-                  "access_key": "pk_live_7Hx…-c9Qm…",
-                  "plaid_token_id": "T3Lp2QZk9Yh"
-                }
               }
             }
           },
@@ -3150,12 +3133,68 @@
         ],
         "operationId": "deletePartnerV1EnrollmentsEnrollmentId",
         "summary": "Delete (unenroll) an enrollment",
+        "description": "Stops reporting and returns the enrollment in its final state.",
         "responses": {
-          "204": {
-            "description": "Enrollment deleted",
+          "200": {
+            "description": "Enrollment deleted; final state returned",
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Enrollment"
+                },
+                "example": {
+                  "id": "Kp2Zq9YhT3L",
+                  "address": {
+                    "address1": "123 Main St",
+                    "address2": "Apt 4B",
+                    "city": "San Jose",
+                    "state_or_province": "CA",
+                    "postal_code": "95112",
+                    "country": "US",
+                    "lat": 37.3382,
+                    "lng": -121.8863,
+                    "one_line_address": "123 Main St, Apt 4B, San Jose, CA 95112"
+                  },
+                  "monthly_rent_amount": 1850.0,
+                  "monthly_rent": {
+                    "cents": 185000,
+                    "currency": "USD"
+                  },
+                  "monthly_rent_day_of_month": 1,
+                  "move_in_date": "2026-06-01",
+                  "lease_end_date": "2027-05-31",
+                  "lease_signed_date": "2026-05-20",
+                  "lease_month_to_month": false,
+                  "status": "finished",
+                  "customer_id": "3YhTq9ZkLp2",
+                  "issues": [],
+                  "rental_verifications": [
+                    {
+                      "id": "Vq7Lm2Zk9Yh",
+                      "for_month": "2026-08-01",
+                      "status": "verified",
+                      "months_delinquency": 0
+                    }
+                  ],
+                  "checked_out": false,
+                  "landlord": {
+                    "contact_first_name": "Sam",
+                    "contact_last_name": "Owner",
+                    "company_name": "Acme Property Management",
+                    "type": "property_manager",
+                    "phone": "+14085559876",
+                    "email": "sam@acme-pm.example"
+                  },
+                  "allow_landlord_contact": true,
+                  "products": [
+                    "ongoing"
+                  ]
+                }
               }
             }
           },
@@ -5307,6 +5346,42 @@
           }
         }
       },
+      "AddressUpdate": {
+        "type": "object",
+        "description": "Any subset of address fields; address1, city, state_or_province and postal_code must be supplied together.",
+        "properties": {
+          "address1": {
+            "type": "string"
+          },
+          "address2": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "state_or_province": {
+            "type": "string"
+          },
+          "postal_code": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string",
+            "example": "US"
+          },
+          "lat": {
+            "type": "number",
+            "format": "double"
+          },
+          "lng": {
+            "type": "number",
+            "format": "double"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
       "EnrollmentUpdate": {
         "type": "object",
         "properties": {
@@ -5331,7 +5406,7 @@
             "type": "boolean"
           },
           "address": {
-            "$ref": "#/components/schemas/AddressInput"
+            "$ref": "#/components/schemas/AddressUpdate"
           }
         }
       },

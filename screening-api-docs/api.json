@@ -213,6 +213,21 @@
                 "$ref": "#/components/headers/X-Request-Id"
               }
             }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -257,6 +272,24 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "property_id",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by property (id or external_id)."
+          },
+          {
+            "name": "property_group_id",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by property group id."
           }
         ],
         "responses": {
@@ -376,7 +409,18 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/User"
+                "$ref": "#/components/schemas/UpdateUser"
+              },
+              "example": {
+                "role_id": "3YhTq9ZkLp2",
+                "property_ids": [
+                  "Kp2Zq9YhT3L"
+                ],
+                "can_make_decisions": true,
+                "can_access_reports": {
+                  "credit_report": true,
+                  "income_report": true
+                }
               }
             }
           }
@@ -466,6 +510,36 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "404": {
+            "description": "No such record for this partner",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
               }
             }
           }
@@ -683,6 +757,21 @@
                 "$ref": "#/components/headers/X-Request-Id"
               }
             }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -837,6 +926,21 @@
                 "$ref": "#/components/headers/X-Request-Id"
               }
             }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -947,6 +1051,21 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
               }
             }
           }
@@ -1060,6 +1179,21 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
               }
             }
           }
@@ -1183,6 +1317,36 @@
                 "$ref": "#/components/headers/X-Request-Id"
               }
             }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -1285,6 +1449,36 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
               }
             }
           }
@@ -1743,6 +1937,15 @@
               "format": "date"
             },
             "description": "Only records updated on or before this date (UTC day end)."
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Free-text search on unit title."
           }
         ],
         "responses": {
@@ -1829,6 +2032,21 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
               }
             }
           }
@@ -1943,6 +2161,21 @@
                 "$ref": "#/components/headers/X-Request-Id"
               }
             }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -2054,6 +2287,21 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
               }
             }
           }
@@ -2177,6 +2425,36 @@
                 "$ref": "#/components/headers/X-Request-Id"
               }
             }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -2281,6 +2559,36 @@
                 "$ref": "#/components/headers/X-Request-Id"
               }
             }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -2325,11 +2633,7 @@
             "required": false,
             "in": "query",
             "schema": {
-              "type": "string",
-              "enum": [
-                "true",
-                "false"
-              ]
+              "type": "boolean"
             }
           },
           {
@@ -2468,6 +2772,21 @@
                 "$ref": "#/components/headers/X-Request-Id"
               }
             }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -2576,6 +2895,51 @@
                 "$ref": "#/components/headers/X-Request-Id"
               }
             }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such record for this partner",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -2586,6 +2950,117 @@
             "bearer": []
           }
         ]
+      },
+      "get": {
+        "operationId": "MagicLinksController_findOne",
+        "summary": "Get an application link",
+        "tags": [
+          "Magic links"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Application link",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MagicLink"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such record for this partner",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/partner/v1/applications": {
@@ -2671,7 +3146,8 @@
             "required": false,
             "in": "query",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "date"
             }
           },
           {
@@ -2679,7 +3155,8 @@
             "required": false,
             "in": "query",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "date"
             }
           }
         ],
@@ -2772,6 +3249,21 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
               }
             }
           }
@@ -2885,6 +3377,21 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
               }
             }
           }
@@ -3011,6 +3518,51 @@
                 "$ref": "#/components/headers/X-Request-Id"
               }
             }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such record for this partner",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -3133,6 +3685,51 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such record for this partner",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
               }
             }
           }
@@ -3282,6 +3879,36 @@
                 "$ref": "#/components/headers/X-Request-Id"
               }
             }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -3401,6 +4028,21 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
               }
             }
           }
@@ -3530,6 +4172,21 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
               }
             }
           }
@@ -3675,6 +4332,36 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
               }
             }
           }
@@ -3853,6 +4540,36 @@
                 "$ref": "#/components/headers/X-Request-Id"
               }
             }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -3964,6 +4681,36 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
               }
             }
           }
@@ -4143,6 +4890,21 @@
                 "$ref": "#/components/headers/X-Request-Id"
               }
             }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -4262,6 +5024,36 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
               }
             }
           }
@@ -4716,6 +5508,36 @@
                 "$ref": "#/components/headers/X-Request-Id"
               }
             }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -4846,6 +5668,36 @@
                 "$ref": "#/components/headers/X-Request-Id"
               }
             }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -4892,7 +5744,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApplicationDetail"
+                  "$ref": "#/components/schemas/ApplicationList"
                 }
               }
             },
@@ -4971,6 +5823,36 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
               }
             }
           }
@@ -5032,7 +5914,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApplicationDetail"
+                  "$ref": "#/components/schemas/ApplicationList"
                 }
               }
             },
@@ -5111,6 +5993,36 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
               }
             }
           }
@@ -5389,6 +6301,21 @@
                 "$ref": "#/components/headers/X-Request-Id"
               }
             }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -5504,6 +6431,21 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
               }
             }
           }
@@ -5721,6 +6663,21 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
               }
             }
           }
@@ -5975,6 +6932,21 @@
                 "$ref": "#/components/headers/X-Request-Id"
               }
             }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -6030,6 +7002,21 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
               }
             }
           }
@@ -6088,6 +7075,21 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
               }
             }
           }
@@ -6433,6 +7435,21 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
               }
             }
           }
@@ -7481,6 +8498,1338 @@
           }
         ]
       }
+    },
+    "/partner/v1/property_groups": {
+      "get": {
+        "operationId": "PropertyGroupsController_findAll",
+        "summary": "List property groups",
+        "tags": [
+          "Property Groups"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 20
+            },
+            "description": "Values above 1000 are clamped to 1000."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Property groups",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "type": "object",
+                      "required": [
+                        "items"
+                      ],
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/PropertyGroupBase"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed or business rule rejected the request",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/partner/v1/property_groups/{id}": {
+      "get": {
+        "operationId": "PropertyGroupsController_findOne",
+        "summary": "Get a property group",
+        "tags": [
+          "Property Groups"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Property group",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PropertyGroupBase"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such record for this partner",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/partner/v1/roles": {
+      "get": {
+        "operationId": "RolesController_findAll",
+        "summary": "List roles",
+        "description": "Roles that can be assigned to users via `role_id`.",
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 20
+            },
+            "description": "Values above 1000 are clamped to 1000."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Roles",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "type": "object",
+                      "required": [
+                        "items"
+                      ],
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Role"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed or business rule rejected the request",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/partner/v1/applications/{id}/conditionally_approve": {
+      "post": {
+        "operationId": "ApplicationsController_conditionallyApprove",
+        "summary": "Approve an application with conditions",
+        "tags": [
+          "Applications"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConditionallyApproveApplication"
+              },
+              "example": {
+                "conditions": [
+                  "provide_proof_of_income"
+                ],
+                "skip_sending_email": false,
+                "send_applicants_to_pms": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Application",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationList"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed or business rule rejected the request",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such record for this partner",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/partner/v1/applications/{id}/applicants/{applicant_id}/request_retry_identity_verification": {
+      "post": {
+        "operationId": "ApplicantsController_requestRetryIdentityVerification",
+        "summary": "Ask the applicant to retry identity verification",
+        "description": "Sends the applicant a request to redo identity verification; the verification is re-opened. 400 `identity_verification_not_found` when the applicant has no identity verification.",
+        "tags": [
+          "Applications"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "applicant_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The affected identity verification",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificationActionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed or business rule rejected the request",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such record for this partner",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/partner/v1/applications/{id}/applicants/{applicant_id}/cancel_request_retry_identity_verification": {
+      "post": {
+        "operationId": "ApplicantsController_cancelRequestRetryIdentityVerification",
+        "summary": "Cancel a pending identity-verification retry request",
+        "description": "Reverts a retry request that the applicant has not acted on. 400 `identity_verification_not_found` when the applicant has no identity verification.",
+        "tags": [
+          "Applications"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "applicant_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The affected identity verification",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificationActionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed or business rule rejected the request",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such record for this partner",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/partner/v1/applications/{id}/applicants/{applicant_id}/rerun_identity_verification": {
+      "post": {
+        "operationId": "ApplicantsController_rerunIdentityVerification",
+        "summary": "Re-run identity verification",
+        "description": "Creates a fresh identity verification and archives the current one. 400 with `requirements` when the rerun is not allowed. 400 `identity_verification_not_found` when the applicant has no identity verification.",
+        "tags": [
+          "Applications"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "applicant_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The affected identity verification",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificationActionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed or business rule rejected the request",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such record for this partner",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/partner/v1/applications/{id}/applicants/{applicant_id}/cancel_rerun_identity_verification": {
+      "post": {
+        "operationId": "ApplicantsController_cancelRerunIdentityVerification",
+        "summary": "Cancel an in-progress identity-verification re-run",
+        "description": "Restores the previous identity verification. 400 `identity_verification_not_found` when the applicant has no identity verification.",
+        "tags": [
+          "Applications"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "applicant_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The affected identity verification",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificationActionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed or business rule rejected the request",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such record for this partner",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/partner/v1/applications/{id}/applicants/{applicant_id}/verifications/{verification_id}/run": {
+      "post": {
+        "operationId": "ApplicationsController_runVerification",
+        "summary": "Run a verification now",
+        "description": "Starts a verification that is waiting to be run (for example a report the partner triggers manually). 400 when the verification cannot be run in its current state.",
+        "tags": [
+          "Applications"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "applicant_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "verification_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Verification",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificationDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed or business rule rejected the request",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such record for this partner",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "info": {
@@ -7701,25 +10050,33 @@
       },
       "CreateUser": {
         "type": "object",
+        "required": [
+          "email",
+          "name"
+        ],
         "properties": {
-          "name": {
-            "type": "string",
-            "example": "John Doe"
-          },
           "email": {
             "type": "string",
-            "example": "test@gmail.com"
+            "format": "email"
+          },
+          "name": {
+            "type": "string"
           },
           "role": {
             "type": "string",
-            "example": "admin",
-            "default": "property_manager"
+            "enum": [
+              "admin",
+              "property_manager"
+            ],
+            "default": "property_manager",
+            "deprecated": true,
+            "description": "Legacy role name; prefer role_id."
+          },
+          "role_id": {
+            "type": "string",
+            "description": "Id of a role from GET /partner/v1/roles."
           }
-        },
-        "required": [
-          "name",
-          "email"
-        ]
+        }
       },
       "Address": {
         "type": "object",
@@ -8312,6 +10669,75 @@
             "items": {
               "$ref": "#/components/schemas/PropertyList"
             }
+          },
+          "assigned_role": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Role"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "can_override_applicant_screening_template": {
+            "type": "boolean"
+          },
+          "can_apply_active_discounts": {
+            "type": "boolean"
+          },
+          "can_apply_custom_discounts": {
+            "type": "boolean"
+          },
+          "can_run_reports_manually": {
+            "type": "boolean"
+          },
+          "can_edit_application_rent": {
+            "type": "boolean"
+          },
+          "can_subscribe_renters": {
+            "type": "boolean"
+          },
+          "can_edit_subscription_details": {
+            "type": "boolean"
+          },
+          "can_unsubscribe_renters": {
+            "type": "boolean"
+          },
+          "can_view_renters_list": {
+            "type": "boolean"
+          },
+          "can_view_rent_reporting": {
+            "type": "boolean"
+          },
+          "can_view_credit_reporting": {
+            "type": "boolean"
+          },
+          "can_access_screening_templates": {
+            "type": "boolean"
+          },
+          "can_access_discount_codes": {
+            "type": "boolean"
+          },
+          "can_change_desired_move_in_date": {
+            "type": "boolean"
+          },
+          "can_access_billing_settings": {
+            "type": "boolean"
+          },
+          "can_access_users_settings": {
+            "type": "boolean"
+          },
+          "can_refund_application": {
+            "type": "boolean"
+          },
+          "can_access_explain_recommendation_modal": {
+            "type": "boolean"
+          },
+          "can_edit_estimated_monthly_payments": {
+            "type": "boolean"
+          },
+          "can_access_reports": {
+            "$ref": "#/components/schemas/ReportAccess"
           }
         },
         "required": [
@@ -8326,47 +10752,92 @@
         "properties": {
           "role": {
             "type": "string",
-            "example": "admin",
-            "default": "property_manager"
+            "enum": [
+              "admin",
+              "property_manager"
+            ],
+            "deprecated": true
           },
-          "can_change_rent_amount": {
-            "type": "boolean",
-            "example": true
-          },
-          "can_change_available_by_date": {
-            "type": "boolean",
-            "example": true
-          },
-          "can_make_decisions": {
-            "type": "boolean",
-            "example": true
-          },
-          "can_view_reports": {
-            "type": "boolean",
-            "example": true
-          },
-          "can_cancel_applications": {
-            "type": "boolean",
-            "example": true
-          },
-          "can_change_unit": {
-            "type": "boolean",
-            "example": true
-          },
-          "can_change_applicant_role": {
-            "type": "boolean",
-            "example": true
-          },
-          "can_show_full_ssn": {
-            "type": "boolean",
-            "example": true
+          "role_id": {
+            "type": "string"
           },
           "property_ids": {
-            "description": "List of property IDs, could be Boom ID or external ID",
             "type": "array",
             "items": {
               "type": "string"
             }
+          },
+          "property_group_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "can_change_rent_amount": {
+            "type": "boolean"
+          },
+          "can_change_available_by_date": {
+            "type": "boolean"
+          },
+          "can_make_decisions": {
+            "type": "boolean"
+          },
+          "can_cancel_applications": {
+            "type": "boolean"
+          },
+          "can_change_unit": {
+            "type": "boolean"
+          },
+          "can_edit_income": {
+            "type": "boolean"
+          },
+          "can_manage_all_properties": {
+            "type": "boolean"
+          },
+          "can_override_decision_recommendation": {
+            "type": "boolean"
+          },
+          "can_change_applicant_role": {
+            "type": "boolean"
+          },
+          "can_show_full_ssn": {
+            "type": "boolean"
+          },
+          "can_override_applicant_screening_template": {
+            "type": "boolean"
+          },
+          "can_apply_active_discounts": {
+            "type": "boolean"
+          },
+          "can_apply_custom_discounts": {
+            "type": "boolean"
+          },
+          "can_run_reports_manually": {
+            "type": "boolean"
+          },
+          "can_edit_application_rent": {
+            "type": "boolean"
+          },
+          "can_subscribe_renters": {
+            "type": "boolean"
+          },
+          "can_edit_subscription_details": {
+            "type": "boolean"
+          },
+          "can_unsubscribe_renters": {
+            "type": "boolean"
+          },
+          "can_view_renters_list": {
+            "type": "boolean"
+          },
+          "can_view_rent_reporting": {
+            "type": "boolean"
+          },
+          "can_view_credit_reporting": {
+            "type": "boolean"
+          },
+          "can_access_reports": {
+            "$ref": "#/components/schemas/ReportAccess"
           }
         }
       },
@@ -8579,9 +11050,12 @@
             "type": "boolean",
             "example": false
           },
-          "list_id": {
+          "listing_id": {
             "type": "string",
-            "example": "123456",
+            "nullable": true
+          },
+          "max_occupants": {
+            "type": "integer",
             "nullable": true
           }
         },
@@ -8711,91 +11185,64 @@
       },
       "CreatePropertyUnit": {
         "type": "object",
+        "required": [
+          "title"
+        ],
+        "description": "Units created with the property. Amount fields take the same {cents, currency} shape as POST /partner/v1/units.",
         "properties": {
-          "id": {
-            "type": "string",
-            "example": "1"
-          },
           "title": {
             "type": "string",
-            "example": "Unit 1"
-          },
-          "property_id": {
-            "type": "string",
-            "example": "1"
+            "example": "Unit 4B"
           },
           "monthly_rent_amount": {
-            "$ref": "#/components/schemas/Money"
-          },
-          "occupied": {
-            "type": "boolean",
-            "example": false
+            "$ref": "#/components/schemas/MoneyInput"
           },
           "available_at": {
-            "format": "date-time",
             "type": "string",
-            "example": "2021-01-01"
+            "format": "date"
           },
-          "magic_link": {
-            "$ref": "#/components/schemas/MagicLink"
+          "occupied": {
+            "type": "boolean"
           },
           "external_id": {
-            "type": "string",
-            "example": "123456",
-            "nullable": true
+            "type": "string"
           },
-          "created_at": {
-            "format": "date-time",
-            "type": "string",
-            "example": "2021-01-01T00:00:00.000Z"
+          "listing_id": {
+            "type": "string"
           },
-          "updated_at": {
-            "format": "date-time",
-            "type": "string",
-            "example": "2021-01-01T00:00:00.000Z"
+          "home_rent_amount": {
+            "$ref": "#/components/schemas/MoneyInput"
           },
-          "unit_url": {
-            "type": "string",
-            "example": "{BOOM_PORTAL_URL}/properties/{property.obfuscated_partner_id}/units/{obfuscated_partner_id}"
+          "site_rent_amount": {
+            "$ref": "#/components/schemas/MoneyInput"
           },
-          "verification_template_id": {
-            "type": "string",
-            "example": "123456",
-            "nullable": true
+          "sale_price": {
+            "$ref": "#/components/schemas/MoneyInput"
           },
-          "can_delete": {
-            "type": "boolean",
-            "example": false
-          },
-          "list_id": {
+          "plan": {
             "type": "string",
-            "example": "123456",
-            "nullable": true
+            "description": "Manufactured-housing floor plan."
+          },
+          "dimensions": {
+            "type": "string",
+            "description": "Manufactured-housing home dimensions."
           }
-        },
-        "required": [
-          "id",
-          "title",
-          "property_id",
-          "occupied",
-          "created_at",
-          "updated_at"
-        ]
+        }
       },
       "CreateProperty": {
         "type": "object",
+        "required": [
+          "name",
+          "address",
+          "units"
+        ],
         "properties": {
           "name": {
             "type": "string",
-            "example": "My property",
-            "nullable": true
+            "example": "Maple Court"
           },
           "address": {
-            "$ref": "#/components/schemas/CreateAddress"
-          },
-          "verification_template_id": {
-            "type": "string",
-            "example": "1234567890"
+            "$ref": "#/components/schemas/PropertyAddressInput"
           },
           "units": {
             "type": "array",
@@ -8803,24 +11250,22 @@
               "$ref": "#/components/schemas/CreatePropertyUnit"
             }
           },
-          "external_id": {
-            "type": "string",
-            "example": "123",
-            "nullable": true
+          "verification_template_id": {
+            "type": "string"
           },
-          "use_property_group_verification_template": {
-            "type": "boolean",
-            "example": true
+          "external_id": {
+            "type": "string"
+          },
+          "owner_name": {
+            "type": "string"
           },
           "market": {
-            "type": "string",
-            "example": "San Francisco",
-            "nullable": true
+            "type": "string"
+          },
+          "use_property_group_verification_template": {
+            "type": "boolean"
           }
-        },
-        "required": [
-          "address"
-        ]
+        }
       },
       "ForbiddenErrorResponse": {
         "type": "object",
@@ -8861,30 +11306,25 @@
         "type": "object",
         "properties": {
           "name": {
-            "type": "string",
-            "example": "My property",
-            "nullable": true
+            "type": "string"
           },
           "address": {
-            "$ref": "#/components/schemas/CreateAddress"
+            "$ref": "#/components/schemas/PropertyAddressInput"
           },
           "verification_template_id": {
-            "type": "string",
-            "example": "1234567890"
+            "type": "string"
           },
           "external_id": {
-            "type": "string",
-            "example": "123",
-            "nullable": true
+            "type": "string"
           },
-          "use_property_group_verification_template": {
-            "type": "boolean",
-            "example": true
+          "owner_name": {
+            "type": "string"
           },
           "market": {
-            "type": "string",
-            "example": "San Francisco",
-            "nullable": true
+            "type": "string"
+          },
+          "use_property_group_verification_template": {
+            "type": "boolean"
           }
         }
       },
@@ -8946,13 +11386,16 @@
             "type": "boolean",
             "example": false
           },
-          "list_id": {
-            "type": "string",
-            "example": "123456",
-            "nullable": true
-          },
           "property": {
             "$ref": "#/components/schemas/PropertyList"
+          },
+          "listing_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "max_occupants": {
+            "type": "integer",
+            "nullable": true
           }
         },
         "required": [
@@ -8966,71 +11409,75 @@
       },
       "CreateUnit": {
         "type": "object",
+        "required": [
+          "title",
+          "monthly_rent_amount",
+          "available_at",
+          "occupied",
+          "property_id"
+        ],
         "properties": {
           "title": {
             "type": "string",
-            "example": "Unit 1"
-          },
-          "property_id": {
-            "type": "string",
-            "example": "1"
+            "example": "Unit 4B"
           },
           "monthly_rent_amount": {
-            "$ref": "#/components/schemas/Money"
-          },
-          "occupied": {
-            "type": "boolean",
-            "example": false
+            "$ref": "#/components/schemas/MoneyInput"
           },
           "available_at": {
-            "format": "date-time",
             "type": "string",
-            "example": "2021-01-01"
+            "format": "date"
+          },
+          "occupied": {
+            "type": "boolean"
+          },
+          "verification_template_id": {
+            "type": "string"
           },
           "external_id": {
-            "type": "string",
-            "example": "123",
-            "nullable": true
+            "type": "string"
+          },
+          "listing_id": {
+            "type": "string"
+          },
+          "max_occupants": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "property_id": {
+            "type": "string"
           }
-        },
-        "required": [
-          "title",
-          "property_id",
-          "occupied"
-        ]
+        }
       },
       "UpdateUnit": {
         "type": "object",
         "properties": {
           "title": {
             "type": "string",
-            "example": "Unit 1"
-          },
-          "property_id": {
-            "type": "string",
-            "example": "1"
+            "example": "Unit 4B"
           },
           "monthly_rent_amount": {
-            "$ref": "#/components/schemas/Money"
-          },
-          "occupied": {
-            "type": "boolean",
-            "example": false
+            "$ref": "#/components/schemas/MoneyInput"
           },
           "available_at": {
-            "format": "date-time",
             "type": "string",
-            "example": "2021-01-01"
+            "format": "date"
+          },
+          "occupied": {
+            "type": "boolean"
+          },
+          "verification_template_id": {
+            "type": "string"
           },
           "external_id": {
-            "type": "string",
-            "example": "123",
-            "nullable": true
+            "type": "string"
           },
           "listing_id": {
-            "type": "string",
-            "example": "123",
-            "nullable": true
+            "type": "string"
+          },
+          "max_occupants": {
+            "type": "integer",
+            "minimum": 1
           }
         }
       },
@@ -9041,10 +11488,7 @@
             "type": "boolean",
             "example": true
           }
-        },
-        "required": [
-          "active"
-        ]
+        }
       },
       "VerificationProgress": {
         "type": "object",
@@ -9123,6 +11567,16 @@
             "format": "date-time",
             "type": "string",
             "example": "2021-01-01T00:00:00.000Z"
+          },
+          "estimated_time": {
+            "type": "integer",
+            "description": "Estimated minutes to complete.",
+            "nullable": true
+          },
+          "archived_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         },
         "required": [
@@ -9261,6 +11715,29 @@
             "format": "date-time",
             "type": "string",
             "example": "2021-01-01T00:00:00.000Z"
+          },
+          "credit_report_verifications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VerificationList"
+            }
+          },
+          "identity_verification_verifications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VerificationList"
+            }
+          },
+          "external_customer_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "is_primary": {
+            "type": "boolean"
+          },
+          "lead_id": {
+            "type": "string",
+            "nullable": true
           }
         },
         "required": [
@@ -9373,6 +11850,29 @@
             "format": "date-time",
             "type": "string",
             "example": "2021-01-01T00:00:00.000Z"
+          },
+          "credit_report_verifications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VerificationList"
+            }
+          },
+          "identity_verification_verifications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VerificationList"
+            }
+          },
+          "external_customer_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "is_primary": {
+            "type": "boolean"
+          },
+          "lead_id": {
+            "type": "string",
+            "nullable": true
           }
         },
         "required": [
@@ -9546,6 +12046,25 @@
             "description": "List of partner users assigned to this application",
             "items": {
               "$ref": "#/components/schemas/Assignee"
+            }
+          },
+          "lead_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "evaluated_rule_set": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RuleSet"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "evaluated_rule_sets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RuleSet"
             }
           }
         },
@@ -9764,6 +12283,18 @@
               "$ref": "#/components/schemas/RuleSet"
             },
             "nullable": false
+          },
+          "lead_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "application_merged_into_id": {
+            "type": "string",
+            "description": "Set when this application was merged into another.",
+            "nullable": true
+          },
+          "warnings_triggered_count": {
+            "type": "integer"
           }
         },
         "required": [
@@ -9834,6 +12365,10 @@
           "note_message": {
             "type": "string",
             "example": "note message"
+          },
+          "send_applicants_to_pms": {
+            "type": "boolean",
+            "description": "Push the applicants to the connected PMS after the decision."
           }
         },
         "required": [
@@ -12479,6 +15014,38 @@
                 "$ref": "#/components/schemas/VerifiedIncomeVerificationReport"
               }
             ]
+          },
+          "estimated_time": {
+            "type": "integer",
+            "description": "Estimated minutes to complete.",
+            "nullable": true
+          },
+          "archived_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "landlord_surveys_data": {
+            "nullable": true,
+            "type": "object",
+            "description": "Keyed by landlord email.",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "index": {
+                    "type": "integer"
+                  },
+                  "data": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "required": [
@@ -12751,6 +15318,15 @@
             "example": "2021-01-01T00:00:00.000Z",
             "nullable": true,
             "description": "Timestamp of the most recent identity verification activity (created or completed) for this lead. Null if no verification has occurred. Tracked separately from updated_at, which only reflects direct edits to the lead."
+          },
+          "desired_move_in_date": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
           }
         },
         "required": [
@@ -12937,9 +15513,7 @@
             "example": true
           },
           "display_order": {
-            "type": "number",
-            "example": 1,
-            "nullable": true
+            "type": "integer"
           },
           "can_edit": {
             "type": "boolean",
@@ -12960,6 +15534,16 @@
             "format": "date-time",
             "type": "string",
             "example": "2021-01-01T00:00:00.000Z"
+          },
+          "color": {
+            "type": "string",
+            "example": "#4A90E2",
+            "nullable": true
+          },
+          "lead_ingest_email": {
+            "type": "string",
+            "format": "email",
+            "nullable": true
           }
         },
         "required": [
@@ -13464,6 +16048,12 @@
           "updated_at": {
             "type": "string",
             "format": "date-time"
+          },
+          "raw_response": {
+            "nullable": true,
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Provider payload."
           }
         }
       },
@@ -13505,6 +16095,20 @@
           "partner_slug": {
             "type": "string",
             "description": "The partner's URL slug, echoed back from the request."
+          },
+          "custom_button_url": {
+            "type": "string",
+            "nullable": true
+          },
+          "custom_button_available": {
+            "type": "boolean"
+          },
+          "custom_button_label": {
+            "type": "string",
+            "nullable": true
+          },
+          "waitlist": {
+            "type": "boolean"
           }
         }
       },
@@ -13616,20 +16220,6 @@
             "items": {},
             "description": "Gallery images. Same variable per-item shape as primary_image_url."
           },
-          "common_amenity_ids": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "type": "string"
-            }
-          },
-          "special_feature_ids": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "type": "string"
-            }
-          },
           "listing_url": {
             "type": "string",
             "nullable": true,
@@ -13649,6 +16239,24 @@
             "nullable": true,
             "description": "Null when the listing has no listing template (no lead-capture actions available).",
             "type": "object"
+          },
+          "common_amenities": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "In-unit laundry"
+            }
+          },
+          "special_features": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "Rooftop deck"
+            }
+          },
+          "last_updated": {
+            "type": "string",
+            "format": "date-time"
           }
         },
         "required": [
@@ -13759,6 +16367,184 @@
                 "example": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
               }
             }
+          }
+        }
+      },
+      "Role": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "role_type",
+          "permissions"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "3YhTq9ZkLp2"
+          },
+          "name": {
+            "type": "string",
+            "example": "Leasing agent"
+          },
+          "role_type": {
+            "type": "string",
+            "enum": [
+              "system",
+              "custom"
+            ],
+            "example": "custom",
+            "description": "`system` roles (admin, owner, property_manager) are built in; `custom` roles are partner-defined."
+          },
+          "permissions": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "boolean"
+            },
+            "description": "Permission name → enabled.",
+            "example": {
+              "can_make_decisions": true,
+              "can_show_full_ssn": false
+            }
+          }
+        }
+      },
+      "MoneyInput": {
+        "type": "object",
+        "required": [
+          "cents"
+        ],
+        "properties": {
+          "cents": {
+            "type": "integer",
+            "example": 185000
+          },
+          "currency": {
+            "type": "string",
+            "default": "USD",
+            "example": "USD"
+          }
+        }
+      },
+      "PropertyAddressInput": {
+        "type": "object",
+        "required": [
+          "address1",
+          "city",
+          "state_or_province",
+          "postal_code"
+        ],
+        "description": "address1, city, state_or_province and postal_code are supplied together.",
+        "properties": {
+          "address1": {
+            "type": "string",
+            "example": "123 Main St"
+          },
+          "address2": {
+            "type": "string",
+            "example": "Apt 4B"
+          },
+          "city": {
+            "type": "string",
+            "example": "San Jose"
+          },
+          "state_or_province": {
+            "type": "string",
+            "example": "CA"
+          },
+          "postal_code": {
+            "type": "string",
+            "example": "95112"
+          },
+          "lat": {
+            "type": "number",
+            "format": "double"
+          },
+          "lng": {
+            "type": "number",
+            "format": "double"
+          },
+          "name": {
+            "type": "string",
+            "description": "Optional label for the address."
+          }
+        }
+      },
+      "ReportAccess": {
+        "type": "object",
+        "properties": {
+          "rental_application": {
+            "type": "boolean"
+          },
+          "identity_verification": {
+            "type": "boolean"
+          },
+          "income_report": {
+            "type": "boolean"
+          },
+          "housing_history_report": {
+            "type": "boolean"
+          },
+          "credit_report": {
+            "type": "boolean"
+          },
+          "us_criminal_report": {
+            "type": "boolean"
+          },
+          "ca_criminal_report": {
+            "type": "boolean"
+          },
+          "housing_court_report": {
+            "type": "boolean"
+          },
+          "animal_screening": {
+            "type": "boolean"
+          },
+          "disclosure": {
+            "type": "boolean"
+          },
+          "additional_documents": {
+            "type": "boolean"
+          },
+          "warnings_report": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ConditionallyApproveApplication": {
+        "type": "object",
+        "required": [
+          "conditions"
+        ],
+        "properties": {
+          "conditions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "skip_sending_email": {
+            "type": "boolean"
+          },
+          "email_message": {
+            "type": "string"
+          },
+          "note_message": {
+            "type": "string"
+          },
+          "send_applicants_to_pms": {
+            "type": "boolean"
+          }
+        }
+      },
+      "VerificationActionResponse": {
+        "type": "object",
+        "required": [
+          "verification"
+        ],
+        "properties": {
+          "verification": {
+            "$ref": "#/components/schemas/VerificationDetail"
           }
         }
       }
