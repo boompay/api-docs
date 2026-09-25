@@ -40,6 +40,7 @@ If-Match: W/"3f9a1c0b7e2d4a6f8b1c2d3e4f5a6b7c"
 - If the record changed since you read it, the write is **not applied** and you get `412 Precondition Failed` with `code: precondition_failed`. Fetch the record again, decide whether your change still makes sense, and retry with the new validator.
 - `If-Match` accepts a comma-separated list, and `*` means "any current version" (an unconditional write).
 - A request without `If-Match` is unconditional. Every successful `PATCH` returns the new `ETag` whether or not you sent one.
+- The precondition is checked immediately before the write, not atomically with it. Two writers that both present the *current* validator at the same instant can both succeed, in which case the later one wins. `If-Match` protects you from writing over a change you have not seen; it does not serialize simultaneous writers.
 
 Recommended pattern for automations that edit records humans also edit in the Boom portal: read, modify, write with `If-Match`, and on 412 re-read and reconcile rather than retrying blindly.
 
