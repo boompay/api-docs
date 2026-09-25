@@ -402,6 +402,9 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "$ref": "#/components/parameters/If-Match"
           }
         ],
         "requestBody": {
@@ -438,6 +441,9 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
               }
             }
           },
@@ -542,6 +548,21 @@
                 }
               }
             }
+          },
+          "412": {
+            "description": "If-Match did not match the current ETag; nothing was written",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreconditionFailedResponse"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -579,6 +600,9 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
               }
             }
           },
@@ -1107,6 +1131,9 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
               }
             }
           },
@@ -1218,6 +1245,9 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "$ref": "#/components/parameters/If-Match"
           }
         ],
         "requestBody": {
@@ -1243,6 +1273,9 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
               }
             }
           },
@@ -1344,6 +1377,21 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "If-Match did not match the current ETag; nothing was written",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreconditionFailedResponse"
                 }
               }
             }
@@ -2215,6 +2263,9 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
               }
             }
           },
@@ -2326,6 +2377,9 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "$ref": "#/components/parameters/If-Match"
           }
         ],
         "requestBody": {
@@ -2351,6 +2405,9 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
               }
             }
           },
@@ -2452,6 +2509,21 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "If-Match did not match the current ETag; nothing was written",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreconditionFailedResponse"
                 }
               }
             }
@@ -2811,6 +2883,9 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "$ref": "#/components/parameters/If-Match"
           }
         ],
         "requestBody": {
@@ -2836,6 +2911,9 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
               }
             }
           },
@@ -2940,6 +3018,21 @@
                 }
               }
             }
+          },
+          "412": {
+            "description": "If-Match did not match the current ETag; nothing was written",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreconditionFailedResponse"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -2978,6 +3071,9 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
               }
             },
             "content": {
@@ -6495,6 +6591,9 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
               }
             }
           },
@@ -6536,6 +6635,9 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "$ref": "#/components/parameters/If-Match"
           }
         ],
         "requestBody": {
@@ -6561,6 +6663,9 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
               }
             }
           },
@@ -6677,6 +6782,21 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "If-Match did not match the current ETag; nothing was written",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreconditionFailedResponse"
                 }
               }
             }
@@ -16547,6 +16667,42 @@
             "$ref": "#/components/schemas/VerificationDetail"
           }
         }
+      },
+      "PreconditionFailedResponse": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "object",
+            "required": [
+              "message",
+              "status",
+              "request_id",
+              "code"
+            ],
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "The resource has changed since you fetched it. Fetch it again and retry with the new ETag."
+              },
+              "status": {
+                "type": "integer",
+                "example": 412
+              },
+              "code": {
+                "type": "string",
+                "example": "precondition_failed"
+              },
+              "request_id": {
+                "type": "string",
+                "example": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+              }
+            }
+          }
+        },
+        "description": "`If-Match` did not match the record's current `ETag`. Nothing was written."
       }
     },
     "headers": {
@@ -16584,6 +16740,24 @@
           "type": "integer",
           "example": 1767225637
         }
+      },
+      "ETag": {
+        "description": "Weak validator for the returned resource, derived from its last modification. Send it back in `If-Match` on PATCH to make the write conditional (see the Concurrency guide).",
+        "schema": {
+          "type": "string",
+          "example": "W/\"3f9a1c0b7e2d4a6f8b1c2d3e4f5a6b7c\""
+        }
+      }
+    },
+    "parameters": {
+      "If-Match": {
+        "name": "If-Match",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        },
+        "description": "Apply the write only if the resource's current `ETag` matches one of the listed validators, or `*`. A stale validator returns 412 `precondition_failed` and nothing is written."
       }
     }
   },
