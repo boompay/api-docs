@@ -40,8 +40,10 @@ Some codes add fields:
 | 403 | `forbidden` | The key is read-only and the request is a write, or the user role does not permit the action. |
 | 404 | `not_found` | No such record for this partner. Also returned for records outside a scoped key's owners or property groups. |
 | 405 | `method_not_allowed` | The path exists but not for this HTTP method. |
-| 409 | `invalid_state_transition` | The record is not in a state that allows this action, for example approving an application that is already approved. Fetch the record and inspect its `status`. |
-| 409 | `lock_failed` | The record changed while your request was in flight. Fetch it again and retry. |
+| 400 | *(none)*, message `cant_approve` / `cant_reject` / `cant_cancel` | An application decision was attempted on an application that is not in a decidable state. Nothing changed; fetch the application and inspect its `status`. |
+| 409 | `invalid_state_transition` | A lifecycle transition the record does not allow from its current state. |
+| 409 | `lock_failed` | The record changed while your request was in flight. Nothing changed; fetch it again and retry. |
+| 412 | `precondition_failed` | The `If-Match` validator you sent no longer matches the record's `ETag`. Nothing changed. See [Concurrency and conflicts](concurrency.md). |
 | 422 | `validation_error` / *(none)* | The request was understood but cannot be processed, for example a customer that fails eligibility. |
 | 429 | `rate_limited` | Rate limit exceeded. Honour the `Retry-After` header. See [Rate limits](rate-limits.md). |
 | 500 | `api_error` | Unexpected server error. Quote `request_id` and `error_id` to support. |
@@ -61,4 +63,5 @@ Every response, success or failure, carries an `X-Request-Id` header. Error bodi
 
 - `GET` requests are safe to retry.
 - On `429` wait for `Retry-After` seconds before retrying; see [Rate limits](rate-limits.md) for a backoff recipe.
+- Make writes conditional with `If-Match` when a human or another integration may edit the same record; see [Concurrency and conflicts](concurrency.md).
 - On `5xx` or a network failure after a write, **read the record back before retrying**. `POST /partner/v1/enrollments/{id}/report_rental_payments` and application decisions have real-world side effects, and the API does not yet accept an idempotency key.
