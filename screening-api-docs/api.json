@@ -6101,6 +6101,27 @@
               "format": "date"
             },
             "description": "Only records updated on or before this date (UTC day end)."
+          },
+          {
+            "name": "include",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "showings",
+                  "communications",
+                  "activity",
+                  "contact_methods",
+                  "prescreening"
+                ]
+              }
+            },
+            "style": "form",
+            "explode": true,
+            "description": "Additional data to embed on each lead. Repeat the parameter (`include=showings&include=activity`) or pass a comma-separated list. Omitted entirely, the response is exactly what it was before this parameter existed. `showings`, `communications` and `activity` embed the 5 most recent entries with `has_more` — page the rest through the per-lead sub-resources. When `include` is used, `per_page` is capped at 25."
           }
         ],
         "responses": {
@@ -6464,7 +6485,7 @@
       "get": {
         "operationId": "LeadsController_findById",
         "summary": "Get lead detail",
-        "description": "Returns the full detail for a lead.\n\n**Deleted leads:** if the lead has been deleted, this endpoint still responds with `200` but returns a slim `DeletedLead` record rather than the full lead, so you can distinguish a deleted lead from one that never existed. A lead id that was never issued returns `404`. All other lead endpoints (update, apply, and the verification actions) return `404` for a deleted lead.",
+        "description": "Returns the full detail for a lead.\n\nShowings, communications, activity, contact methods and pre-screening answers are all included by default — no `include` parameter is needed here, unlike List Leads. Showings, communications and activity are embedded as the 5 most recent entries with `has_more`; page the rest through the per-lead sub-resources.\n\n**Deleted leads:** if the lead has been deleted, this endpoint still responds with `200` but returns a slim `DeletedLead` record rather than the full lead, so you can distinguish a deleted lead from one that never existed. A lead id that was never issued returns `404`. All other lead endpoints (update, apply, and the verification actions) return `404` for a deleted lead.",
         "parameters": [
           {
             "name": "lead_id",
@@ -6842,6 +6863,345 @@
                       }
                     }
                   ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Leads"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/leads/{lead_id}/showings": {
+      "get": {
+        "operationId": "LeadsController_getLeadShowings",
+        "summary": "List a lead's showings",
+        "parameters": [
+          {
+            "name": "lead_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            },
+            "description": "Maximum 100. A larger value is rejected with 400."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/LeadShowing"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Leads"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "description": "Newest first. A showing on a property outside a scoped key's access is not returned."
+      }
+    },
+    "/partner/v1/leads/{lead_id}/communications": {
+      "get": {
+        "operationId": "LeadsController_getLeadCommunications",
+        "summary": "List a lead's SMS, email and call history",
+        "parameters": [
+          {
+            "name": "lead_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            },
+            "description": "Maximum 100. A larger value is rejected with 400."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/LeadCommunication"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Leads"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "description": "Newest first, SMS, email and calls merged into one feed. Messages are attributed to the contact, so the same conversation appears on each of that contact's open leads; a scoped key sees only the leads within its access. History starts when this feature was released — messages exchanged before then are not backfilled and may appear in the activity feed without a matching entry here."
+      }
+    },
+    "/partner/v1/leads/{lead_id}/contact_methods": {
+      "get": {
+        "operationId": "LeadsController_getLeadContactMethods",
+        "summary": "List every phone number and email on file for a lead",
+        "parameters": [
+          {
+            "name": "lead_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            },
+            "description": "Maximum 100. A larger value is rejected with 400."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/LeadContactMethod"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Leads"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/leads/{lead_id}/prescreening_answers": {
+      "get": {
+        "operationId": "LeadsController_getLeadPrescreeningAnswers",
+        "summary": "Get a lead's pre-screening answers",
+        "description": "Answers to the listing template's pre-screening questions and to your own custom contact-form fields, under separate keys. Credit score and income are not exposed.",
+        "parameters": [
+          {
+            "name": "lead_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeadPrescreening"
                 }
               }
             },
@@ -15278,6 +15638,22 @@
             "example": "123456",
             "nullable": true
           },
+          "property": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LeadProperty"
+              }
+            ]
+          },
+          "unit": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LeadUnit"
+              }
+            ]
+          },
           "applicant_id": {
             "type": "string",
             "example": "123456",
@@ -15327,6 +15703,45 @@
           "message": {
             "type": "string",
             "nullable": true
+          },
+          "showings": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LeadShowingsPreview"
+              }
+            ],
+            "description": "Only present when requested via `include` on List Leads; always present on Get Lead by ID."
+          },
+          "communications": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LeadCommunicationsPreview"
+              }
+            ],
+            "description": "Only present when requested via `include` on List Leads; always present on Get Lead by ID."
+          },
+          "activity": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LeadActivityPreview"
+              }
+            ],
+            "description": "Only present when requested via `include` on List Leads; always present on Get Lead by ID."
+          },
+          "contact_methods": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LeadContactMethod"
+            },
+            "description": "Every phone number and email on file. Only present when requested via `include` on List Leads; always present on Get Lead by ID."
+          },
+          "prescreening": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LeadPrescreening"
+              }
+            ],
+            "description": "Only present when requested via `include` on List Leads; always present on Get Lead by ID."
           }
         },
         "required": [
@@ -16547,6 +16962,332 @@
             "$ref": "#/components/schemas/VerificationDetail"
           }
         }
+      },
+      "LeadProperty": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "73z2qplhjqgr2iii"
+          },
+          "name": {
+            "type": "string",
+            "example": "Oak Terrace",
+            "nullable": true
+          },
+          "external_id": {
+            "type": "string",
+            "example": "ext-property-1",
+            "nullable": true
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          }
+        },
+        "description": "The property a lead is associated with. Returned alongside the `property_id` that has always been present."
+      },
+      "LeadUnit": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "lvg3cwdv2qcon5fv"
+          },
+          "title": {
+            "type": "string",
+            "example": "412",
+            "nullable": true
+          },
+          "external_id": {
+            "type": "string",
+            "example": "ext-unit-1",
+            "nullable": true
+          }
+        },
+        "description": "The unit a lead is associated with. `title` is the unit number or label."
+      },
+      "LeadShowing": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "kg0hxrwupbjcerzo"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "scheduled",
+              "completed",
+              "canceled",
+              "no_show"
+            ],
+            "example": "scheduled",
+            "description": "Partner-facing status. Internal lifecycle states are mapped onto these four so the state machine can change without breaking an integration."
+          },
+          "showing_type": {
+            "type": "string",
+            "enum": [
+              "hosted",
+              "self_guided"
+            ],
+            "example": "hosted",
+            "description": "`hosted` means a partner user runs the tour."
+          },
+          "start_time": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-08-23T12:45:00+00:00",
+            "nullable": true
+          },
+          "end_time": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-08-23T13:15:00+00:00",
+            "nullable": true
+          },
+          "timezone": {
+            "type": "string",
+            "example": "America/Chicago",
+            "nullable": true
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-08-01T10:00:00+00:00"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-08-02T10:00:00+00:00"
+          }
+        }
+      },
+      "LeadCommunication": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "msg_06fdb6c2-250a-4765-a4f4-921ae54ebff2",
+            "description": "Stable per entry. Messages are prefixed `msg_`, calls `call_`."
+          },
+          "channel": {
+            "type": "string",
+            "enum": [
+              "sms",
+              "email",
+              "call"
+            ],
+            "example": "sms"
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "inbound",
+              "outbound"
+            ],
+            "example": "inbound"
+          },
+          "content": {
+            "type": "string",
+            "example": "Is the unit still available?",
+            "nullable": true,
+            "description": "The message body for `sms` and `email`; the call transcript for `call`, when one was produced. Email is plain text."
+          },
+          "occurred_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-09-24T17:41:31+00:00"
+          },
+          "status": {
+            "type": "string",
+            "example": "completed",
+            "nullable": true,
+            "description": "Call only; null for `sms` and `email`."
+          },
+          "duration_seconds": {
+            "type": "integer",
+            "example": 112,
+            "nullable": true,
+            "description": "Call only; null for `sms` and `email`."
+          },
+          "recording_url": {
+            "type": "string",
+            "example": "https://example.com/recording.mp3",
+            "nullable": true,
+            "description": "Call only; null for `sms` and `email`."
+          }
+        },
+        "description": "One entry of a lead's SMS, email and call history, newest first. Internal notes are never included."
+      },
+      "LeadContactMethod": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "email",
+              "phone"
+            ],
+            "example": "email"
+          },
+          "sub_type": {
+            "type": "string",
+            "enum": [
+              "home",
+              "work",
+              "mobile",
+              "personal",
+              "other"
+            ],
+            "example": "personal",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "example": "renter@example.com"
+          },
+          "is_primary": {
+            "type": "boolean",
+            "example": true,
+            "description": "At most one primary per type."
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-08-01T10:00:00+00:00"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-08-02T10:00:00+00:00"
+          }
+        }
+      },
+      "LeadPrescreeningAnswer": {
+        "type": "object",
+        "properties": {
+          "question_id": {
+            "type": "string",
+            "example": "q_pets",
+            "nullable": true
+          },
+          "question": {
+            "type": "string",
+            "example": "Do you have pets?",
+            "nullable": true,
+            "description": "The question as it was asked, resolved from the template version pinned to the answer."
+          },
+          "name": {
+            "type": "string",
+            "example": "Pets",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "yes_no",
+              "multiple_choice",
+              "plain_text"
+            ],
+            "example": "yes_no",
+            "nullable": true
+          },
+          "answer": {
+            "type": "string",
+            "example": "yes",
+            "nullable": true
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "Yes",
+              "No",
+              "Maybe"
+            ],
+            "nullable": true,
+            "description": "Only for `multiple_choice`."
+          },
+          "answered_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-08-01T10:00:00+00:00",
+            "nullable": true
+          }
+        }
+      },
+      "LeadPrescreening": {
+        "type": "object",
+        "properties": {
+          "listing_template_answers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LeadPrescreeningAnswer"
+            },
+            "description": "Answers to the listing template's pre-screening questions."
+          },
+          "contact_form_answers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LeadPrescreeningAnswer"
+            },
+            "description": "Answers to your own custom contact-form fields."
+          }
+        },
+        "description": "Credit score and income are never exposed here."
+      },
+      "LeadShowingsPreview": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LeadShowing"
+            }
+          },
+          "has_more": {
+            "type": "boolean",
+            "example": true,
+            "description": "True when the lead has more entries than the preview holds. Page the rest through the sub-resource."
+          }
+        },
+        "description": "The 5 most recent showings. Full history: GET /partner/v1/leads/{lead_id}/showings."
+      },
+      "LeadCommunicationsPreview": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LeadCommunication"
+            }
+          },
+          "has_more": {
+            "type": "boolean",
+            "example": true,
+            "description": "True when the lead has more entries than the preview holds. Page the rest through the sub-resource."
+          }
+        },
+        "description": "The 5 most recent communications. Full history: GET /partner/v1/leads/{lead_id}/communications."
+      },
+      "LeadActivityPreview": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LeadActivityLog"
+            }
+          },
+          "has_more": {
+            "type": "boolean",
+            "example": true,
+            "description": "True when the lead has more entries than the preview holds. Page the rest through the sub-resource."
+          }
+        },
+        "description": "The 5 most recent activity entries. Full history: GET /partner/v1/leads/{lead_id}/activity_logs."
       }
     },
     "headers": {
