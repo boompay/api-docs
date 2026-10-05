@@ -6198,7 +6198,8 @@
           {
             "bearer": []
           }
-        ]
+        ],
+        "description": "Each lead includes approval_likelihood and approval_likelihood_explanation. A change in approval likelihood does not change updated_at, so the updated_at_from_date / updated_at_to_date filters cannot be used to detect score changes; re-pull the leads you care about instead."
       },
       "post": {
         "operationId": "LeadsController_create",
@@ -15491,12 +15492,85 @@
           "message": {
             "type": "string",
             "nullable": true
+          },
+          "approval_likelihood": {
+            "type": "string",
+            "nullable": true,
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "example": "medium",
+            "description": "Approval likelihood band, the same one shown in the Partner Portal. Null when lead scoring is not enabled for your account, the lead has become an applicant, the lead has not been scored yet (normal right after create), or it was scored with too little data. Null never means low. A change in approval likelihood does not change updated_at."
+          },
+          "approval_likelihood_explanation": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LeadApprovalLikelihoodExplanation"
+              }
+            ],
+            "description": "Factors behind the approval likelihood. Null whenever approval_likelihood is null, except when the lead was scored with insufficient data, in which case its factors are still listed."
           }
         },
         "required": [
           "id",
           "created_at",
           "updated_at"
+        ]
+      },
+      "LeadApprovalLikelihoodExplanation": {
+        "type": "object",
+        "properties": {
+          "insufficient_data": {
+            "type": "boolean",
+            "example": false,
+            "description": "True when the lead has some factor information but too little to produce a band."
+          },
+          "factors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LeadApprovalLikelihoodFactor"
+            },
+            "description": "Factors in display order. A factor that was not computed for the lead is omitted."
+          }
+        },
+        "required": [
+          "insufficient_data",
+          "factors"
+        ]
+      },
+      "LeadApprovalLikelihoodFactor": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "example": "income_to_rent_ratio",
+            "description": "Stable factor identifier; use this, not name, in code. One of source, responsiveness, move_in, requirements, prescreening_match, income_to_rent_ratio, prescreening_borderline_criterion, showing_reliability, fraud_risk. New keys may be added; treat unknown keys as informational."
+          },
+          "name": {
+            "type": "string",
+            "example": "Income-to-rent ratio",
+            "description": "Factor label shown in the Partner Portal."
+          },
+          "data_available": {
+            "type": "boolean",
+            "example": true,
+            "description": "Whether data was available for this factor on this lead."
+          },
+          "rationale_text": {
+            "type": "string",
+            "example": "This lead's reported income is 3.2x the property's monthly rent.",
+            "description": "Plain-language sentence shown in the Partner Portal. When data_available is false it is always \"No data available for this factor yet.\""
+          }
+        },
+        "required": [
+          "key",
+          "name",
+          "data_available",
+          "rationale_text"
         ]
       },
       "DeletedLead": {
