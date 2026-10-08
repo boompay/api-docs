@@ -3744,6 +3744,191 @@
         ]
       }
     },
+    "/partner/v1/applications/{id}/undo_decision": {
+      "post": {
+        "operationId": "ApplicationsController_undoDecision",
+        "summary": "Undo an application decision",
+        "description": "Reverts an application in status approved, approved_with_conditions, or rejected back to submitted. The decision must be inside the partner's undo window, counted from decision_at. The window defaults to 30 days and is configured per partner; when the partner turns the restriction off, any decision can be undone. notify_applicant defaults to false. When true, each applicant is emailed that the decision was reverted.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Obfuscated application id.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UndoApplicationDecision"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Decision reverted. The application status is submitted.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationList"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "400": {
+            "description": "Application is not in a revertable status, or the decision is outside the undo window.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                },
+                "examples": {
+                  "WrongStatus": {
+                    "summary": "Application is not approved or rejected",
+                    "value": {
+                      "error": {
+                        "message": "Can't revert application with status submitted",
+                        "status": 400,
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d",
+                        "code": "validation_error",
+                        "errors": [
+                          "Can't revert application with status submitted"
+                        ]
+                      }
+                    }
+                  },
+                  "DecisionTooOld": {
+                    "summary": "Decision is outside the undo window",
+                    "value": {
+                      "error": {
+                        "message": "Cannot undo decisions made more than 30 days ago",
+                        "status": 400,
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d",
+                        "code": "validation_error",
+                        "errors": [
+                          "Cannot undo decisions made more than 30 days ago"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such record for this partner",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Applications"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/partner/v1/applications/{id}/applicants/{applicant_id}/override_identity": {
       "post": {
         "operationId": "ApplicationsController_overrideIdentityVerification",
@@ -12539,6 +12724,17 @@
         "required": [
           "reasons"
         ]
+      },
+      "UndoApplicationDecision": {
+        "type": "object",
+        "properties": {
+          "notify_applicant": {
+            "type": "boolean",
+            "description": "Email applicants that the decision was reverted. Defaults to false when omitted.",
+            "default": false,
+            "example": false
+          }
+        }
       },
       "RentalApplicationEmergencyContact": {
         "type": "object",
