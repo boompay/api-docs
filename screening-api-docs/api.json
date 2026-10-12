@@ -6416,6 +6416,21 @@
               }
             }
           },
+          "400": {
+            "description": "Invalid phone or email, external_id is required, or invalid lead source",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
           "401": {
             "description": "",
             "content": {
@@ -15828,6 +15843,12 @@
             "type": "string",
             "example": "15551234567",
             "nullable": true
+          },
+          "lead_source_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true,
+            "description": "The obfuscated ID of a lead source returned by List lead sources. When omitted, empty or null, the lead source defaults to \"API\". An ID that is not one of the partner's active lead sources is rejected with \"Invalid lead source\" and no lead is created. When the request matches an existing lead, the source is recorded on the new inquiry and the lead's original source is kept."
           }
         },
         "required": [
@@ -15878,7 +15899,8 @@
             "properties": {
               "message": {
                 "type": "string",
-                "example": "Unit not found"
+                "example": "Unit not found",
+                "description": "Why this lead failed, e.g. \"Unit not found\" or \"Invalid lead source\". A failed lead does not stop the other leads in the request from being created."
               },
               "unit_id": {
                 "type": "string",
