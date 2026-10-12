@@ -7601,6 +7601,21 @@
                 "$ref": "#/components/headers/X-Request-Id"
               }
             }
+          },
+          "409": {
+            "description": "Another request for the same owner lead (same external_id, email or phone) is being processed. Nothing was created; retry the request. Message: `Another request for this owner lead is in progress; please retry`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           }
         },
         "tags": [
@@ -7744,7 +7759,7 @@
             "bearer": []
           }
         ],
-        "description": "Creates up to 100 owner leads in one request. Each lead follows the Create an owner lead rules and gets its own result; one invalid lead does not stop the others. A partner without the Owner leads feature has the whole request declined.\n\nRequires the Owner leads feature. Partners without it receive `403` with the message `owner_leads feature is not enabled for this partner`, and nothing is created, changed or returned. Owner leads are not tied to a property, so API keys limited to certain properties can still see and change all of the partner's owner leads."
+        "description": "Creates up to 100 owner leads in one request. Each lead follows the Create an owner lead rules and gets its own result; one invalid lead does not stop the others. A lead whose external_id, email or phone is being processed by another request at the same time returns an error with the message `Another request for this owner lead is in progress; please retry`; retry that lead. A partner without the Owner leads feature has the whole request declined.\n\nRequires the Owner leads feature. Partners without it receive `403` with the message `owner_leads feature is not enabled for this partner`, and nothing is created, changed or returned. Owner leads are not tied to a property, so API keys limited to certain properties can still see and change all of the partner's owner leads."
       }
     },
     "/partner/v1/owner_leads/{lead_id}": {
