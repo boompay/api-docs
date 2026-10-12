@@ -7631,7 +7631,7 @@
         },
         "responses": {
           "200": {
-            "description": "Returns an array of results, each with a status of success or error",
+            "description": "Returns an array of results, each with a status of created or error",
             "content": {
               "application/json": {
                 "schema": {
@@ -18004,14 +18004,14 @@
           "status": {
             "type": "string",
             "enum": [
-              "success",
+              "created",
               "error"
             ],
-            "example": "success"
+            "example": "created"
           },
           "lead": {
             "nullable": true,
-            "description": "The created owner lead, or the existing owner lead it matched (present when status is success)",
+            "description": "The created owner lead, or the existing owner lead it matched (present when status is created)",
             "allOf": [
               {
                 "$ref": "#/components/schemas/OwnerLead"
