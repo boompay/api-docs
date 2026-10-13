@@ -7603,7 +7603,7 @@
             }
           },
           "400": {
-            "description": "A required detail is missing or invalid (for example `first_name is required`, `At least one of email, phone or external_id is required`, an out-of-range portfolio_size, or `Invalid lead source`)",
+            "description": "A required detail is missing or invalid (for example `first_name is required`, `At least one of email, phone or external_id is required`, an out-of-range portfolio_size, `Invalid lead source`, or a lead_stage_id that is not an Owner pipeline stage)",
             "content": {
               "application/json": {
                 "schema": {
@@ -7641,7 +7641,7 @@
             "bearer": []
           }
         ],
-        "description": "Creates one owner lead. It starts in the first stage of the partner's Owner pipeline, the same as one created in the Portal, and is labeled with the API lead source when no lead_source_id is sent.\n\n**Matching:** when the external_id, email or phone matches an existing owner lead, Boom returns that existing lead instead of creating a duplicate and logs a new inquiry on it. A match against a tenant lead only creates a new, separate owner lead and leaves the tenant lead unchanged.\n\nOwner leads are only visible to Portal users allowed to see owner leads, cannot start an application or book a showing, and are not sent to the partner's property management software.\n\nRequires the Owner leads feature. Partners without it receive `403` with the message `owner_leads feature is not enabled for this partner`, and nothing is created, changed or returned. Owner leads are not tied to a property, so API keys limited to certain properties can still see and change all of the partner's owner leads."
+        "description": "Creates one owner lead. It starts in the Owner pipeline stage given by lead_stage_id, or in the first stage of the partner's Owner pipeline when lead_stage_id is left out (the same as one created in the Portal), and is labeled with the API lead source when no lead_source_id is sent.\n\n**Matching:** when the external_id, email or phone matches an existing owner lead, Boom returns that existing lead instead of creating a duplicate and logs a new inquiry on it. A match against a tenant lead only creates a new, separate owner lead and leaves the tenant lead unchanged.\n\nOwner leads are only visible to Portal users allowed to see owner leads, cannot start an application or book a showing, and are not sent to the partner's property management software.\n\nRequires the Owner leads feature. Partners without it receive `403` with the message `owner_leads feature is not enabled for this partner`, and nothing is created, changed or returned. Owner leads are not tied to a property, so API keys limited to certain properties can still see and change all of the partner's owner leads."
       }
     },
     "/partner/v1/owner_leads/bulk": {
@@ -17995,6 +17995,11 @@
             "type": "string",
             "example": "123456",
             "description": "The id of one of the partner's active lead sources (from List lead sources). Defaults to the API lead source when left out."
+          },
+          "lead_stage_id": {
+            "type": "string",
+            "example": "123456",
+            "description": "The id of one of the partner's Owner pipeline stages (List stages with stage_group=owner_pipeline). Defaults to the first Owner pipeline stage when left out. Applies only when a new owner lead is created; when the request matches an existing owner lead, that lead keeps its stage."
           },
           "portfolio_size": {
             "type": "integer",
