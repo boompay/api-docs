@@ -3744,6 +3744,191 @@
         ]
       }
     },
+    "/partner/v1/applications/{id}/undo_decision": {
+      "post": {
+        "operationId": "ApplicationsController_undoDecision",
+        "summary": "Undo an application decision",
+        "description": "Reverts an application in status approved, approved_with_conditions, or rejected back to submitted. The decision must be inside the partner's undo window, counted from decision_at. The window defaults to 30 days and is configured per partner; when the partner turns the restriction off, any decision can be undone. notify_applicant defaults to false. When true, each applicant is emailed that the decision was reverted.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Obfuscated application id.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UndoApplicationDecision"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Decision reverted. The application status is submitted.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationList"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "400": {
+            "description": "Application is not in a revertable status, or the decision is outside the undo window.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                },
+                "examples": {
+                  "WrongStatus": {
+                    "summary": "Application is not approved or rejected",
+                    "value": {
+                      "error": {
+                        "message": "Can't revert application with status submitted",
+                        "status": 400,
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d",
+                        "code": "validation_error",
+                        "errors": [
+                          "Can't revert application with status submitted"
+                        ]
+                      }
+                    }
+                  },
+                  "DecisionTooOld": {
+                    "summary": "Decision is outside the undo window",
+                    "value": {
+                      "error": {
+                        "message": "Cannot undo decisions made more than 30 days ago",
+                        "status": 400,
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d",
+                        "code": "validation_error",
+                        "errors": [
+                          "Cannot undo decisions made more than 30 days ago"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such record for this partner",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Applications"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/partner/v1/applications/{id}/applicants/{applicant_id}/override_identity": {
       "post": {
         "operationId": "ApplicationsController_overrideIdentityVerification",
@@ -6040,7 +6225,7 @@
     "/partner/v1/leads": {
       "get": {
         "operationId": "LeadsController_findAll",
-        "summary": "List leads, optionally filtered by email and/or phone",
+        "summary": "List tenant leads, optionally filtered by email and/or phone",
         "parameters": [
           {
             "name": "page",
@@ -6219,7 +6404,8 @@
           {
             "bearer": []
           }
-        ]
+        ],
+        "description": "Each lead includes approval_likelihood and approval_likelihood_explanation. A change in approval likelihood does not change updated_at, so the updated_at_from_date / updated_at_to_date filters cannot be used to detect score changes; re-pull the leads you care about instead.\n\n**Tenant leads only:** this endpoint returns and changes tenant leads only. Owner leads are managed through the Owner Leads endpoints, and an owner lead id sent here returns `404`."
       },
       "post": {
         "operationId": "LeadsController_create",
@@ -6242,6 +6428,21 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Lead"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid phone or email, external_id is required, or invalid lead source",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
                 }
               }
             },
@@ -6485,7 +6686,7 @@
       "get": {
         "operationId": "LeadsController_findById",
         "summary": "Get lead detail",
-        "description": "Returns the full detail for a lead.\n\nShowings, communications, activity, contact methods and pre-screening answers are all included by default — no `include` parameter is needed here, unlike List Leads. Showings, communications and activity are embedded as the 5 most recent entries with `has_more`; page the rest through the per-lead sub-resources.\n\n**Deleted leads:** if the lead has been deleted, this endpoint still responds with `200` but returns a slim `DeletedLead` record rather than the full lead, so you can distinguish a deleted lead from one that never existed. A lead id that was never issued returns `404`. All other lead endpoints (update, apply, and the verification actions) return `404` for a deleted lead.",
+        "description": "Returns the full detail for a lead.\n\nShowings, communications, activity, contact methods and pre-screening answers are all included by default — no `include` parameter is needed here, unlike List Leads. Showings, communications and activity are embedded as the 5 most recent entries with `has_more`; page the rest through the per-lead sub-resources.\n\n**Deleted leads:** if the lead has been deleted, this endpoint still responds with `200` but returns a slim `DeletedLead` record rather than the full lead, so you can distinguish a deleted lead from one that never existed. A lead id that was never issued returns `404`. All other lead endpoints (update, apply, and the verification actions) return `404` for a deleted lead.\n\n**Tenant leads only:** this endpoint returns and changes tenant leads only. Owner leads are managed through the Owner Leads endpoints, and an owner lead id sent here returns `404`.",
         "parameters": [
           {
             "name": "lead_id",
@@ -6528,7 +6729,7 @@
             }
           },
           "404": {
-            "description": "Not found (no lead with this id was ever issued)",
+            "description": "Not found (no lead with this id, or the id is an owner lead)",
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
@@ -6616,7 +6817,7 @@
             }
           },
           "404": {
-            "description": "",
+            "description": "Not found (no lead with this id, or the id is an owner lead)",
             "content": {
               "application/json": {
                 "schema": {
@@ -6710,7 +6911,8 @@
           {
             "bearer": []
           }
-        ]
+        ],
+        "description": "**Tenant leads only:** this endpoint returns and changes tenant leads only. Owner leads are managed through the Owner Leads endpoints, and an owner lead id sent here returns `404`."
       }
     },
     "/partner/v1/leads/activity_logs": {
@@ -7464,6 +7666,726 @@
         ]
       }
     },
+    "/partner/v1/owner_leads": {
+      "get": {
+        "operationId": "OwnerLeadsController_findAll",
+        "summary": "List owner leads, optionally filtered by email, phone and/or updated-at date range",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 20
+            },
+            "description": "Values above 1000 are clamped to 1000."
+          },
+          {
+            "name": "email",
+            "required": false,
+            "in": "query",
+            "description": "Filter owner leads by email address",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "phone",
+            "required": false,
+            "in": "query",
+            "description": "Filter owner leads by phone number",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "updated_at_from_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Only records updated on or after this date (UTC day start)."
+          },
+          {
+            "name": "updated_at_to_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Only records updated on or before this date (UTC day end)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/OwnerLead"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "403": {
+            "description": "Owner leads feature is not enabled for this partner",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Owner Leads"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "description": "Returns the partner's owner leads, paged the same way as List leads. Deleted owner leads are not included.\n\nRequires the Owner leads feature. Partners without it receive `403` with the message `owner_leads feature is not enabled for this partner`, and nothing is created, changed or returned. Owner leads are not tied to a property, so API keys limited to certain properties can still see and change all of the partner's owner leads."
+      },
+      "post": {
+        "operationId": "OwnerLeadsController_create",
+        "summary": "Create an owner lead",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOwnerLeadRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OwnerLead"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "422": {
+            "description": "Could not create owner lead",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "403": {
+            "description": "Owner leads feature is not enabled for this partner, or a read-only API key was used for a write",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "400": {
+            "description": "A required detail is missing or invalid (for example `first_name is required`, `At least one of email, phone or external_id is required`, an out-of-range portfolio_size, or `Invalid lead source`)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "409": {
+            "description": "Another request for the same owner lead (same external_id, email or phone) is being processed. Nothing was created; retry the request. Message: `Another request for this owner lead is in progress; please retry`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Owner Leads"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "description": "Creates one owner lead. It starts in the first stage of the partner's Owner pipeline, the same as one created in the Portal, and is labeled with the API lead source when no lead_source_id is sent.\n\n**Matching:** when the external_id, email or phone matches an existing owner lead, Boom returns that existing lead instead of creating a duplicate and logs a new inquiry on it. A match against a tenant lead only creates a new, separate owner lead and leaves the tenant lead unchanged.\n\nOwner leads are only visible to Portal users allowed to see owner leads, cannot start an application or book a showing, and are not sent to the partner's property management software.\n\nRequires the Owner leads feature. Partners without it receive `403` with the message `owner_leads feature is not enabled for this partner`, and nothing is created, changed or returned. Owner leads are not tied to a property, so API keys limited to certain properties can still see and change all of the partner's owner leads."
+      }
+    },
+    "/partner/v1/owner_leads/bulk": {
+      "post": {
+        "operationId": "OwnerLeadsController_bulkCreate",
+        "summary": "Bulk create owner leads (max 100 per request)",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BulkCreateOwnerLeadsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns an array of results, each with a status of created or error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BulkCreateOwnerLeadResult"
+                  }
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "422": {
+            "description": "Array exceeds 100 items",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "403": {
+            "description": "Owner leads feature is not enabled for this partner, or a read-only API key was used for a write",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Owner Leads"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "description": "Creates up to 100 owner leads in one request. Each lead follows the Create an owner lead rules and gets its own result; one invalid lead does not stop the others. A lead whose external_id, email or phone is being processed by another request at the same time returns an error with the message `Another request for this owner lead is in progress; please retry`; retry that lead. A partner without the Owner leads feature has the whole request declined.\n\nRequires the Owner leads feature. Partners without it receive `403` with the message `owner_leads feature is not enabled for this partner`, and nothing is created, changed or returned. Owner leads are not tied to a property, so API keys limited to certain properties can still see and change all of the partner's owner leads."
+      }
+    },
+    "/partner/v1/owner_leads/{lead_id}": {
+      "get": {
+        "operationId": "OwnerLeadsController_findOne",
+        "summary": "Get owner lead detail",
+        "description": "Returns the full detail for an owner lead.\n\n**Deleted owner leads:** a deleted owner lead still responds with `200` but returns a slim `DeletedLead` record. An id that was never issued, or the id of a tenant lead, returns `404`.\n\nRequires the Owner leads feature. Partners without it receive `403` with the message `owner_leads feature is not enabled for this partner`, and nothing is created, changed or returned. Owner leads are not tied to a property, so API keys limited to certain properties can still see and change all of the partner's owner leads.",
+        "parameters": [
+          {
+            "name": "lead_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The owner lead ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A full owner lead record, or a slim DeletedLead record if the owner lead has been deleted.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/OwnerLead"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DeletedLead"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found (no owner lead with this id, or the id is a tenant lead)",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "403": {
+            "description": "Owner leads feature is not enabled for this partner",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Owner Leads"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "OwnerLeadsController_update",
+        "summary": "Update owner lead (including stage and source)",
+        "parameters": [
+          {
+            "name": "lead_id",
+            "required": true,
+            "in": "path",
+            "description": "The owner lead ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateOwnerLeadRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OwnerLead"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "400": {
+            "description": "Blank first or last name, out-of-range portfolio_size, or `Invalid lead source`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found (no owner lead with this id, or the id is a tenant lead)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "422": {
+            "description": "Validation failed, including a lead_stage_id that is not one of the partner's Owner pipeline stages",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "403": {
+            "description": "Owner leads feature is not enabled for this partner, or a read-only API key was used for a write",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Owner Leads"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "description": "Changes fields on one owner lead; fields left out stay unchanged. Changes appear in the lead's activity log in the Portal. A deleted owner lead, or the id of a tenant lead, returns `404`.\n\nRequires the Owner leads feature. Partners without it receive `403` with the message `owner_leads feature is not enabled for this partner`, and nothing is created, changed or returned. Owner leads are not tied to a property, so API keys limited to certain properties can still see and change all of the partner's owner leads."
+      }
+    },
     "/partner/v1/stages": {
       "get": {
         "operationId": "StagesController_findAll",
@@ -7476,6 +8398,18 @@
             "description": "Stage kind (e.g. 'lead')",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "stage_group",
+            "required": false,
+            "in": "query",
+            "description": "Set to `owner_pipeline` to return only the partner's Owner pipeline stages, in pipeline order. Requires the Owner leads feature. Leave it out to list stages exactly as before.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "owner_pipeline"
+              ]
             }
           }
         ],
@@ -7551,6 +8485,21 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "403": {
+            "description": "stage_group=owner_pipeline was requested by a partner without the Owner leads feature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorResponse"
                 }
               }
             },
@@ -8519,6 +9468,170 @@
         },
         "tags": [
           "Activity Logs"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/leads/identity_verifications": {
+      "get": {
+        "operationId": "LeadsController_listIdentityVerifications",
+        "summary": "List identity verifications across all leads",
+        "description": "Returns identity verification (IDV) results across all of the partner's leads, optionally filtered by when the verification was created. Results are ordered by most recent first. Only verifications on leads are returned (applicant verifications are excluded), deleted leads are excluded, and API keys scoped to specific properties only see verifications for leads on those properties. Each item carries the same fields as `GET /partner/v1/leads/{lead_id}/identity_verifications` except `raw_response`, which is only available per lead.",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 20
+            },
+            "description": "Values above 1000 are clamped to 1000."
+          },
+          {
+            "name": "created_at_from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "example": "2026-09-01T00:00:00Z",
+            "description": "Only verifications created at or after this time (inclusive). ISO 8601; a date-only value means the start of that day in UTC."
+          },
+          {
+            "name": "created_at_to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "example": "2026-09-30T23:59:59Z",
+            "description": "Only verifications created at or before this time (inclusive). ISO 8601; a date-only value means the start of that day in UTC, so include a time to cover the whole day."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/BulkLeadIdentityVerification"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "400": {
+            "description": "`created_at_from` is later than `created_at_to`, or a parameter is not a valid value",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Leads"
         ],
         "security": [
           {
@@ -12735,6 +13848,17 @@
           "reasons"
         ]
       },
+      "UndoApplicationDecision": {
+        "type": "object",
+        "properties": {
+          "notify_applicant": {
+            "type": "boolean",
+            "description": "Email applicants that the decision was reverted. Defaults to false when omitted.",
+            "default": false,
+            "example": false
+          }
+        }
+      },
       "RentalApplicationEmergencyContact": {
         "type": "object",
         "properties": {
@@ -15704,6 +16828,27 @@
             "type": "string",
             "nullable": true
           },
+          "approval_likelihood": {
+            "type": "string",
+            "nullable": true,
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "example": "medium",
+            "description": "Approval likelihood band, the same one shown in the Partner Portal. Null when lead scoring is not enabled for your account, the lead has become an applicant, the lead has not been scored yet (normal right after create), or it was scored with too little data. Null never means low. A change in approval likelihood does not change updated_at."
+          },
+          "approval_likelihood_explanation": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LeadApprovalLikelihoodExplanation"
+              }
+            ],
+            "description": "Factors behind the approval likelihood. Null whenever approval_likelihood is null, except when the lead was scored with insufficient data, in which case its factors are still listed."
+          },
           "showings": {
             "allOf": [
               {
@@ -15748,6 +16893,58 @@
           "id",
           "created_at",
           "updated_at"
+        ]
+      },
+      "LeadApprovalLikelihoodExplanation": {
+        "type": "object",
+        "properties": {
+          "insufficient_data": {
+            "type": "boolean",
+            "example": false,
+            "description": "True when the lead has some factor information but too little to produce a band."
+          },
+          "factors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LeadApprovalLikelihoodFactor"
+            },
+            "description": "Factors in display order. A factor that was not computed for the lead is omitted."
+          }
+        },
+        "required": [
+          "insufficient_data",
+          "factors"
+        ]
+      },
+      "LeadApprovalLikelihoodFactor": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "example": "income_to_rent_ratio",
+            "description": "Stable factor identifier; use this, not name, in code. One of source, responsiveness, move_in, requirements, prescreening_match, income_to_rent_ratio, prescreening_borderline_criterion, showing_reliability, fraud_risk. New keys may be added; treat unknown keys as informational."
+          },
+          "name": {
+            "type": "string",
+            "example": "Income-to-rent ratio",
+            "description": "Factor label shown in the Partner Portal."
+          },
+          "data_available": {
+            "type": "boolean",
+            "example": true,
+            "description": "Whether data was available for this factor on this lead."
+          },
+          "rationale_text": {
+            "type": "string",
+            "example": "This lead's reported income is 3.2x the property's monthly rent.",
+            "description": "Plain-language sentence shown in the Partner Portal. When data_available is false it is always \"No data available for this factor yet.\""
+          }
+        },
+        "required": [
+          "key",
+          "name",
+          "data_available",
+          "rationale_text"
         ]
       },
       "DeletedLead": {
@@ -15809,6 +17006,12 @@
             "type": "string",
             "example": "15551234567",
             "nullable": true
+          },
+          "lead_source_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true,
+            "description": "The obfuscated ID of a lead source returned by List lead sources. When omitted, empty or null, the lead source defaults to \"API\". An ID that is not one of the partner's active lead sources is rejected with \"Invalid lead source\" and no lead is created. When the request matches an existing lead, the source is recorded on the new inquiry and the lead's original source is kept."
           }
         },
         "required": [
@@ -15859,7 +17062,8 @@
             "properties": {
               "message": {
                 "type": "string",
-                "example": "Unit not found"
+                "example": "Unit not found",
+                "description": "Why this lead failed, e.g. \"Unit not found\" or \"Invalid lead source\". A failed lead does not stop the other leads in the request from being created."
               },
               "unit_id": {
                 "type": "string",
@@ -16472,6 +17676,119 @@
           }
         }
       },
+      "BulkLeadIdentityVerification": {
+        "type": "object",
+        "properties": {
+          "lead_id": {
+            "type": "string",
+            "description": "Obfuscated lead ID"
+          },
+          "first_name": {
+            "type": "string",
+            "description": "Lead first name"
+          },
+          "last_name": {
+            "type": "string",
+            "description": "Lead last name"
+          },
+          "email": {
+            "type": "string",
+            "nullable": true,
+            "description": "Lead primary email"
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true,
+            "description": "Lead primary phone"
+          },
+          "external_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "External ID of the lead as provided by the partner"
+          },
+          "external_customer_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "External customer ID (same as external_id)"
+          },
+          "property_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "Obfuscated property ID"
+          },
+          "unit_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "Obfuscated unit ID"
+          },
+          "application_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "Obfuscated application ID associated with the lead"
+          },
+          "applicant_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "Obfuscated applicant ID associated with the lead"
+          },
+          "identity_verification_finished": {
+            "type": "boolean",
+            "description": "Whether this lead's person has a completed (finished, review_required or failed), unexpired identity verification on any of the partner's leads, not only this record. Matches the per-lead endpoint."
+          },
+          "provider": {
+            "type": "string",
+            "example": "plaid",
+            "description": "IDV provider"
+          },
+          "kind": {
+            "type": "string",
+            "example": "automatic",
+            "description": "Type of identity verification"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "active",
+              "finished",
+              "failed",
+              "review_required",
+              "canceled",
+              "expired"
+            ],
+            "description": "Current status of the identity verification"
+          },
+          "finished_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Timestamp when verification was finished"
+          },
+          "failed_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Timestamp when verification failed"
+          },
+          "checks": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LeadIdentityVerificationChecks"
+              }
+            ],
+            "description": "Individual check results"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "description": "Identity verification result returned by the cross-lead listing. Same fields as LeadIdentityVerification, without the raw provider payload."
+      },
       "PublicListing": {
         "type": "object",
         "properties": {
@@ -16960,6 +18277,272 @@
         "properties": {
           "verification": {
             "$ref": "#/components/schemas/VerificationDetail"
+          }
+        }
+      },
+      "OwnerLead": {
+        "type": "object",
+        "description": "A lead from a property owner looking for property management. Boom sets id, created_at, updated_at and is_deleted; partners cannot set them. Owner leads have no unit, property, application, identity verification, approval likelihood, desired move-in date or address.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "123456"
+          },
+          "first_name": {
+            "type": "string",
+            "example": "Olivia"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Owner"
+          },
+          "email": {
+            "type": "string",
+            "example": "olivia@example.com",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "example": "15551234567",
+            "nullable": true
+          },
+          "external_id": {
+            "type": "string",
+            "example": "ext-123",
+            "nullable": true
+          },
+          "source": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LeadSource"
+              }
+            ],
+            "type": "object"
+          },
+          "stage": {
+            "type": "object",
+            "nullable": true,
+            "description": "The Owner pipeline stage the lead is in.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "123456"
+              },
+              "name": {
+                "type": "string",
+                "example": "New"
+              }
+            }
+          },
+          "portfolio_size": {
+            "type": "integer",
+            "example": 25,
+            "nullable": true,
+            "description": "Number of units the owner controls."
+          },
+          "current_property_manager": {
+            "type": "string",
+            "example": "Acme Property Management",
+            "nullable": true,
+            "description": "Name of the owner's current property manager."
+          },
+          "message": {
+            "type": "string",
+            "example": "Looking for a new property manager",
+            "nullable": true
+          },
+          "is_deleted": {
+            "type": "boolean",
+            "example": false,
+            "description": "Whether the owner lead has been deleted. Always false on this full record; a deleted owner lead is returned from the owner lead detail endpoint as a slim DeletedLead record."
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "first_name",
+          "last_name",
+          "is_deleted",
+          "created_at",
+          "updated_at"
+        ]
+      },
+      "CreateOwnerLeadRequest": {
+        "type": "object",
+        "description": "No property or unit is needed. first_name, last_name and at least one of email, phone or external_id are required.",
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "example": "Olivia",
+            "description": "Required."
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Owner",
+            "description": "Required."
+          },
+          "email": {
+            "type": "string",
+            "example": "olivia@example.com",
+            "description": "At least one of email, phone or external_id is required."
+          },
+          "phone": {
+            "type": "string",
+            "example": "15551234567",
+            "description": "At least one of email, phone or external_id is required."
+          },
+          "external_id": {
+            "type": "string",
+            "example": "ext-123",
+            "description": "External identifier for the owner lead in the partner's system. At least one of email, phone or external_id is required."
+          },
+          "lead_source_id": {
+            "type": "string",
+            "example": "123456",
+            "description": "The id of one of the partner's active lead sources (from List lead sources). Defaults to the API lead source when left out."
+          },
+          "portfolio_size": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000000,
+            "example": 25,
+            "description": "Number of units the owner controls (0 to 1,000,000)."
+          },
+          "current_property_manager": {
+            "type": "string",
+            "maxLength": 255,
+            "example": "Acme Property Management",
+            "description": "Name of the owner's current property manager (at most 255 characters)."
+          },
+          "message": {
+            "type": "string",
+            "example": "Looking for a new property manager"
+          }
+        },
+        "required": [
+          "first_name",
+          "last_name"
+        ]
+      },
+      "BulkCreateOwnerLeadsRequest": {
+        "type": "object",
+        "properties": {
+          "leads": {
+            "type": "array",
+            "description": "Array of owner leads to create (max 100)",
+            "maxItems": 100,
+            "items": {
+              "$ref": "#/components/schemas/CreateOwnerLeadRequest"
+            }
+          }
+        },
+        "required": [
+          "leads"
+        ]
+      },
+      "BulkCreateOwnerLeadResult": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "created",
+              "error"
+            ],
+            "example": "created"
+          },
+          "lead": {
+            "nullable": true,
+            "description": "The created owner lead, or the existing owner lead it matched (present when status is created)",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OwnerLead"
+              }
+            ],
+            "type": "object"
+          },
+          "error": {
+            "type": "object",
+            "nullable": true,
+            "description": "Error details (present when status is error)",
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "first_name is required"
+              },
+              "external_id": {
+                "type": "string",
+                "example": "ext-123",
+                "nullable": true
+              }
+            }
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "UpdateOwnerLeadRequest": {
+        "type": "object",
+        "description": "Fields left out stay unchanged. The lead type cannot be changed.",
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "example": "Olivia",
+            "description": "Cannot be blank."
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Owner",
+            "description": "Cannot be blank."
+          },
+          "email": {
+            "type": "string",
+            "example": "olivia@example.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "15551234567"
+          },
+          "external_id": {
+            "type": "string",
+            "example": "ext-123",
+            "description": "External identifier for the owner lead in the partner's system"
+          },
+          "lead_source_id": {
+            "type": "string",
+            "example": "123456",
+            "description": "The id of one of the partner's active lead sources (from List lead sources)."
+          },
+          "portfolio_size": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000000,
+            "example": 25,
+            "description": "Number of units the owner controls (0 to 1,000,000). Send null to clear.",
+            "nullable": true
+          },
+          "current_property_manager": {
+            "type": "string",
+            "maxLength": 255,
+            "example": "Acme Property Management",
+            "description": "Name of the owner's current property manager (at most 255 characters). Send null to clear.",
+            "nullable": true
+          },
+          "lead_stage_id": {
+            "type": "string",
+            "example": "123456",
+            "description": "The id of one of the partner's Owner pipeline stages (List stages with stage_group=owner_pipeline)."
           }
         }
       },
