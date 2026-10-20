@@ -12,7 +12,7 @@ Delivery, the `X-API-KEY` header, `request_id` and retries work exactly as for e
 |---|---|
 | `property_created` | A property is created, or a deleted property is restored. |
 | `property_updated` | Any detail of a property changes, including its photos. |
-| `property_deleted` | A property is deleted. A `unit_deleted` is also sent for each of its units. |
+| `property_deleted` | A property is deleted. A `unit_deleted` is also sent for each of its units, shortly after. |
 | `unit_created` | A unit is created, a deleted unit is restored, or its property is restored. |
 | `unit_updated` | Any detail of a unit changes, including its photos. |
 | `unit_deleted` | A unit is deleted, or its property is deleted. |
@@ -35,7 +35,7 @@ While a property is deleted, its units count as deleted too: they are not return
 | `changed_by_user` | `{ id, email, name }` when `changed_by` is `partner_user`, otherwise `null`. |
 | `changed_by_pms` | The PMS name when `changed_by` is `pms_sync` (for example `rent_manager`), otherwise `null`. |
 | `changes` | Only on `*_updated` and `*_changed` events: one `{ field, old, new }` entry per changed field, using the field names of the Partner API. A photo change is reported as `photos`, with the old and new photo IDs in order. |
-| `unit` / `property` | The record exactly as `GET /partner/v1/units/{id}` or `GET /partner/v1/properties/{id}` returns it, plus `photos` (`[{ id, position, url }]`, in display order). On `*_deleted` events this is `{ id, external_id, property_id, deleted_at }` instead (`property_id` on units only), because the record no longer exists. |
+| `unit` / `property` | The record as the Partner API returns it, plus `photos` (`[{ id, position, url }]`, in display order). A unit is the same as `GET /partner/v1/units/{id}`. A property is the same as one item of `GET /partner/v1/properties`, without its `units`; each unit has its own events. On `*_deleted` events this is `{ id, external_id, property_id, deleted_at }` instead (`property_id` on units only), because the record no longer exists. |
 
 ### Example: `unit_rent_changed`
 
@@ -59,7 +59,7 @@ While a property is deleted, its units count as deleted too: they are not return
     "property_id": "<property id>",
     "external_id": "RM-101",
     "property": { "id": "<property id>", "name": "Maple Court" },
-    "photos": [{ "id": 991, "position": 0, "url": "https://…/full.jpg" }]
+    "photos": [{ "id": "<photo id>", "position": 0, "url": "https://…/full.jpg" }]
   }
 }
 ```
