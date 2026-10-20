@@ -6468,11 +6468,46 @@
             }
           },
           "422": {
-            "description": "Could not create lead",
+            "description": "Could not create lead, or a tag error (see the codes above). Nothing was saved.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ValidatorResponse"
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "invalid_tag_name": {
+                    "summary": "A tag name over 30 characters",
+                    "value": {
+                      "error": {
+                        "message": "Tag \"Prefers a unit near the downtown office\" is longer than 30 characters",
+                        "status": 422,
+                        "code": "invalid_tag_name",
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  },
+                  "tag_limit_reached": {
+                    "summary": "The lead would have more than 20 tags",
+                    "value": {
+                      "error": {
+                        "message": "A lead can have up to 20 tags",
+                        "status": 422,
+                        "code": "tag_limit_reached",
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  },
+                  "partner_tag_limit_reached": {
+                    "summary": "A new tag on an account that already has 200",
+                    "value": {
+                      "error": {
+                        "message": "An account can have up to 200 tags",
+                        "status": 422,
+                        "code": "partner_tag_limit_reached",
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  }
                 }
               }
             },
@@ -6547,7 +6582,8 @@
           {
             "bearer": []
           }
-        ]
+        ],
+        "description": "**Tags.** `tags` puts tags on the lead. When the request matches an existing lead (a repeat inquiry, which Boom merges into that lead), the tags are added to the lead's current tags and none are removed. Create only adds tags; use Update lead to remove them. A tag error rejects the request, and neither the lead nor the inquiry is saved.\n\n**Tag names.** Send each tag by its name, as it shows in the Portal. Names are matched to the account's tags (List tags) ignoring capitalization and extra spaces, so `hot lead` uses an existing `Hot Lead`. A name that matches no tag creates a new tag on the account, which every Portal user then sees. A name sent twice in one list counts once.\n\n**Limits.** A tag name is 1 to 30 characters of letters, numbers, spaces and common punctuation (no emoji). A lead has at most 20 tags. An account has at most 200 tags.\n\nTag errors return `422` with one of these codes, and save nothing:\n\n| `code` | `message` example |\n|---|---|\n| `invalid_tag_name` | `Tag \"VIP 🔥\" can only use letters, numbers, spaces and common punctuation` |\n| `invalid_tag_name` | `Tag \"Prefers a unit near the downtown office\" is longer than 30 characters` |\n| `invalid_tag_name` | `Tag names can't be empty` |\n| `tag_added_and_removed` | `Tag \"VIP\" can't be both added and removed` |\n| `tag_limit_reached` | `A lead can have up to 20 tags` |\n| `partner_tag_limit_reached` | `An account can have up to 200 tags` |\n| `tag_not_found` | `Tag not found` (the tag was deleted in the Portal while the request ran; retry) |"
       }
     },
     "/partner/v1/leads/bulk": {
@@ -6679,7 +6715,8 @@
           {
             "bearer": []
           }
-        ]
+        ],
+        "description": "**Tags.** Each lead can have its own `tags`, with the same rules as the single create request. A lead with a tag error comes back with `status: \"error\"` and the tag error's message in `error.message`; the other leads are still created.\n\n**Tag names.** Send each tag by its name, as it shows in the Portal. Names are matched to the account's tags (List tags) ignoring capitalization and extra spaces, so `hot lead` uses an existing `Hot Lead`. A name that matches no tag creates a new tag on the account, which every Portal user then sees. A name sent twice in one list counts once.\n\n**Limits.** A tag name is 1 to 30 characters of letters, numbers, spaces and common punctuation (no emoji). A lead has at most 20 tags. An account has at most 200 tags."
       }
     },
     "/partner/v1/leads/{lead_id}": {
@@ -6717,6 +6754,9 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
               }
             }
           },
@@ -6758,6 +6798,16 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "description": "The `ETag` from your last read of this lead. When set, the update applies only if the lead has not changed since; otherwise it fails with `412`.",
+            "schema": {
+              "type": "string",
+              "example": "W/\"3f2a9c0d1e4b5a6c7d8e9f0a1b2c3d4e\""
+            }
           }
         ],
         "requestBody": {
@@ -6766,6 +6816,29 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/UpdateLeadRequest"
+              },
+              "examples": {
+                "swap_tags": {
+                  "summary": "Add one tag and remove another",
+                  "value": {
+                    "add_tags": [
+                      "Pet owner"
+                    ],
+                    "remove_tags": [
+                      "VIP"
+                    ]
+                  }
+                },
+                "stage_and_tags": {
+                  "summary": "Change the stage and add tags in one request",
+                  "value": {
+                    "lead_stage_id": "123456",
+                    "add_tags": [
+                      "Toured",
+                      "Section 8"
+                    ]
+                  }
+                }
               }
             }
           }
@@ -6783,6 +6856,9 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
               }
             }
           },
@@ -6832,11 +6908,57 @@
             }
           },
           "422": {
-            "description": "Validation failed",
+            "description": "Validation failed, or a tag error (see the codes above). Nothing was saved.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ValidatorResponse"
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "invalid_tag_name": {
+                    "summary": "A tag name over 30 characters",
+                    "value": {
+                      "error": {
+                        "message": "Tag \"Prefers a unit near the downtown office\" is longer than 30 characters",
+                        "status": 422,
+                        "code": "invalid_tag_name",
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  },
+                  "tag_added_and_removed": {
+                    "summary": "The same tag in add_tags and remove_tags",
+                    "value": {
+                      "error": {
+                        "message": "Tag \"VIP\" can't be both added and removed",
+                        "status": 422,
+                        "code": "tag_added_and_removed",
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  },
+                  "tag_limit_reached": {
+                    "summary": "The lead would have more than 20 tags",
+                    "value": {
+                      "error": {
+                        "message": "A lead can have up to 20 tags",
+                        "status": 422,
+                        "code": "tag_limit_reached",
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  },
+                  "partner_tag_limit_reached": {
+                    "summary": "A new tag on an account that already has 200",
+                    "value": {
+                      "error": {
+                        "message": "An account can have up to 200 tags",
+                        "status": 422,
+                        "code": "partner_tag_limit_reached",
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  }
                 }
               }
             },
@@ -6902,6 +7024,29 @@
                 }
               }
             }
+          },
+          "412": {
+            "description": "The lead changed since the `ETag` sent in `If-Match` was read. Nothing was saved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "The resource has changed since you fetched it. Fetch it again and retry with the new ETag.",
+                    "status": 412,
+                    "code": "precondition_failed",
+                    "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                  }
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           }
         },
         "tags": [
@@ -6912,7 +7057,7 @@
             "bearer": []
           }
         ],
-        "description": "**Tenant leads only:** this endpoint returns and changes tenant leads only. Owner leads are managed through the Owner Leads endpoints, and an owner lead id sent here returns `404`."
+        "description": "**Tenant leads only:** this endpoint returns and changes tenant leads only. Owner leads are managed through the Owner Leads endpoints, and an owner lead id sent here returns `404`.\n\n**Tags.** `add_tags` and `remove_tags` change the lead's tags and leave its other tags as they are.\n\n- Removals run before adds, so a lead with 20 tags can swap one tag for another in one request.\n- Adding a tag the lead already has, or removing one it doesn't have (or that doesn't exist), changes nothing and still succeeds. Sending the same request twice is safe.\n- A removed tag stays on the account and on other leads. Only an admin can delete a tag, in the Portal.\n- A tag in both lists is an error (`tag_added_and_removed`).\n- There is no option to replace all of a lead's tags. To clear tags, list each one in `remove_tags`.\n- When the request fails for any reason, tag-related or not, nothing in it is saved.\n- A tag change updates the lead's `updated_at`, so List leads with `updated_at_from_date` picks it up.\n\n**Tag names.** Send each tag by its name, as it shows in the Portal. Names are matched to the account's tags (List tags) ignoring capitalization and extra spaces, so `hot lead` uses an existing `Hot Lead`. A name that matches no tag creates a new tag on the account, which every Portal user then sees. A name sent twice in one list counts once.\n\n**Limits.** A tag name is 1 to 30 characters of letters, numbers, spaces and common punctuation (no emoji). A lead has at most 20 tags. An account has at most 200 tags.\n\nTag errors return `422` with one of these codes, and save nothing:\n\n| `code` | `message` example |\n|---|---|\n| `invalid_tag_name` | `Tag \"VIP 🔥\" can only use letters, numbers, spaces and common punctuation` |\n| `invalid_tag_name` | `Tag \"Prefers a unit near the downtown office\" is longer than 30 characters` |\n| `invalid_tag_name` | `Tag names can't be empty` |\n| `tag_added_and_removed` | `Tag \"VIP\" can't be both added and removed` |\n| `tag_limit_reached` | `A lead can have up to 20 tags` |\n| `partner_tag_limit_reached` | `An account can have up to 200 tags` |\n| `tag_not_found` | `Tag not found` (the tag was deleted in the Portal while the request ran; retry) |\n\n**Concurrent changes.** Get lead and Update lead return an `ETag` header. Send it back in `If-Match` to apply the update only if the lead has not changed since you read it. If it has changed, the request fails with `412` (`precondition_failed`) and saves nothing: fetch the lead again and retry with the new `ETag`. Any change to the lead counts, including a tag added or removed by your team in the Portal. Without `If-Match`, the update always applies."
       }
     },
     "/partner/v1/leads/activity_logs": {
@@ -7891,11 +8036,46 @@
             }
           },
           "422": {
-            "description": "Could not create owner lead",
+            "description": "Could not create owner lead, or a tag error (see the codes above). Nothing was saved.",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "invalid_tag_name": {
+                    "summary": "A tag name over 30 characters",
+                    "value": {
+                      "error": {
+                        "message": "Tag \"Prefers a unit near the downtown office\" is longer than 30 characters",
+                        "status": 422,
+                        "code": "invalid_tag_name",
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  },
+                  "tag_limit_reached": {
+                    "summary": "The lead would have more than 20 tags",
+                    "value": {
+                      "error": {
+                        "message": "A lead can have up to 20 tags",
+                        "status": 422,
+                        "code": "tag_limit_reached",
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  },
+                  "partner_tag_limit_reached": {
+                    "summary": "A new tag on an account that already has 200",
+                    "value": {
+                      "error": {
+                        "message": "An account can have up to 200 tags",
+                        "status": 422,
+                        "code": "partner_tag_limit_reached",
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  }
                 }
               }
             },
@@ -8001,7 +8181,7 @@
             "bearer": []
           }
         ],
-        "description": "Creates one owner lead. It starts in the Owner pipeline stage given by lead_stage_id, or in the first stage of the partner's Owner pipeline when lead_stage_id is left out (the same as one created in the Portal), and is labeled with the API lead source when no lead_source_id is sent.\n\n**Matching:** when the external_id, email or phone matches an existing owner lead, Boom returns that existing lead instead of creating a duplicate and logs a new inquiry on it. A match against a tenant lead only creates a new, separate owner lead and leaves the tenant lead unchanged.\n\nOwner leads are only visible to Portal users allowed to see owner leads, cannot start an application or book a showing, and are not sent to the partner's property management software.\n\nRequires the Owner leads feature. Partners without it receive `403` with the message `owner_leads feature is not enabled for this partner`, and nothing is created, changed or returned. Owner leads are not tied to a property, so API keys limited to certain properties can still see and change all of the partner's owner leads."
+        "description": "Creates one owner lead. It starts in the Owner pipeline stage given by lead_stage_id, or in the first stage of the partner's Owner pipeline when lead_stage_id is left out (the same as one created in the Portal), and is labeled with the API lead source when no lead_source_id is sent.\n\n**Matching:** when the external_id, email or phone matches an existing owner lead, Boom returns that existing lead instead of creating a duplicate and logs a new inquiry on it. A match against a tenant lead only creates a new, separate owner lead and leaves the tenant lead unchanged.\n\nOwner leads are only visible to Portal users allowed to see owner leads, cannot start an application or book a showing, and are not sent to the partner's property management software.\n\nRequires the Owner leads feature. Partners without it receive `403` with the message `owner_leads feature is not enabled for this partner`, and nothing is created, changed or returned. Owner leads are not tied to a property, so API keys limited to certain properties can still see and change all of the partner's owner leads.\n\n**Tags.** `tags` puts tags on the lead. When the request matches an existing lead (a repeat inquiry, which Boom merges into that lead), the tags are added to the lead's current tags and none are removed. Create only adds tags; use Update lead to remove them. A tag error rejects the request, and neither the lead nor the inquiry is saved.\n\n**Tag names.** Send each tag by its name, as it shows in the Portal. Names are matched to the account's tags (List tags) ignoring capitalization and extra spaces, so `hot lead` uses an existing `Hot Lead`. A name that matches no tag creates a new tag on the account, which every Portal user then sees. A name sent twice in one list counts once.\n\n**Limits.** A tag name is 1 to 30 characters of letters, numbers, spaces and common punctuation (no emoji). A lead has at most 20 tags. An account has at most 200 tags.\n\nTag errors return `422` with one of these codes, and save nothing:\n\n| `code` | `message` example |\n|---|---|\n| `invalid_tag_name` | `Tag \"VIP 🔥\" can only use letters, numbers, spaces and common punctuation` |\n| `invalid_tag_name` | `Tag \"Prefers a unit near the downtown office\" is longer than 30 characters` |\n| `invalid_tag_name` | `Tag names can't be empty` |\n| `tag_added_and_removed` | `Tag \"VIP\" can't be both added and removed` |\n| `tag_limit_reached` | `A lead can have up to 20 tags` |\n| `partner_tag_limit_reached` | `An account can have up to 200 tags` |\n| `tag_not_found` | `Tag not found` (the tag was deleted in the Portal while the request ran; retry) |"
       }
     },
     "/partner/v1/owner_leads/bulk": {
@@ -8134,7 +8314,7 @@
             "bearer": []
           }
         ],
-        "description": "Creates up to 100 owner leads in one request. Each lead follows the Create an owner lead rules and gets its own result; one invalid lead does not stop the others. A lead whose external_id, email or phone is being processed by another request at the same time returns an error with the message `Another request for this owner lead is in progress; please retry`; retry that lead. A partner without the Owner leads feature has the whole request declined.\n\nRequires the Owner leads feature. Partners without it receive `403` with the message `owner_leads feature is not enabled for this partner`, and nothing is created, changed or returned. Owner leads are not tied to a property, so API keys limited to certain properties can still see and change all of the partner's owner leads."
+        "description": "Creates up to 100 owner leads in one request. Each lead follows the Create an owner lead rules and gets its own result; one invalid lead does not stop the others. A lead whose external_id, email or phone is being processed by another request at the same time returns an error with the message `Another request for this owner lead is in progress; please retry`; retry that lead. A partner without the Owner leads feature has the whole request declined.\n\nRequires the Owner leads feature. Partners without it receive `403` with the message `owner_leads feature is not enabled for this partner`, and nothing is created, changed or returned. Owner leads are not tied to a property, so API keys limited to certain properties can still see and change all of the partner's owner leads.\n\n**Tags.** Each lead can have its own `tags`, with the same rules as the single create request. A lead with a tag error comes back with `status: \"error\"` and the tag error's message in `error.message`; the other leads are still created.\n\n**Tag names.** Send each tag by its name, as it shows in the Portal. Names are matched to the account's tags (List tags) ignoring capitalization and extra spaces, so `hot lead` uses an existing `Hot Lead`. A name that matches no tag creates a new tag on the account, which every Portal user then sees. A name sent twice in one list counts once.\n\n**Limits.** A tag name is 1 to 30 characters of letters, numbers, spaces and common punctuation (no emoji). A lead has at most 20 tags. An account has at most 200 tags."
       }
     },
     "/partner/v1/owner_leads/{lead_id}": {
@@ -8173,6 +8353,9 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
               }
             }
           },
@@ -8229,6 +8412,16 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "description": "The `ETag` from your last read of this lead. When set, the update applies only if the lead has not changed since; otherwise it fails with `412`.",
+            "schema": {
+              "type": "string",
+              "example": "W/\"3f2a9c0d1e4b5a6c7d8e9f0a1b2c3d4e\""
+            }
           }
         ],
         "requestBody": {
@@ -8237,6 +8430,19 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/UpdateOwnerLeadRequest"
+              },
+              "examples": {
+                "swap_tags": {
+                  "summary": "Add one tag and remove another",
+                  "value": {
+                    "add_tags": [
+                      "Referral"
+                    ],
+                    "remove_tags": [
+                      "Cold"
+                    ]
+                  }
+                }
               }
             }
           }
@@ -8254,6 +8460,9 @@
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/X-Request-Id"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
               }
             }
           },
@@ -8303,11 +8512,57 @@
             }
           },
           "422": {
-            "description": "Validation failed, including a lead_stage_id that is not one of the partner's Owner pipeline stages",
+            "description": "Validation failed, or a tag error (see the codes above). Nothing was saved.",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "invalid_tag_name": {
+                    "summary": "A tag name over 30 characters",
+                    "value": {
+                      "error": {
+                        "message": "Tag \"Prefers a unit near the downtown office\" is longer than 30 characters",
+                        "status": 422,
+                        "code": "invalid_tag_name",
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  },
+                  "tag_added_and_removed": {
+                    "summary": "The same tag in add_tags and remove_tags",
+                    "value": {
+                      "error": {
+                        "message": "Tag \"VIP\" can't be both added and removed",
+                        "status": 422,
+                        "code": "tag_added_and_removed",
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  },
+                  "tag_limit_reached": {
+                    "summary": "The lead would have more than 20 tags",
+                    "value": {
+                      "error": {
+                        "message": "A lead can have up to 20 tags",
+                        "status": 422,
+                        "code": "tag_limit_reached",
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  },
+                  "partner_tag_limit_reached": {
+                    "summary": "A new tag on an account that already has 200",
+                    "value": {
+                      "error": {
+                        "message": "An account can have up to 200 tags",
+                        "status": 422,
+                        "code": "partner_tag_limit_reached",
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  }
                 }
               }
             },
@@ -8373,6 +8628,29 @@
                 "$ref": "#/components/headers/X-Request-Id"
               }
             }
+          },
+          "412": {
+            "description": "The lead changed since the `ETag` sent in `If-Match` was read. Nothing was saved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "The resource has changed since you fetched it. Fetch it again and retry with the new ETag.",
+                    "status": 412,
+                    "code": "precondition_failed",
+                    "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                  }
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           }
         },
         "tags": [
@@ -8383,7 +8661,7 @@
             "bearer": []
           }
         ],
-        "description": "Changes fields on one owner lead; fields left out stay unchanged. Changes appear in the lead's activity log in the Portal. A deleted owner lead, or the id of a tenant lead, returns `404`.\n\nRequires the Owner leads feature. Partners without it receive `403` with the message `owner_leads feature is not enabled for this partner`, and nothing is created, changed or returned. Owner leads are not tied to a property, so API keys limited to certain properties can still see and change all of the partner's owner leads."
+        "description": "Changes fields on one owner lead; fields left out stay unchanged. Changes appear in the lead's activity log in the Portal. A deleted owner lead, or the id of a tenant lead, returns `404`.\n\nRequires the Owner leads feature. Partners without it receive `403` with the message `owner_leads feature is not enabled for this partner`, and nothing is created, changed or returned. Owner leads are not tied to a property, so API keys limited to certain properties can still see and change all of the partner's owner leads.\n\n**Tags.** `add_tags` and `remove_tags` change the lead's tags and leave its other tags as they are.\n\n- Removals run before adds, so a lead with 20 tags can swap one tag for another in one request.\n- Adding a tag the lead already has, or removing one it doesn't have (or that doesn't exist), changes nothing and still succeeds. Sending the same request twice is safe.\n- A removed tag stays on the account and on other leads. Only an admin can delete a tag, in the Portal.\n- A tag in both lists is an error (`tag_added_and_removed`).\n- There is no option to replace all of a lead's tags. To clear tags, list each one in `remove_tags`.\n- When the request fails for any reason, tag-related or not, nothing in it is saved.\n- A tag change updates the lead's `updated_at`, so List leads with `updated_at_from_date` picks it up.\n\n**Tag names.** Send each tag by its name, as it shows in the Portal. Names are matched to the account's tags (List tags) ignoring capitalization and extra spaces, so `hot lead` uses an existing `Hot Lead`. A name that matches no tag creates a new tag on the account, which every Portal user then sees. A name sent twice in one list counts once.\n\n**Limits.** A tag name is 1 to 30 characters of letters, numbers, spaces and common punctuation (no emoji). A lead has at most 20 tags. An account has at most 200 tags.\n\nTag errors return `422` with one of these codes, and save nothing:\n\n| `code` | `message` example |\n|---|---|\n| `invalid_tag_name` | `Tag \"VIP 🔥\" can only use letters, numbers, spaces and common punctuation` |\n| `invalid_tag_name` | `Tag \"Prefers a unit near the downtown office\" is longer than 30 characters` |\n| `invalid_tag_name` | `Tag names can't be empty` |\n| `tag_added_and_removed` | `Tag \"VIP\" can't be both added and removed` |\n| `tag_limit_reached` | `A lead can have up to 20 tags` |\n| `partner_tag_limit_reached` | `An account can have up to 200 tags` |\n| `tag_not_found` | `Tag not found` (the tag was deleted in the Portal while the request ran; retry) |\n\n**Concurrent changes.** Get owner lead and Update owner lead return an `ETag` header. Send it back in `If-Match` to apply the update only if the lead has not changed since you read it. If it has changed, the request fails with `412` (`precondition_failed`) and saves nothing: fetch the lead again and retry with the new `ETag`. Any change to the lead counts, including a tag added or removed by your team in the Portal. Without `If-Match`, the update always applies."
       }
     },
     "/partner/v1/stages": {
@@ -8512,6 +8790,120 @@
         },
         "tags": [
           "Stages"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/tags": {
+      "get": {
+        "operationId": "TagsController_findAll",
+        "summary": "List tags",
+        "description": "Returns every tag on the account, sorted A to Z, by name. Use it to check a name before you send it in `tags`, `add_tags` or `remove_tags`.\n\nThe list is shared across the account, so an API key limited to certain properties still gets the whole list. A tag renamed or deleted in the Portal shows the change on the next call. An account has at most 200 tags.\n\nTags are created by your team in the Portal (Settings › CRM › Tags), or by sending a new name in `tags` or `add_tags`. Renaming and deleting tags is done in the Portal only.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "tags": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Tag"
+                      }
+                    }
+                  },
+                  "required": [
+                    "tags"
+                  ]
+                },
+                "example": {
+                  "tags": [
+                    {
+                      "name": "Pet owner"
+                    },
+                    {
+                      "name": "Section 8"
+                    },
+                    {
+                      "name": "VIP"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Tags"
         ],
         "security": [
           {
@@ -16887,12 +17279,24 @@
               }
             ],
             "description": "Only present when requested via `include` on List Leads; always present on Get Lead by ID."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "Section 8",
+              "VIP"
+            ],
+            "description": "Names of the lead's tags, sorted A to Z. An empty list when the lead has no tags, never missing. Tags are added in the Portal or with `add_tags` / `tags` here; a tag renamed or deleted in the Portal shows its new name, or is gone, on the next response."
           }
         },
         "required": [
           "id",
           "created_at",
-          "updated_at"
+          "updated_at",
+          "tags"
         ]
       },
       "LeadApprovalLikelihoodExplanation": {
@@ -17012,6 +17416,19 @@
             "example": "123456",
             "nullable": true,
             "description": "The obfuscated ID of a lead source returned by List lead sources. When omitted, empty or null, the lead source defaults to \"API\". An ID that is not one of the partner's active lead sources is rejected with \"Invalid lead source\" and no lead is created. When the request matches an existing lead, the source is recorded on the new inquiry and the lead's original source is kept."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 30
+            },
+            "example": [
+              "Section 8",
+              "VIP"
+            ],
+            "description": "Tags to put on the lead, by name. A name matching no tag on the account creates it. When the request matches an existing lead, these are added to its tags and none are removed. At most 20 per lead, each up to 30 characters.",
+            "maxItems": 20
           }
         },
         "required": [
@@ -17063,7 +17480,7 @@
               "message": {
                 "type": "string",
                 "example": "Unit not found",
-                "description": "Why this lead failed, e.g. \"Unit not found\" or \"Invalid lead source\". A failed lead does not stop the other leads in the request from being created."
+                "description": "Why this lead failed, e.g. \"Unit not found\", \"Invalid lead source\" or a tag error such as \"A lead can have up to 20 tags\". A failed lead does not stop the other leads in the request from being created."
               },
               "unit_id": {
                 "type": "string",
@@ -17108,6 +17525,28 @@
             "type": "string",
             "example": "123456",
             "description": "The obfuscated ID of the lead source to assign to the lead"
+          },
+          "add_tags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 30
+            },
+            "example": [
+              "Pet owner"
+            ],
+            "description": "Tags to add, by name. A tag the lead already has is left as is. A name matching no tag on the account creates it. Applied after `remove_tags`."
+          },
+          "remove_tags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 30
+            },
+            "example": [
+              "VIP"
+            ],
+            "description": "Tags to remove, by name. A tag the lead doesn't have, or a name matching no tag, is skipped. The tag stays on the account. Applied before `add_tags`."
           }
         }
       },
@@ -17485,6 +17924,11 @@
               "request_id": {
                 "type": "string",
                 "example": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+              },
+              "code": {
+                "type": "string",
+                "example": "tag_limit_reached",
+                "description": "Stable machine-readable error code; branch on this, not on `message`. See Errors and request IDs."
               }
             },
             "required": [
@@ -18366,6 +18810,17 @@
             "format": "date-time",
             "type": "string",
             "example": "2021-01-01T00:00:00.000Z"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "Section 8",
+              "VIP"
+            ],
+            "description": "Names of the owner lead's tags, sorted A to Z. An empty list when it has no tags, never missing."
           }
         },
         "required": [
@@ -18374,7 +18829,8 @@
           "last_name",
           "is_deleted",
           "created_at",
-          "updated_at"
+          "updated_at",
+          "tags"
         ]
       },
       "CreateOwnerLeadRequest": {
@@ -18432,6 +18888,19 @@
           "message": {
             "type": "string",
             "example": "Looking for a new property manager"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 30
+            },
+            "example": [
+              "Section 8",
+              "VIP"
+            ],
+            "description": "Tags to put on the lead, by name. A name matching no tag on the account creates it. When the request matches an existing lead, these are added to its tags and none are removed. At most 20 per lead, each up to 30 characters.",
+            "maxItems": 20
           }
         },
         "required": [
@@ -18483,7 +18952,8 @@
             "properties": {
               "message": {
                 "type": "string",
-                "example": "first_name is required"
+                "example": "first_name is required",
+                "description": "Why this owner lead failed, e.g. \"first_name is required\" or a tag error such as \"A lead can have up to 20 tags\". A failed lead does not stop the others."
               },
               "external_id": {
                 "type": "string",
@@ -18548,6 +19018,28 @@
             "type": "string",
             "example": "123456",
             "description": "The id of one of the partner's Owner pipeline stages (List stages with stage_group=owner_pipeline)."
+          },
+          "add_tags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 30
+            },
+            "example": [
+              "Pet owner"
+            ],
+            "description": "Tags to add, by name. A tag the lead already has is left as is. A name matching no tag on the account creates it. Applied after `remove_tags`."
+          },
+          "remove_tags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 30
+            },
+            "example": [
+              "VIP"
+            ],
+            "description": "Tags to remove, by name. A tag the lead doesn't have, or a name matching no tag, is skipped. The tag stays on the account. Applied before `add_tags`."
           }
         }
       },
@@ -18876,6 +19368,19 @@
           }
         },
         "description": "The 5 most recent activity entries. Full history: GET /partner/v1/leads/{lead_id}/activity_logs."
+      },
+      "Tag": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Section 8",
+            "description": "Tag name, as it shows in the Portal (Settings › CRM › Tags)."
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     },
     "headers": {
@@ -18912,6 +19417,13 @@
         "schema": {
           "type": "integer",
           "example": 1767225637
+        }
+      },
+      "ETag": {
+        "description": "Version of the lead. Send it in `If-Match` on Update to fail with `412` instead of overwriting a change made since your read.",
+        "schema": {
+          "type": "string",
+          "example": "W/\"3f2a9c0d1e4b5a6c7d8e9f0a1b2c3d4e\""
         }
       }
     }
