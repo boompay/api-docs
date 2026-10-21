@@ -4,9 +4,9 @@ Machine-readable definitions of the Boom Partner API, served from `api.productio
 
 | File | Covers | Format |
 |---|---|---|
-| `screening-api-docs/api.json` | BoomScreen (tenant screening) and BoomCRM (leads, listings, magic links) under `/partner/v1/` and `/crm/v1/` | OpenAPI 3.0 |
+| `screening-api-docs/api.json` | BoomScreen (tenant screening) and BoomCRM (leads, listings, magic links, showing availability) under `/partner/v1/` and `/crm/v1/`, plus the listing site endpoint under `/listing_sites/v1/` | OpenAPI 3.0 |
 | `rent-reporting-api-docs/api.json` | BoomReport (customers, enrollments, rental payments, Plaid, ledgers) under `/partner/v1/` | OpenAPI 3.0 |
-| `docs/*.md` | Cross-cutting guides: errors and request IDs, pagination and ordering, rate limits, versioning and deprecation | Markdown, published on docs.boompay.app |
+| `docs/*.md` | Cross-cutting guides: errors and request IDs, pagination and ordering, rate limits, versioning and deprecation, showing availability (Partner API and listing sites) | Markdown, published on docs.boompay.app |
 
 Both specifications share the same conventions: bearer JWT auth from `POST /partner/v1/authenticate`, one error envelope, one list envelope, an `X-Request-Id` on every response. The `info.description` of each file summarises them; the `docs/` guides are the long form.
 
