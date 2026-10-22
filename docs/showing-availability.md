@@ -105,5 +105,5 @@ Authorization: Bearer lsk_...
 - **Which units.** Only listings currently in your site's Boom feed, at any Boom partner. Any other listing (unchecked by the partner, over your site's rent cap, removed from the feed, or nonexistent) returns 404 `not_found`, and the response never says whether it exists elsewhere in Boom.
 - **Identifier.** `listing_id` is the `id` of the `<Listing>` element in your feed, the same ID you send back with each lead.
 - **Request, response and errors** are the same as above, with `listing_id` (a number) in place of `unit_id`.
-- **Rate limit.** 600 requests per minute per key. Over the limit returns 429 `rate_limited` with `Retry-After`.
+- **Rate limit.** 600 requests per minute per key. Over the limit returns 429 `rate_limited` with `Retry-After`. Repeated requests with an invalid key (30 in a minute from one IP) are also throttled.
 - Times can be up to about 30 seconds old, and a time can be taken before it is booked.
