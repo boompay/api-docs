@@ -11307,6 +11307,658 @@
           }
         }
       }
+    },
+    "/partner/v1/units/{id}/showing_availability": {
+      "get": {
+        "operationId": "UnitsController_showingAvailability",
+        "summary": "Get a unit's open tour times",
+        "description": "Returns the open tour times for a unit, the same times Boom's Schedule a tour page offers for it. Guided or self-guided follows the unit's listing template; times respect the showing duration, booking window, minimum notice, visit limits, agent availability and existing bookings or holds. Agent names are never included. Times can be up to about 30 seconds old, and a time can be taken by someone else before it is booked. This endpoint never books, holds or reserves a time. Read-only API keys can call it; property-scoped keys get 404 outside their properties. Partner API rate limit applies (see Rate limits).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Unit ID from the Units endpoint."
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "First date (YYYY-MM-DD) in the property's time zone. Defaults to today. A past date is treated as today."
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Last date (YYYY-MM-DD), inclusive. Defaults to start_date plus 13 days. At most 14 days in total."
+          }
+        ],
+        "tags": [
+          "Units"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Open tour times",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnitShowingAvailability"
+                },
+                "examples": {
+                  "guided": {
+                    "summary": "Guided showing",
+                    "value": {
+                      "unit_id": "Xk2pQ9rT4mN8bV1c",
+                      "showing_type": "guided",
+                      "time_zone": "America/Chicago",
+                      "duration_minutes": 30,
+                      "range": {
+                        "start_date": "2026-10-22",
+                        "end_date": "2026-11-04"
+                      },
+                      "booking_window_ends_on": "2027-01-20",
+                      "times": [
+                        {
+                          "date": "2026-10-23",
+                          "start": "2026-10-23T10:00:00-05:00",
+                          "end": "2026-10-23T10:30:00-05:00",
+                          "joins_existing_showing": false
+                        },
+                        {
+                          "date": "2026-10-23",
+                          "start": "2026-10-23T10:30:00-05:00",
+                          "end": "2026-10-23T11:00:00-05:00",
+                          "joins_existing_showing": false
+                        }
+                      ],
+                      "next_available": null,
+                      "empty_reason": null
+                    }
+                  },
+                  "self_guided": {
+                    "summary": "Self-guided showing",
+                    "value": {
+                      "unit_id": "Xk2pQ9rT4mN8bV1c",
+                      "showing_type": "self_guided",
+                      "time_zone": "America/Chicago",
+                      "duration_minutes": 30,
+                      "range": {
+                        "start_date": "2026-10-22",
+                        "end_date": "2026-11-04"
+                      },
+                      "booking_window_ends_on": "2027-01-20",
+                      "times": [
+                        {
+                          "date": "2026-10-24",
+                          "start": "2026-10-24T09:00:00-05:00",
+                          "end": "2026-10-24T09:30:00-05:00",
+                          "joins_existing_showing": false
+                        },
+                        {
+                          "date": "2026-10-24",
+                          "start": "2026-10-24T09:30:00-05:00",
+                          "end": "2026-10-24T10:00:00-05:00",
+                          "joins_existing_showing": false
+                        }
+                      ],
+                      "next_available": null,
+                      "empty_reason": null
+                    }
+                  },
+                  "group_showing": {
+                    "summary": "A time that joins an existing showing",
+                    "value": {
+                      "unit_id": "Xk2pQ9rT4mN8bV1c",
+                      "showing_type": "guided",
+                      "time_zone": "America/Chicago",
+                      "duration_minutes": 30,
+                      "range": {
+                        "start_date": "2026-10-22",
+                        "end_date": "2026-11-04"
+                      },
+                      "booking_window_ends_on": "2027-01-20",
+                      "times": [
+                        {
+                          "date": "2026-10-23",
+                          "start": "2026-10-23T10:00:00-05:00",
+                          "end": "2026-10-23T10:30:00-05:00",
+                          "joins_existing_showing": false
+                        },
+                        {
+                          "date": "2026-10-23",
+                          "start": "2026-10-23T10:30:00-05:00",
+                          "end": "2026-10-23T11:00:00-05:00",
+                          "joins_existing_showing": true
+                        }
+                      ],
+                      "next_available": null,
+                      "empty_reason": null
+                    }
+                  },
+                  "empty_with_next": {
+                    "summary": "No times in the range, with the next open time",
+                    "value": {
+                      "unit_id": "Xk2pQ9rT4mN8bV1c",
+                      "showing_type": "guided",
+                      "time_zone": "America/Chicago",
+                      "duration_minutes": 30,
+                      "range": {
+                        "start_date": "2026-10-22",
+                        "end_date": "2026-10-28"
+                      },
+                      "booking_window_ends_on": "2027-01-20",
+                      "times": [],
+                      "next_available": {
+                        "date": "2026-11-12",
+                        "start": "2026-11-12T14:00:00-06:00",
+                        "end": "2026-11-12T14:30:00-06:00",
+                        "joins_existing_showing": false
+                      },
+                      "empty_reason": "no_times_in_range"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid date or date range",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShowingAvailabilityError"
+                },
+                "examples": {
+                  "invalid_date_range": {
+                    "value": {
+                      "error": {
+                        "message": "The date range cannot be longer than 14 days.",
+                        "status": 400,
+                        "code": "invalid_date_range",
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  },
+                  "validation_error": {
+                    "value": {
+                      "error": {
+                        "message": "start_date is invalid",
+                        "status": 400,
+                        "code": "validation_error",
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or invalid bearer token",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unit not found, unlisted, another partner's, or outside the key's properties",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShowingAvailabilityError"
+                },
+                "examples": {
+                  "not_found": {
+                    "value": {
+                      "error": {
+                        "message": "Not Found",
+                        "status": 404,
+                        "code": "not_found",
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The unit can't be booked",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShowingAvailabilityError"
+                },
+                "examples": {
+                  "showings_not_enabled": {
+                    "value": {
+                      "error": {
+                        "message": "Showings are not enabled for this unit.",
+                        "status": 422,
+                        "code": "showings_not_enabled",
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  },
+                  "unit_on_waitlist": {
+                    "value": {
+                      "error": {
+                        "message": "This unit is on the waitlist.",
+                        "status": 422,
+                        "code": "unit_on_waitlist",
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/listing_sites/v1/listings/{listing_id}/showing_availability": {
+      "get": {
+        "operationId": "ListingSitesController_showingAvailability",
+        "summary": "Listing sites: get a listing's open tour times",
+        "description": "For listing sites that receive a Boom listing feed (for example AffordableHousing.com). Authenticate with the listing site key Boom issued to your site: `Authorization: Bearer lsk_...`. The key only covers listings currently in your site's feed; any other listing ID returns 404 and the response never says whether it exists elsewhere. The key works on no other endpoint, and Partner API tokens don't work here. Identify the unit by the `id` of its `<Listing>` in the feed (the same ID sent back with each lead). Same parameters, response and errors as the Partner API endpoint, with `listing_id` instead of `unit_id`. Times can be up to about 30 seconds old, and a time can be taken by someone else before it is booked. This endpoint never books, holds or reserves a time. Rate limit: 600 requests per minute per key.",
+        "parameters": [
+          {
+            "name": "listing_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Listing ID from your Boom feed."
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "First date (YYYY-MM-DD) in the property's time zone. Defaults to today. A past date is treated as today."
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Last date (YYYY-MM-DD), inclusive. Defaults to start_date plus 13 days. At most 14 days in total."
+          }
+        ],
+        "tags": [
+          "Listing sites"
+        ],
+        "security": [
+          {
+            "listingSiteKey": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Open tour times",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListingShowingAvailability"
+                },
+                "examples": {
+                  "guided": {
+                    "summary": "Guided showing",
+                    "value": {
+                      "listing_id": 48213,
+                      "showing_type": "guided",
+                      "time_zone": "America/Chicago",
+                      "duration_minutes": 30,
+                      "range": {
+                        "start_date": "2026-10-22",
+                        "end_date": "2026-11-04"
+                      },
+                      "booking_window_ends_on": "2027-01-20",
+                      "times": [
+                        {
+                          "date": "2026-10-23",
+                          "start": "2026-10-23T10:00:00-05:00",
+                          "end": "2026-10-23T10:30:00-05:00",
+                          "joins_existing_showing": false
+                        },
+                        {
+                          "date": "2026-10-23",
+                          "start": "2026-10-23T10:30:00-05:00",
+                          "end": "2026-10-23T11:00:00-05:00",
+                          "joins_existing_showing": false
+                        }
+                      ],
+                      "next_available": null,
+                      "empty_reason": null
+                    }
+                  },
+                  "self_guided": {
+                    "summary": "Self-guided showing",
+                    "value": {
+                      "listing_id": 48213,
+                      "showing_type": "self_guided",
+                      "time_zone": "America/Chicago",
+                      "duration_minutes": 30,
+                      "range": {
+                        "start_date": "2026-10-22",
+                        "end_date": "2026-11-04"
+                      },
+                      "booking_window_ends_on": "2027-01-20",
+                      "times": [
+                        {
+                          "date": "2026-10-24",
+                          "start": "2026-10-24T09:00:00-05:00",
+                          "end": "2026-10-24T09:30:00-05:00",
+                          "joins_existing_showing": false
+                        },
+                        {
+                          "date": "2026-10-24",
+                          "start": "2026-10-24T09:30:00-05:00",
+                          "end": "2026-10-24T10:00:00-05:00",
+                          "joins_existing_showing": false
+                        }
+                      ],
+                      "next_available": null,
+                      "empty_reason": null
+                    }
+                  },
+                  "group_showing": {
+                    "summary": "A time that joins an existing showing",
+                    "value": {
+                      "listing_id": 48213,
+                      "showing_type": "guided",
+                      "time_zone": "America/Chicago",
+                      "duration_minutes": 30,
+                      "range": {
+                        "start_date": "2026-10-22",
+                        "end_date": "2026-11-04"
+                      },
+                      "booking_window_ends_on": "2027-01-20",
+                      "times": [
+                        {
+                          "date": "2026-10-23",
+                          "start": "2026-10-23T10:00:00-05:00",
+                          "end": "2026-10-23T10:30:00-05:00",
+                          "joins_existing_showing": false
+                        },
+                        {
+                          "date": "2026-10-23",
+                          "start": "2026-10-23T10:30:00-05:00",
+                          "end": "2026-10-23T11:00:00-05:00",
+                          "joins_existing_showing": true
+                        }
+                      ],
+                      "next_available": null,
+                      "empty_reason": null
+                    }
+                  },
+                  "empty_with_next": {
+                    "summary": "No times in the range, with the next open time",
+                    "value": {
+                      "listing_id": 48213,
+                      "showing_type": "guided",
+                      "time_zone": "America/Chicago",
+                      "duration_minutes": 30,
+                      "range": {
+                        "start_date": "2026-10-22",
+                        "end_date": "2026-10-28"
+                      },
+                      "booking_window_ends_on": "2027-01-20",
+                      "times": [],
+                      "next_available": {
+                        "date": "2026-11-12",
+                        "start": "2026-11-12T14:00:00-06:00",
+                        "end": "2026-11-12T14:30:00-06:00",
+                        "joins_existing_showing": false
+                      },
+                      "empty_reason": "no_times_in_range"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid date or date range",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShowingAvailabilityError"
+                },
+                "examples": {
+                  "invalid_date_range": {
+                    "value": {
+                      "error": {
+                        "message": "The date range cannot be longer than 14 days.",
+                        "status": 400,
+                        "code": "invalid_date_range",
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  },
+                  "validation_error": {
+                    "value": {
+                      "error": {
+                        "message": "start_date is invalid",
+                        "status": 400,
+                        "code": "validation_error",
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, invalid or revoked listing site key",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShowingAvailabilityError"
+                },
+                "examples": {
+                  "unauthenticated": {
+                    "value": {
+                      "error": {
+                        "message": "Unauthorized",
+                        "status": 401,
+                        "code": "unauthenticated",
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Listing not in your site's feed, or does not exist",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShowingAvailabilityError"
+                },
+                "examples": {
+                  "not_found": {
+                    "value": {
+                      "error": {
+                        "message": "Not Found",
+                        "status": 404,
+                        "code": "not_found",
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The unit can't be booked",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShowingAvailabilityError"
+                },
+                "examples": {
+                  "showings_not_enabled": {
+                    "value": {
+                      "error": {
+                        "message": "Showings are not enabled for this unit.",
+                        "status": 422,
+                        "code": "showings_not_enabled",
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  },
+                  "unit_on_waitlist": {
+                    "value": {
+                      "error": {
+                        "message": "This unit is on the waitlist.",
+                        "status": 422,
+                        "code": "unit_on_waitlist",
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
+            }
+          }
+        }
+      }
     }
   },
   "info": {
@@ -11334,6 +11986,11 @@
         "scheme": "bearer",
         "bearerFormat": "JWT",
         "type": "http"
+      },
+      "listingSiteKey": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Listing site API key issued by Boom (`lsk_...`). Only valid on `/listing_sites/v1/*`."
       }
     },
     "schemas": {
@@ -18880,6 +19537,304 @@
           }
         },
         "description": "The 5 most recent activity entries. Full history: GET /partner/v1/leads/{lead_id}/activity_logs."
+      },
+      "ShowingTime": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "example": "2026-10-23",
+            "description": "Local date in the property's time zone."
+          },
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-10-23T10:00:00-05:00",
+            "description": "Start, with the property's UTC offset."
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-10-23T10:30:00-05:00"
+          },
+          "joins_existing_showing": {
+            "type": "boolean",
+            "example": false,
+            "description": "True when the time joins a showing already booked on the unit (the partner lets leads book into scheduled showings)."
+          }
+        },
+        "required": [
+          "date",
+          "start",
+          "end",
+          "joins_existing_showing"
+        ]
+      },
+      "UnitShowingAvailability": {
+        "type": "object",
+        "properties": {
+          "unit_id": {
+            "type": "string",
+            "example": "Xk2pQ9rT4mN8bV1c",
+            "description": "Unit ID from the Units endpoint."
+          },
+          "showing_type": {
+            "type": "string",
+            "enum": [
+              "guided",
+              "self_guided"
+            ],
+            "description": "Guided (an agent shows the unit) or self-guided, from the unit's listing template."
+          },
+          "time_zone": {
+            "type": "string",
+            "example": "America/Chicago",
+            "description": "IANA time zone of the property."
+          },
+          "duration_minutes": {
+            "type": "integer",
+            "example": 30,
+            "description": "Tour length. Times never overlap."
+          },
+          "range": {
+            "type": "object",
+            "description": "Dates actually covered, inclusive.",
+            "properties": {
+              "start_date": {
+                "type": "string",
+                "format": "date"
+              },
+              "end_date": {
+                "type": "string",
+                "format": "date"
+              }
+            },
+            "required": [
+              "start_date",
+              "end_date"
+            ]
+          },
+          "booking_window_ends_on": {
+            "type": "string",
+            "format": "date",
+            "nullable": true,
+            "description": "Last date anyone can book the unit right now. Null when no one can show it."
+          },
+          "times": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ShowingTime"
+            }
+          },
+          "next_available": {
+            "type": "object",
+            "properties": {
+              "date": {
+                "type": "string",
+                "format": "date",
+                "example": "2026-10-23",
+                "description": "Local date in the property's time zone."
+              },
+              "start": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2026-10-23T10:00:00-05:00",
+                "description": "Start, with the property's UTC offset."
+              },
+              "end": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2026-10-23T10:30:00-05:00"
+              },
+              "joins_existing_showing": {
+                "type": "boolean",
+                "example": false,
+                "description": "True when the time joins a showing already booked on the unit (the partner lets leads book into scheduled showings)."
+              }
+            },
+            "required": [
+              "date",
+              "start",
+              "end",
+              "joins_existing_showing"
+            ],
+            "nullable": true,
+            "description": "When `times` is empty: the first open time after the range, within the booking window."
+          },
+          "empty_reason": {
+            "type": "string",
+            "nullable": true,
+            "enum": [
+              "no_times_in_range",
+              "beyond_booking_window",
+              "no_open_times",
+              null
+            ],
+            "description": "Set only when `times` is empty. `no_times_in_range`: nothing open in the range (fully booked or no hours). `beyond_booking_window`: the range starts after `booking_window_ends_on`. `no_open_times`: nothing open anywhere in the booking window."
+          }
+        },
+        "required": [
+          "unit_id",
+          "showing_type",
+          "time_zone",
+          "duration_minutes",
+          "range",
+          "booking_window_ends_on",
+          "times",
+          "next_available",
+          "empty_reason"
+        ]
+      },
+      "ListingShowingAvailability": {
+        "type": "object",
+        "properties": {
+          "listing_id": {
+            "type": "integer",
+            "example": 48213,
+            "description": "The listing ID from the site's Boom feed."
+          },
+          "showing_type": {
+            "type": "string",
+            "enum": [
+              "guided",
+              "self_guided"
+            ],
+            "description": "Guided (an agent shows the unit) or self-guided, from the unit's listing template."
+          },
+          "time_zone": {
+            "type": "string",
+            "example": "America/Chicago",
+            "description": "IANA time zone of the property."
+          },
+          "duration_minutes": {
+            "type": "integer",
+            "example": 30,
+            "description": "Tour length. Times never overlap."
+          },
+          "range": {
+            "type": "object",
+            "description": "Dates actually covered, inclusive.",
+            "properties": {
+              "start_date": {
+                "type": "string",
+                "format": "date"
+              },
+              "end_date": {
+                "type": "string",
+                "format": "date"
+              }
+            },
+            "required": [
+              "start_date",
+              "end_date"
+            ]
+          },
+          "booking_window_ends_on": {
+            "type": "string",
+            "format": "date",
+            "nullable": true,
+            "description": "Last date anyone can book the unit right now. Null when no one can show it."
+          },
+          "times": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ShowingTime"
+            }
+          },
+          "next_available": {
+            "type": "object",
+            "properties": {
+              "date": {
+                "type": "string",
+                "format": "date",
+                "example": "2026-10-23",
+                "description": "Local date in the property's time zone."
+              },
+              "start": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2026-10-23T10:00:00-05:00",
+                "description": "Start, with the property's UTC offset."
+              },
+              "end": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2026-10-23T10:30:00-05:00"
+              },
+              "joins_existing_showing": {
+                "type": "boolean",
+                "example": false,
+                "description": "True when the time joins a showing already booked on the unit (the partner lets leads book into scheduled showings)."
+              }
+            },
+            "required": [
+              "date",
+              "start",
+              "end",
+              "joins_existing_showing"
+            ],
+            "nullable": true,
+            "description": "When `times` is empty: the first open time after the range, within the booking window."
+          },
+          "empty_reason": {
+            "type": "string",
+            "nullable": true,
+            "enum": [
+              "no_times_in_range",
+              "beyond_booking_window",
+              "no_open_times",
+              null
+            ],
+            "description": "Set only when `times` is empty. `no_times_in_range`: nothing open in the range (fully booked or no hours). `beyond_booking_window`: the range starts after `booking_window_ends_on`. `no_open_times`: nothing open anywhere in the booking window."
+          }
+        },
+        "required": [
+          "listing_id",
+          "showing_type",
+          "time_zone",
+          "duration_minutes",
+          "range",
+          "booking_window_ends_on",
+          "times",
+          "next_available",
+          "empty_reason"
+        ]
+      },
+      "ShowingAvailabilityError": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "Showings are not enabled for this unit."
+              },
+              "status": {
+                "type": "number",
+                "example": 422
+              },
+              "code": {
+                "type": "string",
+                "example": "showings_not_enabled"
+              },
+              "request_id": {
+                "type": "string",
+                "example": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+              }
+            },
+            "required": [
+              "message",
+              "status",
+              "code",
+              "request_id"
+            ]
+          }
+        },
+        "required": [
+          "error"
+        ]
       }
     },
     "headers": {
