@@ -6923,28 +6923,32 @@
       "get": {
         "operationId": "LeadsController_getActivityLogs",
         "summary": "Get activity timeline for all leads",
+        "description": "Two pagination styles; do not mix them in one request (that returns `400`).\n\n**Page style** (`page`, `per_page`, or no pagination parameter) returns `PaginatedResponse` with `current_page`, `page_count`, `total_count` and `has_more`.\n\n**Cursor style** starts when the request sends `limit` or `cursor`. Logs come newest first (`occurred_at`, then `id`) and the response is `CursorPaginatedResponse`: `object`, `items`, `has_more` and `next_cursor`, with no counts. Read the next page by sending `next_cursor` back as `cursor` until it is `null`. The cursor is an opaque string; do not build or change it.\n\n**Deprecated:** page style (`page`, `per_page`) on this endpoint is deprecated in favor of cursor style. It keeps working unchanged; new integrations should use `cursor`.",
         "parameters": [
           {
             "name": "page",
             "required": false,
             "in": "query",
+            "deprecated": true,
             "schema": {
               "type": "integer",
               "minimum": 1,
               "default": 1
-            }
+            },
+            "description": "(Deprecated) Page-style page number; it keeps working unchanged. Use `cursor` instead."
           },
           {
             "name": "per_page",
             "required": false,
             "in": "query",
+            "deprecated": true,
             "schema": {
               "type": "integer",
               "minimum": 1,
               "maximum": 1000,
               "default": 20
             },
-            "description": "Values above 1000 are clamped to 1000."
+            "description": "(Deprecated) Page-style page size. Values above 1000 are clamped to 1000. Use `limit` and `cursor` instead."
           },
           {
             "name": "activity_type",
@@ -6953,29 +6957,86 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 100
+            },
+            "description": "Cursor-style page size, 1 to 100. Defaults to 100. Sending `limit` selects cursor pagination."
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Opaque `next_cursor` from the previous cursor-style page; send it back unchanged. A cursor that cannot be read returns `400 Invalid cursor`. Sending `cursor` selects cursor pagination."
           }
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "Page style returns `PaginatedResponse`; cursor style returns `CursorPaginatedResponse`.",
             "content": {
               "application/json": {
                 "schema": {
-                  "allOf": [
+                  "oneOf": [
                     {
-                      "$ref": "#/components/schemas/PaginatedResponse"
-                    },
-                    {
-                      "properties": {
-                        "items": {
-                          "type": "array",
-                          "items": {
-                            "$ref": "#/components/schemas/LeadActivityLog"
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/PaginatedResponse"
+                        },
+                        {
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/components/schemas/LeadActivityLog"
+                              }
+                            }
                           }
                         }
-                      }
+                      ]
+                    },
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/CursorPaginatedResponse"
+                        },
+                        {
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/components/schemas/LeadActivityLog"
+                              }
+                            }
+                          }
+                        }
+                      ]
                     }
                   ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid cursor; page or per_page combined with cursor or limit; or limit outside 1 to 100.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             },
@@ -12351,6 +12412,37 @@
           "has_more"
         ],
         "description": "Envelope shared by every list endpoint. `per_page` is capped at 1000; ordering is deterministic (see the Pagination guide)."
+      },
+      "CursorPaginatedResponse": {
+        "type": "object",
+        "properties": {
+          "object": {
+            "type": "string",
+            "enum": [
+              "list"
+            ]
+          },
+          "items": {
+            "type": "array",
+            "items": {}
+          },
+          "has_more": {
+            "type": "boolean",
+            "example": true
+          },
+          "next_cursor": {
+            "type": "string",
+            "nullable": true,
+            "description": "Opaque cursor for the next page; send it back as `cursor`. `null` on the last page."
+          }
+        },
+        "required": [
+          "object",
+          "items",
+          "has_more",
+          "next_cursor"
+        ],
+        "description": "Envelope for cursor-style pages. Has no `current_page`, `page_count` or `total_count`; read until `next_cursor` is `null` (see the Pagination guide)."
       },
       "ActivityLog": {
         "type": "object",
