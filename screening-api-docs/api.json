@@ -1871,6 +1871,7 @@
       "get": {
         "operationId": "UnitsController_findAll",
         "summary": "List all units",
+        "description": "Returns the partner's units. Deleted units are not included. A unit is treated as deleted while its property is deleted, including a property deleted in the Portal or through the API, deactivated in the property management system, or excluded from the synced property list. Its units are left out of this list until the property is restored, and then come back unchanged.\n\nTo hear about changes without polling, subscribe to the property and unit webhooks (see the Property and unit webhooks guide).",
         "parameters": [
           {
             "name": "page",
@@ -2192,6 +2193,7 @@
       "get": {
         "operationId": "UnitsController_findById",
         "summary": "Get unit by id",
+        "description": "Returns one unit. A deleted unit, or a unit whose property is deleted, returns `404`.",
         "parameters": [
           {
             "name": "id",
@@ -2234,7 +2236,7 @@
             }
           },
           "404": {
-            "description": "",
+            "description": "The unit does not exist, is deleted, or belongs to a deleted property.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2318,6 +2320,7 @@
       "patch": {
         "operationId": "UnitsController_update",
         "summary": "Update a unit",
+        "description": "Changes fields on one unit; fields left out stay unchanged. A deleted unit, or a unit whose property is deleted, returns `404` and nothing is saved.",
         "parameters": [
           {
             "name": "id",
@@ -2370,7 +2373,7 @@
             }
           },
           "404": {
-            "description": "",
+            "description": "The unit does not exist, is deleted, or belongs to a deleted property.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2469,6 +2472,7 @@
       "delete": {
         "operationId": "UnitsController_delete",
         "summary": "Delete a unit",
+        "description": "Deletes one unit. A unit that is already deleted, or a unit whose property is deleted, returns `404`.",
         "parameters": [
           {
             "name": "id",
@@ -2504,7 +2508,7 @@
             }
           },
           "404": {
-            "description": "",
+            "description": "The unit does not exist, is deleted, or belongs to a deleted property.",
             "content": {
               "application/json": {
                 "schema": {
