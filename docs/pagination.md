@@ -2,7 +2,7 @@
 title: Pagination and ordering
 ---
 
-Every endpoint that returns a collection accepts the same two query parameters and returns the same envelope.
+Endpoints that return a collection use page pagination: the two query parameters and the envelope below. `GET /partner/v1/leads/activity_logs` also supports [cursor pagination](#cursor-pagination), and its page pagination is deprecated.
 
 ## Parameters
 
@@ -35,6 +35,48 @@ Every endpoint that returns a collection accepts the same two query parameters a
 `GET /partner/v1/applications` additionally returns `last_page` (the inverse of `has_more`) for integrations built before `has_more` existed. It is deprecated; new code should use `has_more`.
 
 Two endpoints are not paginated and do not use the envelope: `GET /partner/v1/customers/{customer_id}/issues` returns `{"issues": [...]}`, and `GET /partner/v1/bank_accounts` returns the account's few bank accounts directly.
+
+## Cursor pagination
+
+Supported by: `GET /partner/v1/leads/activity_logs`.
+
+| Parameter | Type | Default | Notes |
+|---|---|---|---|
+| `limit` | integer 1–100 | 100 | Records per page. Values outside 1–100 return `400`. |
+| `cursor` | string | none | The `next_cursor` from the previous page. Omit it for the first page. |
+
+Sending `limit` or `cursor` selects cursor pagination. Do not combine them with `page` or `per_page` in the same request; that returns `400`.
+
+```json
+{
+  "object": "list",
+  "items": [ ... ],
+  "has_more": true,
+  "next_cursor": "eyJvY2N1cnJlZF9hdCI6..."
+}
+```
+
+| Field | Meaning |
+|---|---|
+| `items` | The records for this page, newest first (`occurred_at`, then `id`). |
+| `has_more` | `true` when more records follow this page. |
+| `next_cursor` | Send it back as `cursor` to read the next page. `null` on the last page. |
+
+The envelope has no `current_page`, `page_count` or `total_count`. The cursor is an opaque string: send it back exactly as received and do not build or change it; a cursor that cannot be read returns `400 Invalid cursor`.
+
+To read everything, request the first page without `cursor`, then repeat with `cursor` set to the last `next_cursor` until it is `null`:
+
+```text
+GET /partner/v1/leads/activity_logs?limit=100
+GET /partner/v1/leads/activity_logs?limit=100&cursor=<next_cursor>
+...  (stop when next_cursor is null)
+```
+
+Records that share the same `occurred_at` are neither repeated nor skipped between pages. Filters such as `activity_type` work the same in both styles.
+
+### Page pagination on `GET /partner/v1/leads/activity_logs` (Deprecated)
+
+`page` and `per_page` on this endpoint are deprecated in favor of `cursor`. They keep working unchanged, with the limits in the [Parameters](#parameters) table and the same page envelope. New integrations should use cursor pagination; see [Versioning and deprecation](versioning-and-deprecation.md).
 
 ## Ordering guarantee
 
