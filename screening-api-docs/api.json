@@ -10355,7 +10355,7 @@
       "get": {
         "operationId": "ListingsController_findAll",
         "summary": "List active listings",
-        "description": "Returns the authenticated partner's own active listings only - never another partner's data. Data matches the partner's generic XML feed (active listing whose unit is listed), including the Apply Now, Contact Us, and Request Showing action links. No filter/query parameters are supported in v1 beyond pagination; for a property-scoped API key, results are further restricted to the properties in scope.",
+        "description": "Returns the authenticated partner's own active listings only - never another partner's data. Data matches the partner's generic XML feed (active listing whose unit is listed), including the Apply Now, Contact Us, and Request Showing action links. Photos (gallery_urls) follow the order the partner set in the Portal; the first photo is the primary image (primary_image_url). No filter/query parameters are supported in v1 beyond pagination; for a property-scoped API key, results are further restricted to the properties in scope.",
         "parameters": [
           {
             "name": "page",
@@ -18474,7 +18474,7 @@
             "nullable": true
           },
           "primary_image_url": {
-            "description": "The listing's primary image. Shape varies by source: a plain URL string, an empty object when no image is set, or an object such as { \"full\": ..., \"small\": ... } or { \"url\": ..., \"alt\": ... }.",
+            "description": "The listing's primary image: always the first photo of the gallery, i.e. the photo the partner puts first (marked Default) in the Photos section of the Portal. Shape varies by source: a plain URL string, an empty object when no image is set, or an object such as { \"full\": ..., \"small\": ... } or { \"url\": ..., \"alt\": ... }.",
             "anyOf": [
               {
                 "type": "string",
@@ -18490,7 +18490,7 @@
           "gallery_urls": {
             "type": "array",
             "items": {},
-            "description": "Gallery images. Same variable per-item shape as primary_image_url."
+            "description": "Gallery images, in the order the partner arranged them in the Photos section of the Portal (by dragging or Make default, or the PMS order when photos are synced from a PMS and nobody has rearranged them). The first item is the primary image. A unit with no photos of its own shows its property's photos in the property's order. A new order shows here after the next listing refresh, usually within a minute. Same variable per-item shape as primary_image_url."
           },
           "listing_url": {
             "type": "string",

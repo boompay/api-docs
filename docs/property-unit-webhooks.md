@@ -11,10 +11,10 @@ Delivery, the `X-API-KEY` header, `request_id` and retries work exactly as for e
 | Event | Sent when |
 |---|---|
 | `property_created` | A property is created, or a deleted property is restored. |
-| `property_updated` | Any detail of a property changes, including its photos. |
+| `property_updated` | Any detail of a property changes, including its photos and their order (see [Photo order](#photo-order)). |
 | `property_deleted` | A property is deleted. A `unit_deleted` is also sent for each of its units, shortly after. |
 | `unit_created` | A unit is created, a deleted unit is restored, or its property is restored. |
-| `unit_updated` | Any detail of a unit changes, including its photos. |
+| `unit_updated` | Any detail of a unit changes, including its photos and their order (see [Photo order](#photo-order)). |
 | `unit_deleted` | A unit is deleted, or its property is deleted. |
 | `unit_availability_changed` | The unit's available date, occupied, available for application or ready for showing date changes. Sent together with `unit_updated`. |
 | `unit_listing_status_changed` | The unit's listed or waitlist setting changes. Sent together with `unit_updated`. |
@@ -23,6 +23,19 @@ Delivery, the `X-API-KEY` header, `request_id` and retries work exactly as for e
 Events fire for every source of a change: the Portal, the Partner API, a PMS sync and Boom itself. Several changes to the same record in one save or one sync arrive as one event listing all of them. A save or sync that changes no value sends nothing.
 
 While a property is deleted, its units count as deleted too: they are not returned by the Units endpoints and no unit events are sent for them. Events can arrive out of order; use `changed_at` to order them.
+
+## Photo order
+
+Partners arrange the photos of a property or unit in the Photos section of the Portal. Each of these sends exactly one `property_updated` or `unit_updated` event:
+
+- Dragging a photo to a new place.
+- **Make default** on a photo, which moves it to the front.
+- **Reset order**, which puts the photos back in the PMS order (PMS photos first, then photos uploaded in Boom).
+- A PMS sync that changes the order, for example by adding or removing photos.
+
+The event's `changes` has one `photos` entry with the old and new photo IDs in order, and `photos` in the record lists every photo in the new order with `position` numbered from 0. The first photo is the primary photo: the one marked Default in the Portal and shown first on listings. A photo that only changed place keeps its `id` and `url`.
+
+Once a partner has arranged the photos of a property or unit, later PMS syncs keep that order: new PMS photos are added at the end, and photos removed in the PMS are removed without moving the others.
 
 ## Payload
 
