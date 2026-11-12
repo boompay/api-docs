@@ -838,15 +838,6 @@
               "format": "date"
             },
             "description": "Only records updated on or before this date (UTC day end)."
-          },
-          {
-            "name": "search",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "type": "string"
-            },
-            "description": "Free-text search on the property name, street address, city and postal code."
           }
         ],
         "responses": {
@@ -992,33 +983,11 @@
             }
           },
           "400": {
-            "description": "Invalid parameters, a business rule, or a PMS rule. Codes include `unknown_amenities`, `prescreening_template_not_found`, `single_family_requires_single_unit`, `missing_unit_available_at`, `listed_without_applications` and `validation_error`.",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FieldErrorResponse"
-                },
-                "examples": {
-                  "single_family_requires_single_unit": {
-                    "value": {
-                      "error": {
-                        "message": "A single-family property has exactly one unit",
-                        "status": 400,
-                        "code": "single_family_requires_single_unit",
-                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
-                      }
-                    }
-                  },
-                  "unknown_amenities": {
-                    "value": {
-                      "error": {
-                        "message": "Unknown amenities: rooftop",
-                        "status": 400,
-                        "code": "unknown_amenities",
-                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
-                      }
-                    }
-                  }
+                  "$ref": "#/components/schemas/ValidatorResponse"
                 }
               }
             },
@@ -1278,49 +1247,11 @@
             }
           },
           "400": {
-            "description": "Invalid parameters, a business rule, or a PMS rule. Codes include `pms_controlled_fields`, `pms_sync_not_available`, `unknown_amenities`, `prescreening_template_not_found`, `single_family_requires_single_unit`, `missing_unit_available_at`, `listed_without_applications` and `validation_error`.",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FieldErrorResponse"
-                },
-                "examples": {
-                  "pms_controlled_fields": {
-                    "value": {
-                      "error": {
-                        "message": "The PMS controls name. Change them in the PMS, or first turn PMS sync off with pms_sync for the ones pms_sync lists.",
-                        "status": 400,
-                        "code": "pms_controlled_fields",
-                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d",
-                        "fields": [
-                          "name"
-                        ]
-                      }
-                    }
-                  },
-                  "pms_sync_not_available": {
-                    "value": {
-                      "error": {
-                        "message": "The PMS does not supply description, so it has no PMS sync setting",
-                        "status": 400,
-                        "code": "pms_sync_not_available",
-                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d",
-                        "fields": [
-                          "description"
-                        ]
-                      }
-                    }
-                  },
-                  "unknown_amenities": {
-                    "value": {
-                      "error": {
-                        "message": "Unknown amenities: rooftop",
-                        "status": 400,
-                        "code": "unknown_amenities",
-                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
-                      }
-                    }
-                  }
+                  "$ref": "#/components/schemas/ValidatorResponse"
                 }
               }
             },
@@ -1373,7 +1304,7 @@
             }
           },
           "500": {
-            "description": "Unexpected server error. When a follow-up write fails after the main change was saved (listing state, or the PMS sync setting of a single-family property's other record), the response is `500`: fetch the record before retrying.",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
@@ -1537,17 +1468,17 @@
             }
           },
           "403": {
-            "description": "The property is synced from a PMS (`pms_id` is set), or the key is read-only.",
+            "description": "Read-only API key used for a write",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ForbiddenErrorResponse"
                 }
-              }
-            },
-            "headers": {
-              "X-Request-Id": {
-                "$ref": "#/components/headers/X-Request-Id"
               }
             }
           }
@@ -2161,36 +2092,11 @@
             }
           },
           "400": {
-            "description": "Invalid parameters, a business rule, or a PMS rule. Codes include `unknown_amenities`, `listed_without_applications`, `invalid_total_rent` and `validation_error`.",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FieldErrorResponse"
-                },
-                "examples": {
-                  "unknown_amenities": {
-                    "value": {
-                      "error": {
-                        "message": "Unknown amenities: rooftop",
-                        "status": 400,
-                        "code": "unknown_amenities",
-                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
-                      }
-                    }
-                  },
-                  "listed_without_applications": {
-                    "value": {
-                      "error": {
-                        "message": "A unit can only be listed while it accepts applications",
-                        "status": 400,
-                        "code": "listed_without_applications",
-                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d",
-                        "fields": [
-                          "listed"
-                        ]
-                      }
-                    }
-                  }
+                  "$ref": "#/components/schemas/ValidatorResponse"
                 }
               }
             },
@@ -2452,62 +2358,11 @@
             }
           },
           "400": {
-            "description": "Invalid parameters, a business rule, or a PMS rule. Codes include `pms_controlled_fields` (a change to a field the PMS controls; `fields` names each one and nothing is saved), `pms_sync_not_available`, `unknown_amenities`, `listed_without_applications`, `invalid_total_rent` and `validation_error`.",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FieldErrorResponse"
-                },
-                "examples": {
-                  "pms_controlled_fields": {
-                    "value": {
-                      "error": {
-                        "message": "The PMS controls monthly_rent_amount. Change them in the PMS, or first turn PMS sync off with pms_sync for the ones pms_sync lists.",
-                        "status": 400,
-                        "code": "pms_controlled_fields",
-                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d",
-                        "fields": [
-                          "monthly_rent_amount"
-                        ]
-                      }
-                    }
-                  },
-                  "pms_sync_not_available": {
-                    "value": {
-                      "error": {
-                        "message": "The PMS does not supply description, so it has no PMS sync setting",
-                        "status": 400,
-                        "code": "pms_sync_not_available",
-                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d",
-                        "fields": [
-                          "description"
-                        ]
-                      }
-                    }
-                  },
-                  "unknown_amenities": {
-                    "value": {
-                      "error": {
-                        "message": "Unknown amenities: rooftop",
-                        "status": 400,
-                        "code": "unknown_amenities",
-                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
-                      }
-                    }
-                  },
-                  "listed_without_applications": {
-                    "value": {
-                      "error": {
-                        "message": "A unit can only be listed while it accepts applications",
-                        "status": 400,
-                        "code": "listed_without_applications",
-                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d",
-                        "fields": [
-                          "listed"
-                        ]
-                      }
-                    }
-                  }
+                  "$ref": "#/components/schemas/ValidatorResponse"
                 }
               }
             },
@@ -2560,7 +2415,7 @@
             }
           },
           "500": {
-            "description": "Unexpected server error. When a follow-up write fails after the main change was saved (listing state, or the PMS sync setting of a single-family property's other record), the response is `500`: fetch the record before retrying.",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
@@ -10562,51 +10417,6 @@
                 "$ref": "#/components/headers/X-Request-Id"
               }
             }
-          },
-          "400": {
-            "description": "Invalid `page` or `per_page`.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ValidatorResponse"
-                }
-              }
-            },
-            "headers": {
-              "X-Request-Id": {
-                "$ref": "#/components/headers/X-Request-Id"
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limit exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TooManyRequestsResponse"
-                }
-              }
-            },
-            "headers": {
-              "X-Request-Id": {
-                "$ref": "#/components/headers/X-Request-Id"
-              }
-            }
-          },
-          "500": {
-            "description": "Unexpected server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalErrorResponse"
-                }
-              }
-            },
-            "headers": {
-              "X-Request-Id": {
-                "$ref": "#/components/headers/X-Request-Id"
-              }
-            }
           }
         },
         "tags": [
@@ -12619,7 +12429,9 @@
             "nullable": true
           },
           "owner": {
-            "$ref": "#/components/schemas/PropertyOwner"
+            "type": "string",
+            "example": "John Doe",
+            "nullable": true
           },
           "use_property_group_verification_template": {
             "type": "boolean",
@@ -12638,8 +12450,7 @@
           "verification_template_id": {
             "type": "string",
             "example": "123456",
-            "nullable": true,
-            "description": "Screening template of the property."
+            "nullable": true
           },
           "external_id": {
             "type": "string",
@@ -12671,73 +12482,12 @@
             "example": "abc123",
             "nullable": true,
             "description": "The ID of the bank account associated with this property (only applicable for partners with per_property billing)"
-          },
-          "property_type": {
-            "type": "string",
-            "nullable": true,
-            "description": "Property type.",
-            "enum": [
-              "single_family",
-              "multi_family",
-              "manufactured_housing"
-            ]
-          },
-          "description": {
-            "type": "string",
-            "nullable": true,
-            "description": "Listing description of the property. For a single-family property, the description of its unit."
-          },
-          "amenities": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Amenity"
-            },
-            "description": "Amenities of the property. Requests send the slugs."
-          },
-          "pet_policy": {
-            "$ref": "#/components/schemas/PropertyPetPolicy"
-          },
-          "property_group": {
-            "type": "object",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PropertyGroupReference"
-              }
-            ],
-            "nullable": true,
-            "description": "Property group. Moving a property between groups stays in the Portal. Read only."
-          },
-          "pms_id": {
-            "type": "string",
-            "nullable": true,
-            "description": "ID of the property in the PMS. A property with a PMS ID can't be deleted. Read only."
-          },
-          "pms_sync": {
-            "$ref": "#/components/schemas/PropertyPmsSync"
-          },
-          "listing_url": {
-            "type": "string",
-            "nullable": true,
-            "description": "Public listing page of the property. Read only."
-          },
-          "custom_button_link": {
-            "type": "string",
-            "nullable": true,
-            "description": "Link of the custom button on the property's listing page."
-          },
-          "prescreening_template_id": {
-            "type": "string",
-            "nullable": true,
-            "description": "Pre-screening template used on the property's listings."
-          },
-          "listing_fraud_monitoring": {
-            "type": "boolean",
-            "description": "Whether listed units are monitored for fraudulent copies. Billed, so it is turned on or off in the Portal. Read only."
           }
         },
         "required": [
           "id",
           "address",
+          "verification_template",
           "created_at",
           "updated_at"
         ]
@@ -13228,9 +12978,7 @@
           "available_at": {
             "format": "date-time",
             "type": "string",
-            "nullable": true,
-            "example": "2026-11-01T00:00:00-05:00",
-            "description": "Date the unit is available (ISO 8601). Requests send it as YYYY-MM-DD; send null on update to clear it."
+            "example": "2021-01-01"
           },
           "magic_link": {
             "$ref": "#/components/schemas/MagicLink"
@@ -13256,9 +13004,8 @@
           },
           "verification_template_id": {
             "type": "string",
-            "nullable": true,
-            "description": "Screening template of the unit, or of its property when the unit has none of its own.",
-            "example": "123456"
+            "example": "123456",
+            "nullable": true
           },
           "can_delete": {
             "type": "boolean",
@@ -13266,201 +13013,11 @@
           },
           "listing_id": {
             "type": "string",
-            "nullable": true,
-            "description": "Screening listing ID: a reference the partner sets for its own records. It is not related to the IDs returned by the Listings endpoint."
+            "nullable": true
           },
           "max_occupants": {
             "type": "integer",
             "nullable": true
-          },
-          "listed": {
-            "type": "boolean",
-            "description": "Whether the unit is shown on the public listings page."
-          },
-          "available_for_application": {
-            "type": "boolean",
-            "description": "Whether applicants can apply to the unit."
-          },
-          "beds": {
-            "type": "integer",
-            "nullable": true,
-            "description": "Number of bedrooms.",
-            "example": 2
-          },
-          "baths": {
-            "type": "number",
-            "nullable": true,
-            "description": "Number of bathrooms; half baths are .5 (for example 1.5).",
-            "example": 1.5
-          },
-          "sqft": {
-            "type": "integer",
-            "nullable": true,
-            "description": "Living area in square feet.",
-            "example": 850
-          },
-          "description": {
-            "type": "string",
-            "nullable": true,
-            "description": "Listing description of the unit."
-          },
-          "amenities": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Amenity"
-            },
-            "description": "Amenities of the unit. Requests send the slugs."
-          },
-          "pet_policy": {
-            "$ref": "#/components/schemas/UnitPetPolicy"
-          },
-          "security_deposit_cents": {
-            "type": "integer",
-            "nullable": true,
-            "description": "Security deposit in cents.",
-            "example": 150000
-          },
-          "application_fee_cents": {
-            "type": "integer",
-            "nullable": true,
-            "description": "Application fee in cents.",
-            "example": 5000
-          },
-          "lease_terms": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "type": "string"
-            },
-            "description": "Lease lengths offered, as the PMS or partner labels them.",
-            "example": [
-              "12 months"
-            ]
-          },
-          "included_utilities": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "type": "string"
-            },
-            "description": "Utilities included in the rent.",
-            "example": [
-              "Water"
-            ]
-          },
-          "waitlist": {
-            "type": "boolean",
-            "description": "Whether prospects can join a waitlist. Only stays true while the unit is occupied."
-          },
-          "ready_for_showing_at": {
-            "type": "string",
-            "nullable": true,
-            "description": "Date the unit is ready for showings (YYYY-MM-DD).",
-            "format": "date"
-          },
-          "unit_type": {
-            "type": "string",
-            "nullable": true,
-            "description": "Unit type supplied by the PMS. Read only."
-          },
-          "address": {
-            "type": "object",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Address"
-              }
-            ],
-            "nullable": true,
-            "description": "The unit's own address, when it differs from the property's; null when the unit uses the property's."
-          },
-          "pms_id": {
-            "type": "string",
-            "nullable": true,
-            "description": "ID of the unit in the PMS. Read only."
-          },
-          "pms_sync": {
-            "$ref": "#/components/schemas/UnitPmsSync"
-          },
-          "listing_url": {
-            "type": "string",
-            "nullable": true,
-            "description": "Public listing page of the unit. Read only."
-          },
-          "custom_button_link": {
-            "type": "string",
-            "nullable": true,
-            "description": "Link of the custom button on the unit's listing page."
-          },
-          "entry_instructions": {
-            "type": "string",
-            "nullable": true,
-            "description": "Self-guided tour entry instructions: the unit's own text, or the listing template's."
-          },
-          "exit_instructions": {
-            "type": "string",
-            "nullable": true,
-            "description": "Self-guided tour exit instructions: the unit's own text, or the listing template's."
-          },
-          "home_rent_amount": {
-            "type": "object",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Money"
-              }
-            ],
-            "nullable": true,
-            "description": "Manufactured housing: home rent."
-          },
-          "site_rent_amount": {
-            "type": "object",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Money"
-              }
-            ],
-            "nullable": true,
-            "description": "Manufactured housing: lot rent."
-          },
-          "sale_price": {
-            "type": "object",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Money"
-              }
-            ],
-            "nullable": true,
-            "description": "Manufactured housing: sale price."
-          },
-          "purchase_price": {
-            "type": "object",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Money"
-              }
-            ],
-            "nullable": true,
-            "description": "Manufactured housing: purchase price."
-          },
-          "dimensions": {
-            "type": "string",
-            "nullable": true,
-            "description": "Manufactured housing: dimensions."
-          },
-          "manufacturer": {
-            "type": "string",
-            "nullable": true,
-            "description": "Manufactured housing: manufacturer."
-          },
-          "model_name": {
-            "type": "string",
-            "nullable": true,
-            "description": "Manufactured housing: model name."
-          },
-          "manufactured_date": {
-            "type": "string",
-            "nullable": true,
-            "description": "Manufactured housing: manufactured date or year, as the PMS or partner wrote it.",
-            "example": "1999"
           }
         },
         "required": [
@@ -13485,7 +13042,9 @@
             "nullable": true
           },
           "owner": {
-            "$ref": "#/components/schemas/PropertyOwner"
+            "type": "string",
+            "example": "John Doe",
+            "nullable": true
           },
           "use_property_group_verification_template": {
             "type": "boolean",
@@ -13504,8 +13063,7 @@
           "verification_template_id": {
             "type": "string",
             "example": "123456",
-            "nullable": true,
-            "description": "Screening template of the property."
+            "nullable": true
           },
           "external_id": {
             "type": "string",
@@ -13537,76 +13095,13 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/UnitList"
-            },
-            "description": "Units of the property, in the Get a unit shape without the embedded property."
+            }
           },
           "bank_account_id": {
             "type": "string",
             "example": "abc123",
             "nullable": true,
             "description": "The ID of the bank account associated with this property (only applicable for partners with per_property billing)"
-          },
-          "property_type": {
-            "type": "string",
-            "nullable": true,
-            "description": "Property type.",
-            "enum": [
-              "single_family",
-              "multi_family",
-              "manufactured_housing"
-            ]
-          },
-          "description": {
-            "type": "string",
-            "nullable": true,
-            "description": "Listing description of the property. For a single-family property, the description of its unit."
-          },
-          "amenities": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Amenity"
-            },
-            "description": "Amenities of the property. Requests send the slugs."
-          },
-          "pet_policy": {
-            "$ref": "#/components/schemas/PropertyPetPolicy"
-          },
-          "property_group": {
-            "type": "object",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PropertyGroupReference"
-              }
-            ],
-            "nullable": true,
-            "description": "Property group. Moving a property between groups stays in the Portal. Read only."
-          },
-          "pms_id": {
-            "type": "string",
-            "nullable": true,
-            "description": "ID of the property in the PMS. A property with a PMS ID can't be deleted. Read only."
-          },
-          "pms_sync": {
-            "$ref": "#/components/schemas/PropertyPmsSync"
-          },
-          "listing_url": {
-            "type": "string",
-            "nullable": true,
-            "description": "Public listing page of the property. Read only."
-          },
-          "custom_button_link": {
-            "type": "string",
-            "nullable": true,
-            "description": "Link of the custom button on the property's listing page."
-          },
-          "prescreening_template_id": {
-            "type": "string",
-            "nullable": true,
-            "description": "Pre-screening template used on the property's listings."
-          },
-          "listing_fraud_monitoring": {
-            "type": "boolean",
-            "description": "Whether listed units are monitored for fraudulent copies. Billed, so it is turned on or off in the Portal. Read only."
           }
         },
         "required": [
@@ -13652,10 +13147,9 @@
       "CreatePropertyUnit": {
         "type": "object",
         "required": [
-          "title",
-          "available_at"
+          "title"
         ],
-        "description": "Units created with the property accept the same fields as Create a unit. Amount fields take the same {cents, currency} shape.",
+        "description": "Units created with the property. Amount fields take the same {cents, currency} shape as POST /partner/v1/units.",
         "properties": {
           "title": {
             "type": "string",
@@ -13675,180 +13169,24 @@
             "type": "string"
           },
           "listing_id": {
-            "type": "string",
-            "description": "Screening listing ID: a reference you set for your own records, unrelated to the Listings endpoint IDs."
+            "type": "string"
           },
           "home_rent_amount": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MoneyInput"
-              }
-            ],
-            "description": "Manufactured housing: home rent. With `site_rent_amount`, must add up to `monthly_rent_amount`."
+            "$ref": "#/components/schemas/MoneyInput"
           },
           "site_rent_amount": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MoneyInput"
-              }
-            ],
-            "description": "Manufactured housing: lot rent."
+            "$ref": "#/components/schemas/MoneyInput"
           },
           "sale_price": {
-            "type": "object",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MoneyInput"
-              }
-            ],
-            "nullable": true,
-            "description": "Manufactured housing: sale price. Send null on update to clear it."
+            "$ref": "#/components/schemas/MoneyInput"
           },
           "plan": {
-            "type": "object",
-            "deprecated": true,
-            "description": "Deprecated: send `beds`, `baths` and `sqft` instead.",
-            "properties": {
-              "beds": {
-                "type": "integer"
-              },
-              "baths": {
-                "type": "number"
-              },
-              "sqft": {
-                "type": "integer"
-              }
-            }
+            "type": "string",
+            "description": "Manufactured-housing floor plan."
           },
           "dimensions": {
-            "type": "string"
-          },
-          "purchase_price": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MoneyInput"
-              }
-            ],
-            "description": "Manufactured housing: purchase price."
-          },
-          "ready_for_showing_at": {
             "type": "string",
-            "format": "date",
-            "nullable": true,
-            "description": "Date the unit is ready for showings. Send null on update to clear it."
-          },
-          "waitlist": {
-            "type": "boolean",
-            "description": "Only kept while the unit is occupied with no available date."
-          },
-          "listed": {
-            "type": "boolean",
-            "description": "Show the unit on the public listings page. A unit that doesn't accept applications can't be listed (code `listed_without_applications`)."
-          },
-          "available_for_application": {
-            "type": "boolean",
-            "description": "Accept applications. `false` also unlists the unit; `true` leaves `listed` as it is."
-          },
-          "max_occupants": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "verification_template_id": {
-            "type": "string",
-            "description": "Screening template of the unit. Sending back the property's template unchanged keeps the unit inheriting it."
-          },
-          "beds": {
-            "type": "integer"
-          },
-          "baths": {
-            "type": "number",
-            "description": "Whole or half number (for example 1.5)."
-          },
-          "sqft": {
-            "type": "integer"
-          },
-          "description": {
-            "type": "string"
-          },
-          "amenities": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Amenity slugs; replaces the unit's amenities. An unknown slug is refused with code `unknown_amenities`.",
-            "example": [
-              "pool"
-            ]
-          },
-          "pet_policy": {
-            "type": "object",
-            "description": "Send only the parts that change.",
-            "properties": {
-              "cats_allowed": {
-                "type": "boolean"
-              },
-              "dogs_allowed": {
-                "type": "boolean"
-              },
-              "dog_size": {
-                "type": "string",
-                "enum": [
-                  "small",
-                  "large_and_small"
-                ]
-              }
-            }
-          },
-          "security_deposit_cents": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "application_fee_cents": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "lease_terms": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "included_utilities": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "address": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PropertyAddressInput"
-              }
-            ],
-            "description": "The unit's own address, when it differs from the property's."
-          },
-          "custom_button_link": {
-            "type": "string",
-            "nullable": true,
-            "description": "Link of the custom button. Send null on update to clear it."
-          },
-          "entry_instructions": {
-            "type": "string",
-            "description": "Self-guided tour entry instructions. An empty string clears the unit's own text. Sending back the template's text unchanged keeps the unit on the template."
-          },
-          "exit_instructions": {
-            "type": "string",
-            "description": "Self-guided tour exit instructions. Same rules as `entry_instructions`."
-          },
-          "manufacturer": {
-            "type": "string"
-          },
-          "model_name": {
-            "type": "string"
-          },
-          "manufactured_date": {
-            "type": "string",
-            "description": "Free text, for example `1999` or `2004-05-25`."
+            "description": "Manufactured-housing home dimensions."
           }
         }
       },
@@ -13880,60 +13218,13 @@
             "type": "string"
           },
           "owner_name": {
-            "type": "string",
-            "deprecated": true,
-            "description": "Deprecated: send `owner.name`."
+            "type": "string"
           },
           "market": {
             "type": "string"
           },
           "use_property_group_verification_template": {
             "type": "boolean"
-          },
-          "property_type": {
-            "type": "string",
-            "enum": [
-              "single_family",
-              "multi_family",
-              "manufactured_housing"
-            ],
-            "description": "A single-family property has exactly one unit (code `single_family_requires_single_unit`)."
-          },
-          "description": {
-            "type": "string",
-            "description": "Listing description. On a single-family property it is stored on the unit."
-          },
-          "amenities": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Amenity slugs; replaces the property's amenities. An unknown slug is refused with code `unknown_amenities`.",
-            "example": [
-              "pool"
-            ]
-          },
-          "pet_policy": {
-            "type": "object",
-            "description": "Send only the parts that change.",
-            "properties": {
-              "cats_allowed": {
-                "type": "boolean"
-              },
-              "dogs_allowed": {
-                "type": "boolean"
-              }
-            }
-          },
-          "owner": {
-            "$ref": "#/components/schemas/PropertyOwnerInput"
-          },
-          "custom_button_link": {
-            "type": "string"
-          },
-          "prescreening_template_id": {
-            "type": "string",
-            "description": "Pre-screening template identifier. An unknown or deleted template is refused with code `prescreening_template_not_found`."
           }
         }
       },
@@ -13988,85 +13279,15 @@
             "type": "string"
           },
           "owner_name": {
-            "type": "string",
-            "deprecated": true,
-            "description": "Deprecated: send `owner.name`."
+            "type": "string"
           },
           "market": {
             "type": "string"
           },
           "use_property_group_verification_template": {
             "type": "boolean"
-          },
-          "property_type": {
-            "type": "string",
-            "enum": [
-              "single_family",
-              "multi_family",
-              "manufactured_housing"
-            ],
-            "description": "A single-family property has exactly one unit (code `single_family_requires_single_unit`)."
-          },
-          "description": {
-            "type": "string",
-            "description": "Listing description. On a single-family property it is stored on the unit."
-          },
-          "amenities": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Amenity slugs; replaces the property's amenities. An unknown slug is refused with code `unknown_amenities`.",
-            "example": [
-              "pool"
-            ]
-          },
-          "pet_policy": {
-            "type": "object",
-            "description": "Send only the parts that change.",
-            "properties": {
-              "cats_allowed": {
-                "type": "boolean"
-              },
-              "dogs_allowed": {
-                "type": "boolean"
-              }
-            }
-          },
-          "owner": {
-            "$ref": "#/components/schemas/PropertyOwnerInput"
-          },
-          "custom_button_link": {
-            "type": "string"
-          },
-          "prescreening_template_id": {
-            "type": "string",
-            "description": "Pre-screening template identifier. An unknown or deleted template is refused with code `prescreening_template_not_found`."
-          },
-          "pms_sync": {
-            "$ref": "#/components/schemas/PropertyPmsSyncInput"
-          },
-          "pms_overrides": {
-            "type": "object",
-            "deprecated": true,
-            "description": "Deprecated: send `pms_sync`. `false` stops the PMS sync for the field, `true` hands it back.",
-            "properties": {
-              "name": {
-                "type": "boolean"
-              },
-              "address": {
-                "type": "boolean"
-              },
-              "market": {
-                "type": "boolean"
-              },
-              "property_owner_name": {
-                "type": "boolean"
-              }
-            }
           }
-        },
-        "description": "Send only the fields that change. On a PMS-synced property, changing `name`, `address`, `market`, the owner, `description`, `amenities`, the pet policy or `external_id` while the PMS controls it is refused with `pms_controlled_fields`; release the field with `pms_sync` first (in the same request or before). `property_group`, `pms_id`, `listing_url` and `listing_fraud_monitoring` are read only and ignored on requests."
+        }
       },
       "UnitDetail": {
         "type": "object",
@@ -14093,9 +13314,7 @@
           "available_at": {
             "format": "date-time",
             "type": "string",
-            "nullable": true,
-            "example": "2026-11-01T00:00:00-05:00",
-            "description": "Date the unit is available (ISO 8601). Requests send it as YYYY-MM-DD; send null on update to clear it."
+            "example": "2021-01-01"
           },
           "magic_link": {
             "$ref": "#/components/schemas/MagicLink"
@@ -14121,219 +13340,23 @@
           },
           "verification_template_id": {
             "type": "string",
-            "nullable": true,
-            "description": "Screening template of the unit, or of its property when the unit has none of its own.",
-            "example": "123456"
+            "example": "123456",
+            "nullable": true
           },
           "can_delete": {
             "type": "boolean",
             "example": false
           },
           "property": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PropertyList"
-              }
-            ],
-            "description": "The unit's property. Its `owner` is the same object as in the Properties endpoints."
+            "$ref": "#/components/schemas/PropertyList"
           },
           "listing_id": {
             "type": "string",
-            "nullable": true,
-            "description": "Screening listing ID: a reference the partner sets for its own records. It is not related to the IDs returned by the Listings endpoint."
+            "nullable": true
           },
           "max_occupants": {
             "type": "integer",
             "nullable": true
-          },
-          "listed": {
-            "type": "boolean",
-            "description": "Whether the unit is shown on the public listings page."
-          },
-          "available_for_application": {
-            "type": "boolean",
-            "description": "Whether applicants can apply to the unit."
-          },
-          "beds": {
-            "type": "integer",
-            "nullable": true,
-            "description": "Number of bedrooms.",
-            "example": 2
-          },
-          "baths": {
-            "type": "number",
-            "nullable": true,
-            "description": "Number of bathrooms; half baths are .5 (for example 1.5).",
-            "example": 1.5
-          },
-          "sqft": {
-            "type": "integer",
-            "nullable": true,
-            "description": "Living area in square feet.",
-            "example": 850
-          },
-          "description": {
-            "type": "string",
-            "nullable": true,
-            "description": "Listing description of the unit."
-          },
-          "amenities": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Amenity"
-            },
-            "description": "Amenities of the unit. Requests send the slugs."
-          },
-          "pet_policy": {
-            "$ref": "#/components/schemas/UnitPetPolicy"
-          },
-          "security_deposit_cents": {
-            "type": "integer",
-            "nullable": true,
-            "description": "Security deposit in cents.",
-            "example": 150000
-          },
-          "application_fee_cents": {
-            "type": "integer",
-            "nullable": true,
-            "description": "Application fee in cents.",
-            "example": 5000
-          },
-          "lease_terms": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "type": "string"
-            },
-            "description": "Lease lengths offered, as the PMS or partner labels them.",
-            "example": [
-              "12 months"
-            ]
-          },
-          "included_utilities": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "type": "string"
-            },
-            "description": "Utilities included in the rent.",
-            "example": [
-              "Water"
-            ]
-          },
-          "waitlist": {
-            "type": "boolean",
-            "description": "Whether prospects can join a waitlist. Only stays true while the unit is occupied."
-          },
-          "ready_for_showing_at": {
-            "type": "string",
-            "nullable": true,
-            "description": "Date the unit is ready for showings (YYYY-MM-DD).",
-            "format": "date"
-          },
-          "unit_type": {
-            "type": "string",
-            "nullable": true,
-            "description": "Unit type supplied by the PMS. Read only."
-          },
-          "address": {
-            "type": "object",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Address"
-              }
-            ],
-            "nullable": true,
-            "description": "The unit's own address, when it differs from the property's; null when the unit uses the property's."
-          },
-          "pms_id": {
-            "type": "string",
-            "nullable": true,
-            "description": "ID of the unit in the PMS. Read only."
-          },
-          "pms_sync": {
-            "$ref": "#/components/schemas/UnitPmsSync"
-          },
-          "listing_url": {
-            "type": "string",
-            "nullable": true,
-            "description": "Public listing page of the unit. Read only."
-          },
-          "custom_button_link": {
-            "type": "string",
-            "nullable": true,
-            "description": "Link of the custom button on the unit's listing page."
-          },
-          "entry_instructions": {
-            "type": "string",
-            "nullable": true,
-            "description": "Self-guided tour entry instructions: the unit's own text, or the listing template's."
-          },
-          "exit_instructions": {
-            "type": "string",
-            "nullable": true,
-            "description": "Self-guided tour exit instructions: the unit's own text, or the listing template's."
-          },
-          "home_rent_amount": {
-            "type": "object",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Money"
-              }
-            ],
-            "nullable": true,
-            "description": "Manufactured housing: home rent."
-          },
-          "site_rent_amount": {
-            "type": "object",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Money"
-              }
-            ],
-            "nullable": true,
-            "description": "Manufactured housing: lot rent."
-          },
-          "sale_price": {
-            "type": "object",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Money"
-              }
-            ],
-            "nullable": true,
-            "description": "Manufactured housing: sale price."
-          },
-          "purchase_price": {
-            "type": "object",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Money"
-              }
-            ],
-            "nullable": true,
-            "description": "Manufactured housing: purchase price."
-          },
-          "dimensions": {
-            "type": "string",
-            "nullable": true,
-            "description": "Manufactured housing: dimensions."
-          },
-          "manufacturer": {
-            "type": "string",
-            "nullable": true,
-            "description": "Manufactured housing: manufacturer."
-          },
-          "model_name": {
-            "type": "string",
-            "nullable": true,
-            "description": "Manufactured housing: model name."
-          },
-          "manufactured_date": {
-            "type": "string",
-            "nullable": true,
-            "description": "Manufactured housing: manufactured date or year, as the PMS or partner wrote it.",
-            "example": "1999"
           }
         },
         "required": [
@@ -14370,15 +13393,13 @@
             "type": "boolean"
           },
           "verification_template_id": {
-            "type": "string",
-            "description": "Screening template of the unit. Sending back the property's template unchanged keeps the unit inheriting it."
+            "type": "string"
           },
           "external_id": {
             "type": "string"
           },
           "listing_id": {
-            "type": "string",
-            "description": "Screening listing ID: a reference you set for your own records, unrelated to the Listings endpoint IDs."
+            "type": "string"
           },
           "max_occupants": {
             "type": "integer",
@@ -14386,154 +13407,6 @@
           },
           "property_id": {
             "type": "string"
-          },
-          "home_rent_amount": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MoneyInput"
-              }
-            ],
-            "description": "Manufactured housing: home rent. With `site_rent_amount`, must add up to `monthly_rent_amount`."
-          },
-          "site_rent_amount": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MoneyInput"
-              }
-            ],
-            "description": "Manufactured housing: lot rent."
-          },
-          "sale_price": {
-            "type": "object",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MoneyInput"
-              }
-            ],
-            "nullable": true,
-            "description": "Manufactured housing: sale price. Send null on update to clear it."
-          },
-          "purchase_price": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MoneyInput"
-              }
-            ],
-            "description": "Manufactured housing: purchase price."
-          },
-          "ready_for_showing_at": {
-            "type": "string",
-            "format": "date",
-            "nullable": true,
-            "description": "Date the unit is ready for showings. Send null on update to clear it."
-          },
-          "waitlist": {
-            "type": "boolean",
-            "description": "Only kept while the unit is occupied with no available date."
-          },
-          "listed": {
-            "type": "boolean",
-            "description": "Show the unit on the public listings page. A unit that doesn't accept applications can't be listed (code `listed_without_applications`)."
-          },
-          "available_for_application": {
-            "type": "boolean",
-            "description": "Accept applications. `false` also unlists the unit; `true` leaves `listed` as it is."
-          },
-          "beds": {
-            "type": "integer"
-          },
-          "baths": {
-            "type": "number",
-            "description": "Whole or half number (for example 1.5)."
-          },
-          "sqft": {
-            "type": "integer"
-          },
-          "description": {
-            "type": "string"
-          },
-          "amenities": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Amenity slugs; replaces the unit's amenities. An unknown slug is refused with code `unknown_amenities`.",
-            "example": [
-              "pool"
-            ]
-          },
-          "pet_policy": {
-            "type": "object",
-            "description": "Send only the parts that change.",
-            "properties": {
-              "cats_allowed": {
-                "type": "boolean"
-              },
-              "dogs_allowed": {
-                "type": "boolean"
-              },
-              "dog_size": {
-                "type": "string",
-                "enum": [
-                  "small",
-                  "large_and_small"
-                ]
-              }
-            }
-          },
-          "security_deposit_cents": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "application_fee_cents": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "lease_terms": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "included_utilities": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "address": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PropertyAddressInput"
-              }
-            ],
-            "description": "The unit's own address, when it differs from the property's."
-          },
-          "custom_button_link": {
-            "type": "string",
-            "nullable": true,
-            "description": "Link of the custom button. Send null on update to clear it."
-          },
-          "entry_instructions": {
-            "type": "string",
-            "description": "Self-guided tour entry instructions. An empty string clears the unit's own text. Sending back the template's text unchanged keeps the unit on the template."
-          },
-          "exit_instructions": {
-            "type": "string",
-            "description": "Self-guided tour exit instructions. Same rules as `entry_instructions`."
-          },
-          "dimensions": {
-            "type": "string"
-          },
-          "manufacturer": {
-            "type": "string"
-          },
-          "model_name": {
-            "type": "string"
-          },
-          "manufactured_date": {
-            "type": "string",
-            "description": "Free text, for example `1999` or `2004-05-25`."
           }
         }
       },
@@ -14549,181 +13422,25 @@
           },
           "available_at": {
             "type": "string",
-            "format": "date",
-            "nullable": true,
-            "description": "Send null to clear the available date."
+            "format": "date"
           },
           "occupied": {
             "type": "boolean"
           },
           "verification_template_id": {
-            "type": "string",
-            "description": "Screening template of the unit. Sending back the property's template unchanged keeps the unit inheriting it."
+            "type": "string"
           },
           "external_id": {
             "type": "string"
           },
           "listing_id": {
-            "type": "string",
-            "description": "Screening listing ID: a reference you set for your own records, unrelated to the Listings endpoint IDs."
+            "type": "string"
           },
           "max_occupants": {
             "type": "integer",
             "minimum": 1
-          },
-          "home_rent_amount": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MoneyInput"
-              }
-            ],
-            "description": "Manufactured housing: home rent. With `site_rent_amount`, must add up to `monthly_rent_amount`."
-          },
-          "site_rent_amount": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MoneyInput"
-              }
-            ],
-            "description": "Manufactured housing: lot rent."
-          },
-          "sale_price": {
-            "type": "object",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MoneyInput"
-              }
-            ],
-            "nullable": true,
-            "description": "Manufactured housing: sale price. Send null on update to clear it."
-          },
-          "purchase_price": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MoneyInput"
-              }
-            ],
-            "description": "Manufactured housing: purchase price."
-          },
-          "ready_for_showing_at": {
-            "type": "string",
-            "format": "date",
-            "nullable": true,
-            "description": "Date the unit is ready for showings. Send null on update to clear it."
-          },
-          "waitlist": {
-            "type": "boolean",
-            "description": "Only kept while the unit is occupied with no available date."
-          },
-          "listed": {
-            "type": "boolean",
-            "description": "Show the unit on the public listings page. A unit that doesn't accept applications can't be listed (code `listed_without_applications`)."
-          },
-          "available_for_application": {
-            "type": "boolean",
-            "description": "Accept applications. `false` also unlists the unit; `true` leaves `listed` as it is."
-          },
-          "beds": {
-            "type": "integer"
-          },
-          "baths": {
-            "type": "number",
-            "description": "Whole or half number (for example 1.5)."
-          },
-          "sqft": {
-            "type": "integer"
-          },
-          "description": {
-            "type": "string"
-          },
-          "amenities": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Amenity slugs; replaces the unit's amenities. An unknown slug is refused with code `unknown_amenities`.",
-            "example": [
-              "pool"
-            ]
-          },
-          "pet_policy": {
-            "type": "object",
-            "description": "Send only the parts that change.",
-            "properties": {
-              "cats_allowed": {
-                "type": "boolean"
-              },
-              "dogs_allowed": {
-                "type": "boolean"
-              },
-              "dog_size": {
-                "type": "string",
-                "enum": [
-                  "small",
-                  "large_and_small"
-                ]
-              }
-            }
-          },
-          "security_deposit_cents": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "application_fee_cents": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "lease_terms": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "included_utilities": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "address": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PropertyAddressInput"
-              }
-            ],
-            "description": "The unit's own address, when it differs from the property's."
-          },
-          "custom_button_link": {
-            "type": "string",
-            "nullable": true,
-            "description": "Link of the custom button. Send null on update to clear it."
-          },
-          "entry_instructions": {
-            "type": "string",
-            "description": "Self-guided tour entry instructions. An empty string clears the unit's own text. Sending back the template's text unchanged keeps the unit on the template."
-          },
-          "exit_instructions": {
-            "type": "string",
-            "description": "Self-guided tour exit instructions. Same rules as `entry_instructions`."
-          },
-          "dimensions": {
-            "type": "string"
-          },
-          "manufacturer": {
-            "type": "string"
-          },
-          "model_name": {
-            "type": "string"
-          },
-          "manufactured_date": {
-            "type": "string",
-            "description": "Free text, for example `1999` or `2004-05-25`."
-          },
-          "pms_sync": {
-            "$ref": "#/components/schemas/UnitPmsSyncInput"
           }
-        },
-        "description": "Send only the fields that change. On a PMS-synced unit, a change to a field the PMS controls is refused with `pms_controlled_fields` unless `pms_sync` releases it in the same request. `external_id` is always refused on a PMS-synced unit, and `manufacturer`, `model_name`, `manufactured_date` on a Rent Manager unit, because every sync rewrites them."
+        }
       },
       "UpdateMagicLink": {
         "type": "object",
@@ -19653,21 +18370,17 @@
           },
           "custom_button_url": {
             "type": "string",
-            "nullable": true,
-            "description": "Link of the listing's custom button. Null when no custom button link is set."
+            "nullable": true
           },
           "custom_button_available": {
-            "type": "boolean",
-            "description": "Whether the listing shows a custom button."
+            "type": "boolean"
           },
           "custom_button_label": {
             "type": "string",
-            "nullable": true,
-            "description": "Text on the listing's custom button."
+            "nullable": true
           },
           "waitlist": {
-            "type": "boolean",
-            "description": "Whether prospects can join the unit's waitlist. False when the listing has no unit."
+            "type": "boolean"
           }
         }
       },
@@ -19696,24 +18409,6 @@
             "type": "string",
             "description": "Obfuscated Boom listing ID.",
             "example": "aB3xQ9pL"
-          },
-          "unit_id": {
-            "type": "string",
-            "nullable": true,
-            "description": "ID of the listing's unit in the Units endpoint.",
-            "example": "s4uvdyalmoj8043z"
-          },
-          "property_id": {
-            "type": "string",
-            "nullable": true,
-            "description": "ID of the listing's property in the Properties endpoint.",
-            "example": "u4ld1bxkefa45xvr"
-          },
-          "external_id": {
-            "type": "string",
-            "nullable": true,
-            "description": "External ID of the listing's unit.",
-            "example": "EXT-101"
           },
           "title": {
             "type": "string",
@@ -20781,302 +19476,6 @@
         },
         "required": [
           "name"
-        ]
-      },
-      "PropertyOwner": {
-        "type": "object",
-        "description": "Property owner. Requests send the same object; the legacy `owner_name` request field is still accepted.",
-        "properties": {
-          "name": {
-            "type": "string",
-            "nullable": true,
-            "example": "Jane Owner"
-          },
-          "phone": {
-            "type": "string",
-            "nullable": true,
-            "example": "5551234567"
-          },
-          "email": {
-            "type": "string",
-            "nullable": true,
-            "example": "owner@example.com"
-          }
-        }
-      },
-      "PropertyOwnerInput": {
-        "type": "object",
-        "description": "Send only the parts that change. A malformed `email` is refused with `400`; an empty string clears it.",
-        "properties": {
-          "name": {
-            "type": "string",
-            "example": "Jane Owner"
-          },
-          "phone": {
-            "type": "string",
-            "example": "5551234567"
-          },
-          "email": {
-            "type": "string",
-            "example": "owner@example.com"
-          }
-        }
-      },
-      "Amenity": {
-        "type": "object",
-        "properties": {
-          "slug": {
-            "type": "string",
-            "example": "pool",
-            "description": "Stable identifier. Requests send slugs."
-          },
-          "title": {
-            "type": "string",
-            "example": "Pool"
-          }
-        },
-        "required": [
-          "slug",
-          "title"
-        ]
-      },
-      "PropertyPetPolicy": {
-        "type": "object",
-        "properties": {
-          "cats_allowed": {
-            "type": "boolean",
-            "nullable": true
-          },
-          "dogs_allowed": {
-            "type": "boolean",
-            "nullable": true
-          }
-        }
-      },
-      "UnitPetPolicy": {
-        "type": "object",
-        "properties": {
-          "cats_allowed": {
-            "type": "boolean",
-            "nullable": true
-          },
-          "dogs_allowed": {
-            "type": "boolean",
-            "nullable": true
-          },
-          "dog_size": {
-            "type": "string",
-            "nullable": true,
-            "enum": [
-              "small",
-              "large_and_small"
-            ]
-          }
-        }
-      },
-      "PropertyGroupReference": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "example": "1l7o93ec8kneadp3"
-          },
-          "name": {
-            "type": "string",
-            "example": "North"
-          }
-        }
-      },
-      "PropertyPmsSync": {
-        "type": "object",
-        "description": "PMS sync settings of the property. Keys can be `name`, `address`, `market`, `owner_name`, `owner_phone`, `owner_email`, `description`, `amenities`, `cats_allowed` and `dogs_allowed`. Only fields the PMS supplies are listed. `true` means the PMS controls the field: an update that changes it is refused with `400` and code `pms_controlled_fields`, and nothing in the request is saved. Sending the current value back is accepted. `false` means the PMS sync no longer writes it and your value is kept. Change a setting with `pms_sync` on update. See [PMS-controlled fields](pms-controlled-fields.md). Read only.",
-        "additionalProperties": {
-          "type": "boolean"
-        },
-        "example": {
-          "name": true,
-          "address": true,
-          "amenities": false
-        }
-      },
-      "UnitPmsSync": {
-        "type": "object",
-        "description": "PMS sync settings of the unit. Keys can be `monthly_rent_amount`, `home_rent_amount`, `site_rent_amount`, `available_at`, `ready_for_showing_at`, `occupied`, `title`, `description`, `listed`, `available_for_application`, `beds`, `baths`, `sqft`, `cats_allowed`, `dogs_allowed`, `dog_size`, `amenities`, `lease_terms`, `included_utilities`, `security_deposit`, `application_fee`, `sale_price`, `purchase_price`, `dimensions`, `custom_button_link` and `address`. Only fields the PMS supplies are listed. `true` means the PMS controls the field: an update that changes it is refused with `400` and code `pms_controlled_fields`, and nothing in the request is saved. Sending the current value back is accepted. `false` means the PMS sync no longer writes it and your value is kept. Change a setting with `pms_sync` on update. See [PMS-controlled fields](pms-controlled-fields.md). Read only.",
-        "additionalProperties": {
-          "type": "boolean"
-        },
-        "example": {
-          "monthly_rent_amount": true,
-          "description": false,
-          "listed": true
-        }
-      },
-      "PropertyPmsSyncInput": {
-        "type": "object",
-        "description": "Per field: `false` stops the PMS sync for the field and keeps your value, `true` hands it back to the PMS and restores the value the PMS last sent when Boom has it. Can be combined with a change to the same field in one request. A field the PMS does not supply is refused with code `pms_sync_not_available`; `null` is refused.",
-        "properties": {
-          "name": {
-            "type": "boolean"
-          },
-          "address": {
-            "type": "boolean"
-          },
-          "market": {
-            "type": "boolean"
-          },
-          "owner_name": {
-            "type": "boolean"
-          },
-          "owner_phone": {
-            "type": "boolean"
-          },
-          "owner_email": {
-            "type": "boolean"
-          },
-          "description": {
-            "type": "boolean"
-          },
-          "amenities": {
-            "type": "boolean"
-          },
-          "cats_allowed": {
-            "type": "boolean"
-          },
-          "dogs_allowed": {
-            "type": "boolean"
-          }
-        },
-        "example": {
-          "name": false
-        }
-      },
-      "UnitPmsSyncInput": {
-        "type": "object",
-        "description": "Per field: `false` stops the PMS sync for the field and keeps your value, `true` hands it back to the PMS and restores the value the PMS last sent when Boom has it. Can be combined with a change to the same field in one request. A field the PMS does not supply is refused with code `pms_sync_not_available`; `null` is refused. The three rent amounts are released and handed back together.",
-        "properties": {
-          "monthly_rent_amount": {
-            "type": "boolean"
-          },
-          "home_rent_amount": {
-            "type": "boolean"
-          },
-          "site_rent_amount": {
-            "type": "boolean"
-          },
-          "available_at": {
-            "type": "boolean"
-          },
-          "ready_for_showing_at": {
-            "type": "boolean"
-          },
-          "occupied": {
-            "type": "boolean"
-          },
-          "sale_price": {
-            "type": "boolean"
-          },
-          "purchase_price": {
-            "type": "boolean"
-          },
-          "security_deposit": {
-            "type": "boolean"
-          },
-          "application_fee": {
-            "type": "boolean"
-          },
-          "dimensions": {
-            "type": "boolean"
-          },
-          "description": {
-            "type": "boolean"
-          },
-          "title": {
-            "type": "boolean"
-          },
-          "custom_button_link": {
-            "type": "boolean"
-          },
-          "listed": {
-            "type": "boolean"
-          },
-          "available_for_application": {
-            "type": "boolean"
-          },
-          "lease_terms": {
-            "type": "boolean"
-          },
-          "included_utilities": {
-            "type": "boolean"
-          },
-          "beds": {
-            "type": "boolean"
-          },
-          "baths": {
-            "type": "boolean"
-          },
-          "sqft": {
-            "type": "boolean"
-          },
-          "cats_allowed": {
-            "type": "boolean"
-          },
-          "dogs_allowed": {
-            "type": "boolean"
-          },
-          "dog_size": {
-            "type": "boolean"
-          },
-          "amenities": {
-            "type": "boolean"
-          },
-          "address": {
-            "type": "boolean"
-          }
-        },
-        "example": {
-          "monthly_rent_amount": false
-        }
-      },
-      "FieldErrorResponse": {
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "object",
-            "properties": {
-              "message": {
-                "type": "string",
-                "example": "A partner lead source with this name already exists"
-              },
-              "status": {
-                "type": "number",
-                "example": 400
-              },
-              "request_id": {
-                "type": "string",
-                "example": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
-              },
-              "code": {
-                "type": "string",
-                "example": "tag_limit_reached",
-                "description": "Stable machine-readable error code; branch on this, not on `message`. See Errors and request IDs."
-              },
-              "fields": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                },
-                "description": "Fields the error is about. Sent with `pms_controlled_fields`, `pms_sync_not_available` and `listed_without_applications`."
-              }
-            },
-            "required": [
-              "message",
-              "status",
-              "request_id"
-            ]
-          }
-        },
-        "required": [
-          "error"
         ]
       }
     },
