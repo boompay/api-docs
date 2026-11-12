@@ -27,7 +27,6 @@ Some codes add fields:
 - `validation_error` adds `errors`, an array of one string per failing parameter.
 - `api_error` adds `error_id` (unique to this failure) and `error_signature` (identical for repeats of the same underlying bug).
 - `POST /partner/v1/customers/check` adds `details`, a map of field → reason.
-- `pms_controlled_fields`, `pms_sync_not_available` and `listed_without_applications` add `fields`, the request fields the error is about.
 
 ## Error codes
 
@@ -36,13 +35,6 @@ Some codes add fields:
 | 400 | `validation_error` | A parameter is missing, has the wrong type, or fails a documented constraint. `errors` lists each problem. |
 | 400 | `invalid_request_body` | The body is not valid JSON for the declared `Content-Type`. |
 | 400 | `bad_request` / *(none)* | A business rule rejected the request, for example `Customer already have active enrollment`. |
-| 400 | `pms_controlled_fields` | The request changes a property or unit field the PMS controls. `fields` names each one, and nothing in the request is saved. See [PMS-controlled fields](pms-controlled-fields.md). |
-| 400 | `pms_sync_not_available` | A `pms_sync` setting names a field the PMS does not supply. `fields` names each one. |
-| 400 | `listed_without_applications` | `listed: true` on a unit that doesn't accept applications. |
-| 400 | `unknown_amenities` | An amenity slug does not exist. The message lists the unknown slugs. |
-| 400 | `prescreening_template_not_found` | `prescreening_template_id` names no current pre-screening template. |
-| 400 | `single_family_requires_single_unit` | A single-family property is created with more than one unit. |
-| 400 | `missing_unit_available_at` | A unit sent in `units` of Create a property has no `available_at`. |
 | 401 | `unauthenticated` | Missing, malformed, expired or revoked bearer token, or the partner has no API access. Request a new token with `POST /partner/v1/authenticate`. |
 | 402 | `stripe_card_error` | A card payment failed. `stripe_code` and `stripe_decline_code` carry Stripe's reason. |
 | 403 | `forbidden` | The key is read-only and the request is a write, or the user role does not permit the action. |
@@ -50,7 +42,7 @@ Some codes add fields:
 | 405 | `method_not_allowed` | The path exists but not for this HTTP method. |
 | 409 | `invalid_state_transition` | The record is not in a state that allows this action, for example approving an application that is already approved. Fetch the record and inspect its `status`. |
 | 409 | `lock_failed` | The record changed while your request was in flight. Fetch it again and retry. |
-| 412 | `precondition_failed` | The lead, property or unit changed since the `ETag` you sent in `If-Match` was read. Nothing was saved. Fetch it again and retry with the new `ETag`. |
+| 412 | `precondition_failed` | The lead changed since the `ETag` you sent in `If-Match` was read. Nothing was saved. Fetch it again and retry with the new `ETag`. |
 | 422 | `validation_error` / *(none)* | The request was understood but cannot be processed, for example a customer that fails eligibility. |
 | 422 | `invalid_tag_name` | A tag name is empty, longer than 30 characters, or uses characters other than letters, numbers, spaces and common punctuation. The message quotes the name. |
 | 422 | `tag_added_and_removed` | The same tag is in both `add_tags` and `remove_tags`. The message quotes the tag. |
