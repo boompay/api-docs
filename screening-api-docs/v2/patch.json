@@ -1,0 +1,62 @@
+[
+  {
+    "op": "replace",
+    "path": "/info/title",
+    "value": "BoomScreen API (v2)"
+  },
+  {
+    "op": "replace",
+    "path": "/info/version",
+    "value": "2.0"
+  },
+  {
+    "op": "replace",
+    "path": "/info/description",
+    "value": "Tenant screening (BoomScreen) and leasing CRM endpoints of the Boom Partner API, version 2.\n\n**What differs from v1.** Every `/partner/v1/` endpoint is also served under `/partner/v2/` with the same method, parameters, authentication, rate limits and API key scope. Responses are identical to v1 except: `owner` on a property (list, detail, create, update, and the property nested in units, users and property groups) is an object `{name, email, phone}`, or `null` when the property has no owner. In v1 it is the owner's name as a string. Request bodies are unchanged (`owner_name` is still accepted). Webhook payloads are not versioned and keep the v1 shape. See the v2 migration guide on docs.boompay.app.\n\n**Authentication.** `POST /partner/v2/authenticate` with your API key pair returns a JWT; send it as `Authorization: Bearer <token>`. Keys are created self-serve under Settings → API. Read-only keys may only call GET endpoints (writes return 403 `forbidden`). Keys scoped to owners or property groups only see matching records.\n\n**Conventions.** Every response carries an `X-Request-Id` header. Errors use one envelope: `{\"error\": {\"message\", \"status\", \"code\", \"request_id\"}}`. Lists use one envelope with `page` / `per_page` (max 1000) and a deterministic order. 429 responses carry `Retry-After`. See the Errors, Pagination, Rate limits and Versioning guides on docs.boompay.app.\n\nPublic listing endpoints under `/crm/v1/` are not part of Partner API versioning and are listed here unchanged. Rent reporting (BoomReport) endpoints are documented in the companion BoomReport API specification."
+  },
+  {
+    "op": "add",
+    "path": "/components/schemas/PropertyOwner",
+    "value": {
+      "type": "object",
+      "nullable": true,
+      "description": "Owner of the property, or `null` when the property has no owner. Properties that only have a legacy owner name return it in `name` with `email` and `phone` set to `null`.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "nullable": true,
+          "example": "Jane Owner"
+        },
+        "email": {
+          "type": "string",
+          "nullable": true,
+          "example": "jane@example.com"
+        },
+        "phone": {
+          "type": "string",
+          "nullable": true,
+          "example": "5551234567"
+        }
+      },
+      "required": [
+        "name",
+        "email",
+        "phone"
+      ]
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/components/schemas/PropertyList/properties/owner",
+    "value": {
+      "$ref": "#/components/schemas/PropertyOwner"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/components/schemas/PropertyDetail/properties/owner",
+    "value": {
+      "$ref": "#/components/schemas/PropertyOwner"
+    }
+  }
+]
