@@ -12431,11 +12431,7 @@
           "owner": {
             "type": "string",
             "example": "John Doe",
-            "nullable": true,
-            "description": "Owner name. `owner_detail` carries the same owner with email and phone."
-          },
-          "owner_detail": {
-            "$ref": "#/components/schemas/PropertyOwner"
+            "nullable": true
           },
           "use_property_group_verification_template": {
             "type": "boolean",
@@ -13048,11 +13044,7 @@
           "owner": {
             "type": "string",
             "example": "John Doe",
-            "nullable": true,
-            "description": "Owner name. `owner_detail` carries the same owner with email and phone."
-          },
-          "owner_detail": {
-            "$ref": "#/components/schemas/PropertyOwner"
+            "nullable": true
           },
           "use_property_group_verification_template": {
             "type": "boolean",
@@ -19486,33 +19478,6 @@
         },
         "required": [
           "name"
-        ]
-      },
-      "PropertyOwner": {
-        "type": "object",
-        "nullable": true,
-        "description": "Owner of the property, or `null` when the property has no owner. Properties that only have a legacy owner name return it in `name` with `email` and `phone` set to `null`.",
-        "properties": {
-          "name": {
-            "type": "string",
-            "nullable": true,
-            "example": "Jane Owner"
-          },
-          "email": {
-            "type": "string",
-            "nullable": true,
-            "example": "jane@example.com"
-          },
-          "phone": {
-            "type": "string",
-            "nullable": true,
-            "example": "5551234567"
-          }
-        },
-        "required": [
-          "name",
-          "email",
-          "phone"
         ]
       }
     },
