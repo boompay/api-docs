@@ -8,8 +8,9 @@ The Partner API is rate limited per client, using a rolling one-minute window.
 |---|---|
 | `/partner/v1/*` | 650 requests per minute per source IP |
 | `POST /partner/v1/customers/{customer_id}/issue_access_token` | 2,500 requests per minute per source IP (SDK token issuance) |
+| `/listing_sites/v1/*` | 600 requests per minute per listing site key. A source IP that sends 30 requests with a missing, invalid or revoked key within a minute gets 429 for up to a minute. |
 
-Limits are enforced per source IP address. If several of your systems share one egress IP they share the budget; contact support if you need a higher limit for a specific integration.
+Partner API limits are enforced per source IP address; listing site limits are enforced per key. If several of your systems share one egress IP they share the budget; contact support if you need a higher limit for a specific integration.
 
 ## What a throttled response looks like
 
