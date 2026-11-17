@@ -42,6 +42,7 @@ Currently deprecated in `v1`:
 |---|---|
 | `monthly_rent_amount` (float) on enrollments | `monthly_rent` (`{cents, currency}`) |
 | `last_page` on `GET /partner/v1/applications` | `has_more` |
+| `page` / `per_page` on `GET /partner/v1/leads/activity_logs` | `cursor` / `limit` (see [cursor pagination](pagination.md#cursor-pagination)) |
 | Webhook events labelled "(Deprecated)" on the Webhooks page | The successor event named alongside each one |
 
 ## Where changes are published

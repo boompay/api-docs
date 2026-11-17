@@ -42,7 +42,13 @@ Some codes add fields:
 | 405 | `method_not_allowed` | The path exists but not for this HTTP method. |
 | 409 | `invalid_state_transition` | The record is not in a state that allows this action, for example approving an application that is already approved. Fetch the record and inspect its `status`. |
 | 409 | `lock_failed` | The record changed while your request was in flight. Fetch it again and retry. |
+| 412 | `precondition_failed` | The lead changed since the `ETag` you sent in `If-Match` was read. Nothing was saved. Fetch it again and retry with the new `ETag`. |
 | 422 | `validation_error` / *(none)* | The request was understood but cannot be processed, for example a customer that fails eligibility. |
+| 422 | `invalid_tag_name` | A tag name is empty, longer than 30 characters, or uses characters other than letters, numbers, spaces and common punctuation. The message quotes the name. |
+| 422 | `tag_added_and_removed` | The same tag is in both `add_tags` and `remove_tags`. The message quotes the tag. |
+| 422 | `tag_limit_reached` | The change would leave a lead with more than 20 tags. |
+| 422 | `partner_tag_limit_reached` | A new tag name was sent, but the account already has 200 tags. |
+| 422 | `tag_not_found` | A tag was deleted in the Portal while the request was adding it. Retry the request. |
 | 429 | `rate_limited` | Rate limit exceeded. Honour the `Retry-After` header. See [Rate limits](rate-limits.md). |
 | 500 | `api_error` | Unexpected server error. Quote `request_id` and `error_id` to support. |
 | 503 | `request_timeout` | The request exceeded the server's processing time. Safe to retry GETs; for writes, fetch the record first to see whether the change was applied. |
