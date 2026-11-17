@@ -17251,6 +17251,7 @@
             "nullable": true
           },
           "property": {
+            "type": "object",
             "nullable": true,
             "allOf": [
               {
@@ -17259,6 +17260,7 @@
             ]
           },
           "unit": {
+            "type": "object",
             "nullable": true,
             "allOf": [
               {
