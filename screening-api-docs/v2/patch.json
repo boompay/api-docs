@@ -12,7 +12,7 @@
   {
     "op": "replace",
     "path": "/info/description",
-    "value": "Tenant screening (BoomScreen) and leasing CRM endpoints of the Boom Partner API, version 2.\n\n**What differs from v1.** Every `/partner/v1/` endpoint is also served under `/partner/v2/` with the same method, parameters, authentication, rate limits and API key scope. Responses are identical to v1 except: `owner` on a property (list, detail, create, update, and the property nested in units, users and property groups) is an object `{name, email, phone}`, or `null` when the property has no owner. In v1 it is the owner's name as a string. Request bodies are unchanged (`owner_name` is still accepted). Webhook payloads are not versioned and keep the v1 shape. See the v2 migration guide on docs.boompay.app.\n\n**Authentication.** `POST /partner/v2/authenticate` with your API key pair returns a JWT; send it as `Authorization: Bearer <token>`. Keys are created self-serve under Settings → API. Read-only keys may only call GET endpoints (writes return 403 `forbidden`). Keys scoped to owners or property groups only see matching records.\n\n**Conventions.** Every response carries an `X-Request-Id` header. Errors use one envelope: `{\"error\": {\"message\", \"status\", \"code\", \"request_id\"}}`. Lists use one envelope with `page` / `per_page` (max 1000) and a deterministic order. 429 responses carry `Retry-After`. See the Errors, Pagination, Rate limits and Versioning guides on docs.boompay.app.\n\nPublic listing endpoints under `/crm/v1/` are not part of Partner API versioning and are listed here unchanged. Rent reporting (BoomReport) endpoints are documented in the companion BoomReport API specification."
+    "value": "Tenant screening (BoomScreen) and leasing CRM endpoints of the Boom Partner API, version 2.\n\n**What differs from v1.** Every `/partner/v1/` endpoint is also served under `/partner/v2/` with the same method, parameters, authentication, rate limits and API key scope. Responses are identical to v1 except: `owner` on a property (list, detail, create, update, and the property nested in units, users and property groups) is an object `{name, email, phone}`, or `null` when the property has no owner. In v1 it is the owner's name as a string. With an API key scoped to some properties, the `properties` array of a user or a property group lists only the properties in the key's scope (v1 lists all of them). Request bodies are unchanged (`owner_name` is still accepted). Webhook payloads are not versioned and keep the v1 shape. See the v2 migration guide on docs.boompay.app.\n\n**Authentication.** `POST /partner/v2/authenticate` with your API key pair returns a JWT; send it as `Authorization: Bearer <token>`. Keys are created self-serve under Settings → API. Read-only keys may only call GET endpoints (writes return 403 `forbidden`). Keys scoped to owners or property groups only see matching records.\n\n**Conventions.** Every response carries an `X-Request-Id` header. Errors use one envelope: `{\"error\": {\"message\", \"status\", \"code\", \"request_id\"}}`. Lists use one envelope with `page` / `per_page` (max 1000) and a deterministic order. 429 responses carry `Retry-After`. See the Errors, Pagination, Rate limits and Versioning guides on docs.boompay.app.\n\nPublic listing endpoints under `/crm/v1/` are not part of Partner API versioning and are listed here unchanged. Rent reporting (BoomReport) endpoints are documented in the companion BoomReport API specification."
   },
   {
     "op": "add",
@@ -58,5 +58,43 @@
     "value": {
       "$ref": "#/components/schemas/PropertyOwner"
     }
+  },
+  {
+    "op": "add",
+    "path": "/components/schemas/PropertyGroupDetail",
+    "value": {
+      "allOf": [
+        {
+          "$ref": "#/components/schemas/PropertyGroupBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "properties": {
+              "type": "array",
+              "description": "Properties in the group. With an API key scoped to some properties, only the properties in the key's scope.",
+              "items": {
+                "$ref": "#/components/schemas/PropertyList"
+              }
+            }
+          },
+          "required": [
+            "properties"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/paths/~1partner~1v2~1property_groups~1{id}/get/responses/200/content/application~1json/schema",
+    "value": {
+      "$ref": "#/components/schemas/PropertyGroupDetail"
+    }
+  },
+  {
+    "op": "add",
+    "path": "/components/schemas/User/properties/properties/description",
+    "value": "Properties assigned to the user. With an API key scoped to some properties, only the properties in the key's scope."
   }
 ]

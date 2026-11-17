@@ -21,11 +21,16 @@ title: Partner API v2
 
 It applies to every response that contains a property:
 
-- `GET /partner/v2/properties` and `GET /partner/v2/properties/{id}`
-- `POST /partner/v2/properties` and `PATCH /partner/v2/properties/{id}`
-- the property nested in units (`GET /partner/v2/units/{id}`), users and property groups
+- `GET /partner/v2/properties`, `GET /partner/v2/properties/{id}`, `POST /partner/v2/properties`, `PATCH /partner/v2/properties/{id}` and `POST /partner/v2/properties/{id}/set_bank_account`
+- `GET /partner/v2/units/{id}`, `POST /partner/v2/units` and `PATCH /partner/v2/units/{id}` (`property`)
+- `GET /partner/v2/property_groups/{id}` (`properties`)
+- `GET /partner/v2/users`, `GET /partner/v2/users/{id}`, `POST /partner/v2/users` and `PATCH /partner/v2/users/{id}` (`properties`)
 
 Request bodies do not change: create and update a property's owner with `owner_name` exactly as in v1.
+
+### Nested properties follow the API key's property scope
+
+With an API key scoped to some properties, the `properties` array of a user (`GET`/`POST /partner/v2/users`, `GET`/`PATCH /partner/v2/users/{id}`) and of a property group (`GET /partner/v2/property_groups/{id}`) lists only the properties in the key's scope. In v1 these arrays list every property of the user or group. Keys without a property scope see every property in both versions.
 
 ## What does not change
 
