@@ -27,6 +27,7 @@ Some codes add fields:
 - `validation_error` adds `errors`, an array of one string per failing parameter.
 - `api_error` adds `error_id` (unique to this failure) and `error_signature` (identical for repeats of the same underlying bug).
 - `POST /partner/v1/customers/check` adds `details`, a map of field → reason.
+- `pms_controlled_fields` adds `fields`, the request fields that were refused.
 
 ## Error codes
 
@@ -49,6 +50,7 @@ Some codes add fields:
 | 422 | `tag_limit_reached` | The change would leave a lead with more than 20 tags. |
 | 422 | `partner_tag_limit_reached` | A new tag name was sent, but the account already has 200 tags. |
 | 422 | `tag_not_found` | A tag was deleted in the Portal while the request was adding it. Retry the request. |
+| 422 | `pms_controlled_fields` | An update to a property or unit synced from a PMS changes fields the PMS controls (PMS sync on in `pms_overrides`, and the PMS has sent a value). `fields` lists each one and nothing in the request is saved. Send `pms_overrides` with `false` for those fields to change them. |
 | 429 | `rate_limited` | Rate limit exceeded. Honour the `Retry-After` header. See [Rate limits](rate-limits.md). |
 | 500 | `api_error` | Unexpected server error. Quote `request_id` and `error_id` to support. |
 | 503 | `request_timeout` | The request exceeded the server's processing time. Safe to retry GETs; for writes, fetch the record first to see whether the change was applied. |

@@ -12,7 +12,7 @@
   {
     "op": "replace",
     "path": "/info/description",
-    "value": "Tenant screening (BoomScreen) and leasing CRM endpoints of the Boom Partner API, version 2.\n\n**What differs from v1.** Every `/partner/v1/` endpoint is also served under `/partner/v2/` with the same method, parameters, authentication, rate limits and API key scope. Responses are identical to v1 except: `owner` on a property (list, detail, create, update, and the property nested in units, users and property groups) is an object `{name, email, phone}`, or `null` when the property has no owner. In v1 it is the owner's name as a string. With an API key scoped to some properties, the `properties` array of a user or a property group lists only the properties in the key's scope (v1 lists all of them). Request bodies are unchanged (`owner_name` is still accepted). Webhook payloads are not versioned and keep the v1 shape. See the v2 migration guide on docs.boompay.app.\n\n**Authentication.** `POST /partner/v2/authenticate` with your API key pair returns a JWT; send it as `Authorization: Bearer <token>`. Keys are created self-serve under Settings → API. Read-only keys may only call GET endpoints (writes return 403 `forbidden`). Keys scoped to owners or property groups only see matching records.\n\n**Conventions.** Every response carries an `X-Request-Id` header. Errors use one envelope: `{\"error\": {\"message\", \"status\", \"code\", \"request_id\"}}`. Lists use one envelope with `page` / `per_page` (max 1000) and a deterministic order. 429 responses carry `Retry-After`. See the Errors, Pagination, Rate limits and Versioning guides on docs.boompay.app.\n\nPublic listing endpoints under `/crm/v1/` are not part of Partner API versioning and are listed here unchanged. Rent reporting (BoomReport) endpoints are documented in the companion BoomReport API specification."
+    "value": "Tenant screening (BoomScreen) and leasing CRM endpoints of the Boom Partner API, version 2.\n\n**What differs from v1.** Every `/partner/v1/` endpoint is also served under `/partner/v2/` with the same method, parameters, authentication, rate limits and API key scope. Responses are identical to v1 except: `owner` on a property (list, detail, create, update, and the property nested in units, users and property groups) is an object `{name, email, phone}`, or `null` when the property has no owner. In v1 it is the owner's name as a string. With an API key scoped to some properties, the `properties` array of a user or a property group lists only the properties in the key's scope (v1 lists all of them). Requests differ in three ways: Create and Update a property accept `owner` as the same `{name, email, phone}` object (`owner_name` is still accepted but deprecated; `owner` wins when both are sent); on a property synced from a PMS, Update a property refuses a change to `name`, `address`, `market` or the owner while the PMS controls it, with `422` `pms_controlled_fields`, where v1 turns that field's PMS sync off and saves; and Update a unit with `\"available_at\": null` clears the available date, where v1 ignores the `null`. Webhook payloads are not versioned and keep the v1 shape. See the v2 migration guide on docs.boompay.app.\n\n**Authentication.** `POST /partner/v2/authenticate` with your API key pair returns a JWT; send it as `Authorization: Bearer <token>`. Keys are created self-serve under Settings → API. Read-only keys may only call GET endpoints (writes return 403 `forbidden`). Keys scoped to owners or property groups only see matching records.\n\n**Conventions.** Every response carries an `X-Request-Id` header. Errors use one envelope: `{\"error\": {\"message\", \"status\", \"code\", \"request_id\"}}`. Lists use one envelope with `page` / `per_page` (max 1000) and a deterministic order. 429 responses carry `Retry-After`. See the Errors, Pagination, Rate limits and Versioning guides on docs.boompay.app.\n\nPublic listing endpoints under `/crm/v1/` are not part of Partner API versioning and are listed here unchanged. Rent reporting (BoomReport) endpoints are documented in the companion BoomReport API specification."
   },
   {
     "op": "add",
@@ -96,5 +96,79 @@
     "op": "add",
     "path": "/components/schemas/User/properties/properties/description",
     "value": "Properties assigned to the user. With an API key scoped to some properties, only the properties in the key's scope."
+  },
+  {
+    "op": "add",
+    "path": "/components/schemas/PropertyOwnerInput",
+    "value": {
+      "type": "object",
+      "description": "Owner of the property, in the same shape as `owner` in the response. Send only the parts that change.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Jane Owner"
+        },
+        "email": {
+          "type": "string",
+          "example": "jane@example.com"
+        },
+        "phone": {
+          "type": "string",
+          "example": "5551234567"
+        }
+      }
+    }
+  },
+  {
+    "op": "add",
+    "path": "/components/schemas/CreateProperty/properties/owner",
+    "value": {
+      "$ref": "#/components/schemas/PropertyOwnerInput"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/components/schemas/CreateProperty/properties/owner_name",
+    "value": {
+      "type": "string",
+      "deprecated": true,
+      "description": "Deprecated: send `owner.name`. When both are sent, `owner` is used."
+    }
+  },
+  {
+    "op": "add",
+    "path": "/components/schemas/UpdateProperty/properties/owner",
+    "value": {
+      "$ref": "#/components/schemas/PropertyOwnerInput"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/components/schemas/UpdateProperty/properties/owner_name",
+    "value": {
+      "type": "string",
+      "deprecated": true,
+      "description": "Deprecated: send `owner.name`. When both are sent, `owner` is used."
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/components/schemas/UpdateUnit/properties/available_at",
+    "value": {
+      "type": "string",
+      "format": "date",
+      "nullable": true,
+      "description": "Date the unit becomes available. Send the date (`2026-11-01`) or the timestamp a response returns; the time part is ignored. Send `null` to clear the date."
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/paths/~1partner~1v2~1properties~1{id}/patch/description",
+    "value": "Send only the fields that change. `owner` takes the same `{name, email, phone}` object as the response; `owner_name` is still accepted but deprecated, and `owner` is used when both are sent. `property_group`, `pms_id`, `listing_url` and `listing_fraud_monitoring_enabled` are read only and ignored when sent: move a property between groups and turn fraud monitoring on or off in the Portal.\n\n**PMS-controlled fields.** On a property with a `pms_id`, a field is controlled by the PMS when its PMS sync is on (`pms_overrides.<field>` is `true`) and the PMS has sent a value for it. A request that changes such a field is refused as a whole with `422` and code `pms_controlled_fields`; `fields` lists every refused field and nothing in the request is saved. Sending the current value is not a change. To change the field, send `pms_overrides: {\"<field>\": false}`, in the same request as the new value or before it. Send `true` to give the field back to the PMS; Boom restores the last value the PMS sent.\n\nThe rule covers every field, including `name`, `address`, `market` and the owner. In v1 a change to one of those four turns its PMS sync off and saves instead.\n\nOn a single-family property, `description`, `amenities` and `pet_policy` are shared with its only unit: changing them here changes the unit too, and the other way round."
+  },
+  {
+    "op": "replace",
+    "path": "/paths/~1partner~1v2~1units~1{id}/patch/description",
+    "value": "Changes fields on one unit; fields left out stay unchanged. A deleted unit, or a unit whose property is deleted, returns `404` and nothing is saved. `unit_type`, `pms_id` and `listing_url` are read only and ignored when sent. `\"available_at\": null` clears the available date (v1 ignores it).\n\n**PMS-controlled fields.** A unit with a `pms_id` accepts changes to every field the PMS does not control. A field is controlled by the PMS when its PMS sync is on (`pms_overrides.<field>` is `true`) and the PMS has sent a value for it; a field whose sync is on but that the PMS never sent can be changed. A request that changes a PMS-controlled field is refused as a whole with `422` and code `pms_controlled_fields`; `fields` lists every refused field and nothing in the request is saved. Sending the current value is not a change. To change the field, send `pms_overrides: {\"<field>\": false}`, in the same request as the new value or before it. Send `true` to give the field back to the PMS; Boom restores the last value the PMS sent.\n\nA partner whose properties come from a PMS but who doesn't use BoomScreen can't update units through the API: the request is refused with `400` `Can't update unit`."
   }
 ]
