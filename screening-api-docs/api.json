@@ -5704,7 +5704,7 @@
           }
         ],
         "summary": "List applicants in the applicant app right now",
-        "description": "Applicants who have an application they have not submitted open in the applicant app right now, the status Live View shows in the Portal. Most recently seen first. An applicant drops off the list about 15 seconds after closing the tab, or after 2 minutes with the tab in the background. Only for companies with Live View turned on; a property-scoped API key only lists applicants on its properties. To reach out as soon as an applicant arrives, subscribe to the `applicant_active` webhook (see the Live Applicant Status guide) instead of polling."
+        "description": "Applicants who have an application they have not submitted open in the applicant app right now, the status Live View shows in the Portal. Longest active first (`active_since`, then ID). An applicant drops off the list about 15 seconds after closing the tab, or after 2 minutes with the tab in the background, which shifts later pages: read the list in one request (`per_page` up to 1000). Only for companies with Live View turned on; a property-scoped API key only lists applicants on its properties. To reach out as soon as an applicant arrives, subscribe to the `applicant_active` webhook (see the Live Applicant Status guide) instead of polling."
       }
     },
     "/partner/v1/applications/{id}/place_on_hold": {
@@ -13876,6 +13876,11 @@
             "example": "123",
             "nullable": true
           },
+          "external_customer_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "Your CRM ID for the lead, the same as in the applicant webhooks."
+          },
           "lead_id": {
             "type": "string",
             "nullable": true
@@ -13890,7 +13895,7 @@
             "type": "string",
             "example": "Income",
             "nullable": true,
-            "description": "Where the applicant is in the application; follows within a minute of a step change."
+            "description": "Where the applicant is in the application; follows within a minute of a step change. Display text that can change without notice: do not build rules on its value."
           },
           "active_since": {
             "format": "date-time",

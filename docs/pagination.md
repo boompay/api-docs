@@ -91,6 +91,7 @@ The default order is newest first (descending id), with these exceptions:
 - `GET /partner/v1/listings` returns ascending id.
 - `GET /partner/v1/units` returns ascending title for some property-management-system integrations, ties broken by id.
 - `GET /partner/v1/roles` returns ascending name.
+- `GET /partner/v1/applicants/active` returns the longest active first (ascending `active_since`), ties broken by id. Applicants leave the list within minutes, which shifts later pages, so read it in one request (`per_page` up to 1000).
 
 Records created while you page will appear at the start of the collection (newest first) and will not disturb the pages you have already read. Records deleted while you page shift later pages by one; if you need an exact snapshot, page quickly or filter by an updated-since date.
 
