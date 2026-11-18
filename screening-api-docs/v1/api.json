@@ -2422,7 +2422,7 @@
       "patch": {
         "operationId": "UnitsController_update",
         "summary": "Update a unit",
-        "description": "Changes fields on one unit; fields left out stay unchanged. A deleted unit, or a unit whose property is deleted, returns `404` and nothing is saved. `unit_type`, `pms_id` and `listing_url` are read only and ignored when sent. In v1, `\"available_at\": null` is ignored like any other `null`.\n\n**PMS-controlled fields.** A unit with a `pms_id` accepts changes to every field the PMS does not control. A field is controlled by the PMS when its PMS sync is on (`pms_overrides.<field>` is `true`) and the PMS has sent a value for it; a field whose sync is on but that the PMS never sent can be changed. A request that changes a PMS-controlled field is refused as a whole with `422` and code `pms_controlled_fields`; `fields` lists every refused field and nothing in the request is saved. Sending the current value is not a change. To change the field, send `pms_overrides: {\"<field>\": false}`, in the same request as the new value or before it. Send `true` to give the field back to the PMS; Boom restores the last value the PMS sent.\n\nA partner whose properties come from a PMS but who doesn't use BoomScreen can't update units through the API: the request is refused with `400` `Can't update unit`.",
+        "description": "Changes fields on one unit; fields left out stay unchanged. A deleted unit, or a unit whose property is deleted, returns `404` and nothing is saved. `unit_type`, `pms_id` and `listing_url` are read only and ignored when sent. In v1, `\"available_at\": null` is ignored like any other `null`.\n\n**PMS-controlled fields.** A unit with a `pms_id` accepts changes to every field the PMS does not control. A field is controlled by the PMS when its PMS sync is on (`pms_overrides.<field>` is `true`) and the PMS has sent a value for it; a field whose sync is on but that the PMS never sent can be changed. `waitlist` and `external_id` always follow the PMS: changing either is always refused, and they have no `pms_overrides` key, so they can't be taken off the PMS. A request that changes a PMS-controlled field is refused as a whole with `422` and code `pms_controlled_fields`; `fields` lists every refused field and nothing in the request is saved. Sending the current value is not a change. To change the field, send `pms_overrides: {\"<field>\": false}`, in the same request as the new value or before it. Send `true` to give the field back to the PMS; Boom restores the last value the PMS sent.\n\nA partner whose properties come from a PMS but who doesn't use BoomScreen can't update units through the API: the request is refused with `400` `Can't update unit`.",
         "parameters": [
           {
             "name": "id",
@@ -13355,7 +13355,7 @@
           },
           "waitlist": {
             "type": "boolean",
-            "description": "Whether prospects can join the unit's waitlist."
+            "description": "Whether prospects can join the unit's waitlist. On a unit with a `pms_id` it always follows the PMS and can't be changed through the API."
           },
           "ready_for_showing_at": {
             "type": "string",
@@ -13658,7 +13658,8 @@
             "type": "boolean"
           },
           "external_id": {
-            "type": "string"
+            "type": "string",
+            "description": "On a unit with a `pms_id` it always follows the PMS: a change is refused with `422` `pms_controlled_fields`."
           },
           "listing_id": {
             "type": "string",
@@ -13674,8 +13675,20 @@
             "$ref": "#/components/schemas/MoneyInput"
           },
           "plan": {
-            "type": "string",
-            "description": "Manufactured-housing floor plan."
+            "type": "object",
+            "deprecated": true,
+            "description": "Deprecated: send `beds`, `baths` and `sqft` instead. Still accepted; when `beds`, `baths` or `sqft` are also sent, they win over the matching key of `plan`.",
+            "properties": {
+              "beds": {
+                "type": "integer"
+              },
+              "baths": {
+                "type": "number"
+              },
+              "sqft": {
+                "type": "integer"
+              }
+            }
           },
           "dimensions": {
             "type": "string",
@@ -13744,7 +13757,7 @@
           },
           "waitlist": {
             "type": "boolean",
-            "description": "Let prospects join the unit's waitlist."
+            "description": "Let prospects join the unit's waitlist. On a unit with a `pms_id` it always follows the PMS: a change is refused with `422` `pms_controlled_fields`."
           },
           "ready_for_showing_at": {
             "type": "string",
@@ -13843,7 +13856,7 @@
           },
           "custom_button_link": {
             "type": "string",
-            "description": "Link opened by the custom button on the property's listing page."
+            "description": "Link opened by the custom button on the property's listing page. Must be an `http` or `https` URL; anything else is refused with `422` `invalid_custom_button_link`."
           },
           "prescreening_template_id": {
             "type": "string",
@@ -13925,7 +13938,7 @@
           },
           "custom_button_link": {
             "type": "string",
-            "description": "Link opened by the custom button on the property's listing page."
+            "description": "Link opened by the custom button on the property's listing page. Must be an `http` or `https` URL; anything else is refused with `422` `invalid_custom_button_link`."
           },
           "prescreening_template_id": {
             "type": "string",
@@ -14083,7 +14096,7 @@
           },
           "waitlist": {
             "type": "boolean",
-            "description": "Whether prospects can join the unit's waitlist."
+            "description": "Whether prospects can join the unit's waitlist. On a unit with a `pms_id` it always follows the PMS and can't be changed through the API."
           },
           "ready_for_showing_at": {
             "type": "string",
@@ -14231,7 +14244,8 @@
             "description": "Screening template of the unit. Without one the unit uses its property's template."
           },
           "external_id": {
-            "type": "string"
+            "type": "string",
+            "description": "On a unit with a `pms_id` it always follows the PMS: a change is refused with `422` `pms_controlled_fields`."
           },
           "listing_id": {
             "type": "string",
@@ -14299,7 +14313,7 @@
           },
           "waitlist": {
             "type": "boolean",
-            "description": "Let prospects join the unit's waitlist."
+            "description": "Let prospects join the unit's waitlist. On a unit with a `pms_id` it always follows the PMS: a change is refused with `422` `pms_controlled_fields`."
           },
           "ready_for_showing_at": {
             "type": "string",
@@ -14399,7 +14413,8 @@
             "description": "Screening template of the unit. Without one the unit uses its property's template."
           },
           "external_id": {
-            "type": "string"
+            "type": "string",
+            "description": "On a unit with a `pms_id` it always follows the PMS: a change is refused with `422` `pms_controlled_fields`."
           },
           "listing_id": {
             "type": "string",
@@ -14464,7 +14479,7 @@
           },
           "waitlist": {
             "type": "boolean",
-            "description": "Let prospects join the unit's waitlist."
+            "description": "Let prospects join the unit's waitlist. On a unit with a `pms_id` it always follows the PMS: a change is refused with `422` `pms_controlled_fields`."
           },
           "ready_for_showing_at": {
             "type": "string",
@@ -19327,7 +19342,7 @@
       "PmsOverrides": {
         "type": "object",
         "nullable": true,
-        "description": "PMS sync of each field, or `null` when the record has no `pms_id`. `true`: the field follows the PMS, and once the PMS has sent a value for it, a request that changes it is refused with `422` `pms_controlled_fields`. `false`: the field was edited by hand and the PMS sync no longer writes it. Keys are the field names of this API; the owner's name is `property_owner_name`. Change a setting with `pms_overrides` in Update.",
+        "description": "PMS sync of each field, or `null` when the record has no `pms_id`. `true`: the field follows the PMS, and once the PMS has sent a value for it, a request that changes it is refused with `422` `pms_controlled_fields`. `false`: the field was edited by hand and the PMS sync no longer writes it. Keys are the field names of this API; the owner's name is `property_owner_name`. A unit's `waitlist` and `external_id` have no key: on a unit with a `pms_id` they always follow the PMS. Change a setting with `pms_overrides` in Update.",
         "additionalProperties": {
           "type": "boolean"
         },
