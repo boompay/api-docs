@@ -5580,6 +5580,133 @@
         ]
       }
     },
+    "/partner/v1/applicants/active": {
+      "get": {
+        "operationId": "ApplicantsController_listActive",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 20
+            },
+            "description": "Values above 1000 are clamped to 1000."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/LiveApplicant"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalErrorResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Applicants"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List applicants in the applicant app right now",
+        "description": "Applicants who have an application they have not submitted open in the applicant app right now, the status Live View shows in the Portal. Longest active first (`active_since`, then ID). An applicant drops off the list about 15 seconds after closing the tab, or after 2 minutes with the tab in the background, which shifts later pages: read the list in one request (`per_page` up to 1000). Only for companies with Live View turned on; a property-scoped API key only lists applicants on its properties. To reach out as soon as an applicant arrives, subscribe to the `applicant_active` webhook (see the Live Applicant Status guide) instead of polling."
+      }
+    },
     "/partner/v1/applications/{id}/place_on_hold": {
       "post": {
         "operationId": "ApplicationsController_placeOnHold",
@@ -13712,6 +13839,85 @@
           "external_id",
           "verifications"
         ]
+      },
+      "LiveApplicant": {
+        "type": "object",
+        "properties": {
+          "applicant_id": {
+            "type": "string",
+            "example": "1"
+          },
+          "application_id": {
+            "type": "string",
+            "example": "1"
+          },
+          "first_name": {
+            "type": "string",
+            "example": "John",
+            "nullable": true
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Doe",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "example": "jd@boompay.app",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "example": "1234567890",
+            "nullable": true
+          },
+          "external_id": {
+            "type": "string",
+            "example": "123",
+            "nullable": true
+          },
+          "external_customer_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "Your CRM ID for the lead, the same as in the applicant webhooks."
+          },
+          "lead_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active"
+            ]
+          },
+          "step": {
+            "type": "string",
+            "example": "Income",
+            "nullable": true,
+            "description": "Where the applicant is in the application; follows within a minute of a step change. Display text that can change without notice: do not build rules on its value."
+          },
+          "active_since": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z",
+            "description": "When the current visit started."
+          },
+          "last_seen_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z",
+            "description": "The last time the applicant app reported the applicant."
+          }
+        },
+        "required": [
+          "applicant_id",
+          "application_id",
+          "status",
+          "active_since",
+          "last_seen_at"
+        ],
+        "description": "An applicant in the applicant app right now."
       },
       "ApplicantDetails": {
         "type": "object",
