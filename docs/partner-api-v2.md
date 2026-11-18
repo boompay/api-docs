@@ -59,7 +59,7 @@ On a property synced from a property management system (it has a `pms_id`), a fi
 
 `property_type`, `custom_button_link` and `prescreening_template_id` are never written by the PMS, so they can always be changed in both versions.
 
-To change the field in v2, send `"pms_overrides": {"<field>": false}` in the same request as the new value, or before it. Sending the current value is not a change. Send `true` to give the field back to the PMS: Boom restores the last value the PMS sent. For `description`, a single-family property gets back its unit's last PMS description; a multi-family property keeps no PMS copy, so its current text stays until the PMS sends a new one. Units follow the same rule in both versions.
+To change the field in v2, send `"pms_overrides": {"<field>": false}` in the same request as the new value, or before it. Use the keys `pms_overrides` returns: the pet policy is `cats_allowed` and `dogs_allowed` (not `pet_policy`), and the owner is `property_owner_name`, `property_owner_phone` and `property_owner_email`. Any other key is ignored without an error. Sending the current value is not a change. Send `true` to give the field back to the PMS: Boom restores the last value the PMS sent. For `description`, a single-family property gets back its unit's last PMS description; a multi-family property keeps no PMS copy, so its current text stays until the PMS sends a new one. Units follow the same rule in both versions.
 
 ### `"available_at": null` clears a unit's available date
 

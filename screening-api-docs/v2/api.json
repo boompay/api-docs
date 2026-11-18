@@ -13519,10 +13519,10 @@
           },
           "ready_for_showing_at": {
             "type": "string",
-            "format": "date",
+            "format": "date-time",
             "nullable": true,
-            "description": "Date the unit is ready for showings.",
-            "example": "2026-11-01"
+            "description": "Date the unit is ready for showings, as an ISO 8601 timestamp at the start of that day. Create and Update accept this same value back, or just the date (`2026-12-01`).",
+            "example": "2026-12-01T00:00:00Z"
           },
           "unit_type": {
             "type": "string",
@@ -14099,7 +14099,7 @@
             "description": "Pre-screening template used by the property's listings."
           },
           "pms_overrides": {
-            "$ref": "#/components/schemas/PmsOverridesInput"
+            "$ref": "#/components/schemas/PropertyPmsOverridesInput"
           },
           "owner": {
             "$ref": "#/components/schemas/PropertyOwnerInput"
@@ -14260,10 +14260,10 @@
           },
           "ready_for_showing_at": {
             "type": "string",
-            "format": "date",
+            "format": "date-time",
             "nullable": true,
-            "description": "Date the unit is ready for showings.",
-            "example": "2026-11-01"
+            "description": "Date the unit is ready for showings, as an ISO 8601 timestamp at the start of that day. Create and Update accept this same value back, or just the date (`2026-12-01`).",
+            "example": "2026-12-01T00:00:00Z"
           },
           "unit_type": {
             "type": "string",
@@ -14715,7 +14715,7 @@
             "description": "Manufactured housing: when the home was built, free text (for example `1999` or `2004-05-25`)."
           },
           "pms_overrides": {
-            "$ref": "#/components/schemas/PmsOverridesInput"
+            "$ref": "#/components/schemas/UnitPmsOverridesInput"
           }
         }
       },
@@ -19611,7 +19611,7 @@
       "PmsOverrides": {
         "type": "object",
         "nullable": true,
-        "description": "PMS sync of each field, or `null` when the record has no `pms_id`. A unit created by a listing sync source has an object here even without a `pms_id`, for the fields that source owns. `true`: the field follows the PMS, and once the PMS has sent a value for it, a request that changes it is refused with `422` `pms_controlled_fields`. `false`: the field was edited by hand and the PMS sync no longer writes it. Keys are the field names of this API; the owner's name is `property_owner_name`. A unit's `external_id` and `waitlist` have no key: on a unit with a `pms_id`, `external_id` always follows the PMS, and `waitlist` does when the PMS fills it through a custom field (UDF) mapping. Change a setting with `pms_overrides` in Update.",
+        "description": "PMS sync of each field, or `null` when the record has no `pms_id`. A unit created by a listing sync source has an object here even without a `pms_id`, for the fields that source owns. `true`: the field follows the PMS, and once the PMS has sent a value for it, a request that changes it is refused with `422` `pms_controlled_fields`. `false`: the field was edited by hand and the PMS sync no longer writes it. Keys are listed in `PropertyPmsOverridesInput` and `UnitPmsOverridesInput`; the pet policy uses `cats_allowed`, `dogs_allowed` (and `dog_size` on a unit), not `pet_policy`. A unit's `external_id` and `waitlist` have no key: on a unit with a `pms_id`, `external_id` always follows the PMS, and `waitlist` does when the PMS fills it through a custom field (UDF) mapping. Change a setting with `pms_overrides` in Update.",
         "additionalProperties": {
           "type": "boolean"
         },
@@ -19621,9 +19621,9 @@
           "description": false
         }
       },
-      "PmsOverridesInput": {
+      "PropertyPmsOverridesInput": {
         "type": "object",
-        "description": "PMS sync per field, keyed like `pms_overrides` in the response. `false` stops the PMS sync for the field so you can change it: send it in the same request as the new value or before. `true` gives the field back to the PMS, and Boom restores the last value the PMS sent. For a property's `description`, a single-family property gets back its unit's last PMS description; a multi-family property keeps no PMS copy, so its current text stays until the PMS sends a new one. Fields left out keep their setting.",
+        "description": "PMS sync per property field. `false` stops the PMS sync for the field so you can change it: send it in the same request as the new value or before. `true` gives the field back to the PMS, and Boom restores the last value the PMS sent. For `description`, a single-family property gets back its unit's last PMS description; a multi-family property keeps no PMS copy, so its current text stays until the PMS sends a new one. Fields left out keep their setting. Only the keys listed here are read; any other key (for example `pet_policy`) is ignored without an error.",
         "properties": {
           "name": {
             "type": "boolean"
@@ -19636,10 +19636,121 @@
           },
           "property_owner_name": {
             "type": "boolean"
+          },
+          "property_owner_phone": {
+            "type": "boolean"
+          },
+          "property_owner_email": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "boolean"
+          },
+          "amenities": {
+            "type": "boolean"
+          },
+          "cats_allowed": {
+            "type": "boolean"
+          },
+          "dogs_allowed": {
+            "type": "boolean"
           }
         },
-        "additionalProperties": {
-          "type": "boolean"
+        "example": {
+          "description": false
+        }
+      },
+      "UnitPmsOverridesInput": {
+        "type": "object",
+        "description": "PMS sync per unit field. `false` stops the sync for the field so you can change it: send it in the same request as the new value or before. `true` gives the field back to the PMS, and Boom restores the last value the PMS sent. The three rent amounts move together. Fields left out keep their setting. Only the keys listed here are read; any other key (for example `pet_policy`) is ignored without an error. `external_id` and `waitlist` have no key.",
+        "properties": {
+          "title": {
+            "type": "boolean"
+          },
+          "monthly_rent_amount": {
+            "type": "boolean"
+          },
+          "home_rent_amount": {
+            "type": "boolean"
+          },
+          "site_rent_amount": {
+            "type": "boolean"
+          },
+          "available_at": {
+            "type": "boolean"
+          },
+          "occupied": {
+            "type": "boolean"
+          },
+          "ready_for_showing_at": {
+            "type": "boolean"
+          },
+          "security_deposit": {
+            "type": "boolean"
+          },
+          "application_fee": {
+            "type": "boolean"
+          },
+          "listed": {
+            "type": "boolean"
+          },
+          "available_for_application": {
+            "type": "boolean"
+          },
+          "beds": {
+            "type": "boolean"
+          },
+          "baths": {
+            "type": "boolean"
+          },
+          "sqft": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "boolean"
+          },
+          "amenities": {
+            "type": "boolean"
+          },
+          "cats_allowed": {
+            "type": "boolean"
+          },
+          "dogs_allowed": {
+            "type": "boolean"
+          },
+          "dog_size": {
+            "type": "boolean"
+          },
+          "lease_terms": {
+            "type": "boolean"
+          },
+          "included_utilities": {
+            "type": "boolean"
+          },
+          "address": {
+            "type": "boolean"
+          },
+          "custom_button_link": {
+            "type": "boolean"
+          },
+          "sale_price": {
+            "type": "boolean"
+          },
+          "purchase_price": {
+            "type": "boolean"
+          },
+          "dimensions": {
+            "type": "boolean"
+          },
+          "manufacturer": {
+            "type": "boolean"
+          },
+          "model_name": {
+            "type": "boolean"
+          },
+          "manufactured_date": {
+            "type": "boolean"
+          }
         },
         "example": {
           "monthly_rent_amount": false
@@ -19653,7 +19764,7 @@
           }
         ],
         "nullable": true,
-        "description": "Address of the unit, or `null` when the unit has no address of its own."
+        "description": "Address of the unit. A unit without an address of its own returns its property's address, so a value here does not mean the unit has its own address. `null` only when neither has one."
       },
       "UnitListingReference": {
         "type": "string",
