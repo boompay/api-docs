@@ -22,6 +22,8 @@ Delivery, the `X-API-KEY` header, `request_id` and retries work exactly as for e
 
 Events fire for every source of a change: the Portal, the Partner API, a PMS sync and Boom itself. Several changes to the same record in one save or one sync arrive as one event listing all of them. A save or sync that changes no value sends nothing.
 
+A single-family property shows the `description` and `amenities` of its only unit. A change to them, whether made on the property or on the unit, is sent as `unit_updated` only: the property's record shows the new value, but no `property_updated` reports it. Listen to `unit_updated` to follow these fields.
+
 While a property is deleted, its units count as deleted too: they are not returned by the Units endpoints and no unit events are sent for them. Events can arrive out of order; use `changed_at` to order them.
 
 ## Photo order

@@ -13461,16 +13461,18 @@
           },
           "lease_terms": {
             "type": "array",
+            "nullable": true,
             "items": {
               "type": "string"
             },
-            "description": "Lease lengths offered.",
+            "description": "Lease lengths offered. `null` when none were ever set.",
             "example": [
               "12 months"
             ]
           },
           "included_utilities": {
             "type": "array",
+            "nullable": true,
             "items": {
               "type": "string"
             },
@@ -14199,16 +14201,18 @@
           },
           "lease_terms": {
             "type": "array",
+            "nullable": true,
             "items": {
               "type": "string"
             },
-            "description": "Lease lengths offered.",
+            "description": "Lease lengths offered. `null` when none were ever set.",
             "example": [
               "12 months"
             ]
           },
           "included_utilities": {
             "type": "array",
+            "nullable": true,
             "items": {
               "type": "string"
             },

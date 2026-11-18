@@ -55,7 +55,9 @@ On a property synced from a property management system (it has a `pms_id`), a fi
 | `PATCH /properties/{id}` changes a PMS-controlled... | v1 | v2 |
 |---|---|---|
 | `name`, `address`, `market` or the owner | Turns that field's PMS sync off and saves the change | `422` `pms_controlled_fields`, nothing saved |
-| `property_type`, `description`, `amenities`, `pet_policy`, `custom_button_link`, `prescreening_template_id` | `422` `pms_controlled_fields`, nothing saved | `422` `pms_controlled_fields`, nothing saved |
+| `description`, `amenities`, `pet_policy` | `422` `pms_controlled_fields`, nothing saved | `422` `pms_controlled_fields`, nothing saved |
+
+`property_type`, `custom_button_link` and `prescreening_template_id` are never written by the PMS, so they can always be changed in both versions.
 
 To change the field in v2, send `"pms_overrides": {"<field>": false}` in the same request as the new value, or before it. Sending the current value is not a change. Units follow the same rule in both versions.
 
