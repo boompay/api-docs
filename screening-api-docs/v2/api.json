@@ -13672,20 +13672,9 @@
             "$ref": "#/components/schemas/MoneyInput"
           },
           "plan": {
-            "type": "object",
+            "type": "string",
             "deprecated": true,
-            "description": "Deprecated: send `beds`, `baths` and `sqft` instead. Still accepted; when `beds`, `baths` or `sqft` are also sent, they win over the matching key of `plan`.",
-            "properties": {
-              "beds": {
-                "type": "integer"
-              },
-              "baths": {
-                "type": "number"
-              },
-              "sqft": {
-                "type": "integer"
-              }
-            }
+            "description": "Deprecated: send `beds`, `baths` and `sqft` instead. The server reads `plan` as an object `{beds, baths, sqft}`; the declared type is kept as published so generated clients keep working. When `beds`, `baths` or `sqft` are also sent, they win over the matching key of `plan`."
           },
           "dimensions": {
             "type": "string",
