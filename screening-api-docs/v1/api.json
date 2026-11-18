@@ -964,7 +964,7 @@
       "post": {
         "operationId": "PropertiesController_create",
         "summary": "Create a new property",
-        "description": "Creates the property and its `units` together. Every element of `units` takes the same fields and the same type checks as Create a unit. All units are checked before anything is created: a unit with a wrong type is refused with `400`, a unit that breaks a business rule (for example `home_rent_amount` + `site_rent_amount` not adding up to `monthly_rent_amount`) is refused with `422` naming its position, such as `units[1]`. In both cases no property and no unit is created. `property_group`, `pms_id`, `listing_url` and `listing_fraud_monitoring_enabled` are read only and ignored when sent.",
+        "description": "Creates the property and its `units` together. Every element of `units` takes the same fields and the same type checks as Create a unit: a unit with a wrong type is refused with `400` and no property and no unit is created. In v1, a unit that breaks a business rule (for example `home_rent_amount` + `site_rent_amount` not adding up to `monthly_rent_amount`, or an amenity name that matches no amenity) is skipped, and the property is created with the other units. `property_group`, `pms_id`, `listing_url` and `listing_fraud_monitoring_enabled` are read only and ignored when sent.",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -993,7 +993,7 @@
             }
           },
           "422": {
-            "description": "A business rule refused the request and nothing was created: an amenity name matches no amenity (the message lists those names), or units in `units` break a business rule (code `invalid_units`: `fields` lists them as `units[<index>]`, counting from 0, and each item of `errors` gives `field` and the `error` code, plus `amenities` with the unmatched names for `unknown_amenities`). A new property has no PMS ID, so `pms_controlled_fields` never applies here.",
+            "description": "A business rule refused the request and nothing was created: an amenity name of the property matches no amenity (the message lists those names). In v1 a unit of `units` that breaks a business rule is skipped instead. A new property has no PMS ID, so `pms_controlled_fields` never applies here.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1005,47 +1005,6 @@
                       "error": {
                         "message": "Unknown amenities: Rooftop deck",
                         "status": 422,
-                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
-                      }
-                    }
-                  },
-                  "invalid_units": {
-                    "value": {
-                      "error": {
-                        "message": "units[1]: invalid_total_rent",
-                        "status": 422,
-                        "code": "invalid_units",
-                        "fields": [
-                          "units[1]"
-                        ],
-                        "errors": [
-                          {
-                            "field": "units[1]",
-                            "error": "invalid_total_rent"
-                          }
-                        ],
-                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
-                      }
-                    }
-                  },
-                  "invalid_units_unknown_amenities": {
-                    "value": {
-                      "error": {
-                        "message": "units[0]: unknown_amenities: Nope",
-                        "status": 422,
-                        "code": "invalid_units",
-                        "fields": [
-                          "units[0]"
-                        ],
-                        "errors": [
-                          {
-                            "field": "units[0]",
-                            "error": "unknown_amenities",
-                            "amenities": [
-                              "Nope"
-                            ]
-                          }
-                        ],
                         "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
                       }
                     }
@@ -2454,7 +2413,7 @@
       "patch": {
         "operationId": "UnitsController_update",
         "summary": "Update a unit",
-        "description": "Changes fields on one unit; fields left out stay unchanged. A deleted unit, or a unit whose property is deleted, returns `404` and nothing is saved. `unit_type`, `pms_id` and `listing_url` are read only and ignored when sent. In v1, `\"available_at\": null` is ignored like any other `null`.\n\n**PMS-controlled fields.** A unit with a `pms_id` accepts changes to every field the PMS does not control. A field is controlled by the PMS when its PMS sync is on (`pms_overrides.<field>` is `true`) and the PMS has sent a value for it; a field whose sync is on but that the PMS never sent can be changed. A unit created by a listing sync source has no `pms_id` but follows the same rule for the fields that source owns. `external_id` always follows the PMS: changing it is always refused, and it has no `pms_overrides` key, so it can't be taken off the PMS. `waitlist` is refused the same way only when the unit's PMS fills it through a custom field (UDF) mapping; otherwise it can be changed. A request that changes a PMS-controlled field is refused as a whole with `422` and code `pms_controlled_fields`; `fields` lists every refused field and nothing in the request is saved. Sending the current value is not a change. To change the field, send `pms_overrides: {\"<field>\": false}`, in the same request as the new value or before it. Send `true` to give the field back to the PMS; Boom restores the last value the PMS sent.\n\nA partner whose properties come from a PMS but who doesn't use BoomScreen can't update units through the API: the request is refused with `400` `Can't update unit`.",
+        "description": "Changes fields on one unit; fields left out stay unchanged. A deleted unit, or a unit whose property is deleted, returns `404` and nothing is saved. `unit_type`, `pms_id` and `listing_url` are read only and ignored when sent. In v1, `\"available_at\": null` is ignored like any other `null`.\n\n**PMS-controlled fields.** A unit with a `pms_id` accepts changes to every field the PMS does not control. A field is controlled by the PMS when its PMS sync is on (`pms_overrides.<field>` is `true`) and the PMS has sent a value for it; a field whose sync is on but that the PMS never sent can be changed. A unit created by a listing sync source has no `pms_id` but follows the same rule for the fields that source owns. `external_id` always follows the PMS: changing it is always refused, and it has no `pms_overrides` key, so it can't be taken off the PMS. `waitlist` is refused the same way only when the unit's PMS fills it through a custom field (UDF) mapping; otherwise it can be changed. In v1, a partner with no account-level PMS setting (its PMS units come through integration credentials) edits units with a `pms_id` freely, as before: this rule does not apply to them. A request that changes a PMS-controlled field is refused as a whole with `422` and code `pms_controlled_fields`; `fields` lists every refused field and nothing in the request is saved. Sending the current value is not a change. To change the field, send `pms_overrides: {\"<field>\": false}`, in the same request as the new value or before it. Send `true` to give the field back to the PMS; Boom restores the last value the PMS sent.\n\nA partner whose properties come from a PMS but who doesn't use BoomScreen can't update units through the API: the request is refused with `400` `Can't update unit`.",
         "parameters": [
           {
             "name": "id",
@@ -13423,7 +13382,7 @@
             "type": "string",
             "example": "123456",
             "nullable": true,
-            "description": "Screening template of the unit; the property's template when the unit has none of its own."
+            "description": "Screening template of the unit's property. In v2 this is the unit's own template when it has one."
           },
           "can_delete": {
             "type": "boolean",
@@ -14152,7 +14111,8 @@
           "verification_template_id": {
             "type": "string",
             "example": "123456",
-            "nullable": true
+            "nullable": true,
+            "description": "Screening template of the unit's property. In v2 this is the unit's own template when it has one."
           },
           "can_delete": {
             "type": "boolean",

@@ -65,6 +65,18 @@ To change the field in v2, send `"pms_overrides": {"<field>": false}` in the sam
 
 `PATCH /partner/v2/units/{id}` with `"available_at": null` clears the date. v1 ignores the `null` and keeps the date, because clients generated from the v1 specification often send `null` for every field they do not set.
 
+### The PMS-controlled field rule covers every PMS unit
+
+`PATCH /partner/v2/units/{id}` applies the PMS-controlled field rule to every unit with a `pms_id`. In v1, a partner with no account-level PMS setting (its PMS units come through integration credentials) still edits those units freely, as before.
+
+### A unit's own screening template
+
+`verification_template_id` on a unit (Get, List, Create and Update a unit, and the units of a property) is the unit's own screening template, or the property's when the unit has none. v1 and webhooks return the property's template.
+
+### Invalid units refuse Create a property
+
+`POST /partner/v2/properties` checks every element of `units` before creating anything. A unit that breaks a business rule (home rent and lot rent not adding up to the monthly rent, an amenity name that matches no amenity) answers `422` code `invalid_units`, with `fields` naming each unit as `units[<index>]` and `errors` giving the reason for each, and nothing is created. v1 skips such a unit and creates the property with the others. A wrong-typed field answers `400` in both versions.
+
 ### Nested properties follow the API key's property scope
 
 With an API key scoped to some properties, the `properties` array of a user (`GET`/`POST /partner/v2/users`, `GET`/`PATCH /partner/v2/users/{id}`) and of a property group (`GET /partner/v2/property_groups/{id}`) lists only the properties in the key's scope. In v1 these arrays list every property of the user or group. Keys without a property scope see every property in both versions.
