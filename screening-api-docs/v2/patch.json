@@ -102,7 +102,7 @@
     "path": "/components/schemas/PropertyOwnerInput",
     "value": {
       "type": "object",
-      "description": "Owner of the property, in the same shape as `owner` in the response. Send only the parts that change.",
+      "description": "Owner of the property, in the same shape as `owner` in the response. Send only the parts that change. On a property that has no owner name yet, an `owner` with `email` or `phone` but no `name` is refused with `422` `owner_name_required` and nothing is saved.",
       "properties": {
         "name": {
           "type": "string",
