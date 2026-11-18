@@ -993,7 +993,7 @@
             }
           },
           "422": {
-            "description": "A business rule refused the request and nothing was created: an amenity name matches no amenity (the message lists those names), or a unit in `units` breaks a business rule (the message names it as `units[<index>]`, counting from 0). A new property has no PMS ID, so `pms_controlled_fields` never applies here.",
+            "description": "A business rule refused the request and nothing was created: an amenity name matches no amenity (the message lists those names), or units in `units` break a business rule (code `invalid_units`: `fields` lists them as `units[<index>]`, counting from 0, and each item of `errors` gives `field` and the `error` code, plus `amenities` with the unmatched names for `unknown_amenities`). A new property has no PMS ID, so `pms_controlled_fields` never applies here.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1009,11 +1009,43 @@
                       }
                     }
                   },
-                  "invalid_unit": {
+                  "invalid_units": {
                     "value": {
                       "error": {
-                        "message": "units[1]: home rent and lot rent must add up to the monthly rent",
+                        "message": "units[1]: invalid_total_rent",
                         "status": 422,
+                        "code": "invalid_units",
+                        "fields": [
+                          "units[1]"
+                        ],
+                        "errors": [
+                          {
+                            "field": "units[1]",
+                            "error": "invalid_total_rent"
+                          }
+                        ],
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  },
+                  "invalid_units_unknown_amenities": {
+                    "value": {
+                      "error": {
+                        "message": "units[0]: unknown_amenities: Nope",
+                        "status": 422,
+                        "code": "invalid_units",
+                        "fields": [
+                          "units[0]"
+                        ],
+                        "errors": [
+                          {
+                            "field": "units[0]",
+                            "error": "unknown_amenities",
+                            "amenities": [
+                              "Nope"
+                            ]
+                          }
+                        ],
                         "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
                       }
                     }
@@ -1255,7 +1287,7 @@
       "patch": {
         "operationId": "PropertiesController_update",
         "summary": "Update a property",
-        "description": "Send only the fields that change. `property_group`, `pms_id`, `listing_url` and `listing_fraud_monitoring_enabled` are read only and ignored when sent: move a property between groups and turn fraud monitoring on or off in the Portal.\n\n**PMS-controlled fields.** On a property with a `pms_id`, a field is controlled by the PMS when its PMS sync is on (`pms_overrides.<field>` is `true`) and the PMS has sent a value for it. A request that changes such a field is refused as a whole with `422` and code `pms_controlled_fields`; `fields` lists every refused field and nothing in the request is saved. Sending the current value is not a change. To change the field, send `pms_overrides: {\"<field>\": false}`, in the same request as the new value or before it. Send `true` to give the field back to the PMS; Boom restores the last value the PMS sent.\n\nIn v1, `name`, `address`, `market` and `owner_name` keep their earlier behaviour: changing one that follows the PMS turns its PMS sync off and saves the change. The rule above applies in v1 to `description`, `amenities` and `pet_policy`. `property_type`, `custom_button_link` and `prescreening_template_id` are never written by the PMS and can always be changed.\n\nOn a single-family property, `description`, `amenities` and `pet_policy` are shared with its only unit: changing them here changes the unit too, and the other way round.",
+        "description": "Send only the fields that change. `property_group`, `pms_id`, `listing_url` and `listing_fraud_monitoring_enabled` are read only and ignored when sent: move a property between groups and turn fraud monitoring on or off in the Portal.\n\n**PMS-controlled fields.** On a property with a `pms_id`, a field is controlled by the PMS when its PMS sync is on (`pms_overrides.<field>` is `true`) and the PMS has sent a value for it. A request that changes such a field is refused as a whole with `422` and code `pms_controlled_fields`; `fields` lists every refused field and nothing in the request is saved. Sending the current value is not a change. To change the field, send `pms_overrides: {\"<field>\": false}`, in the same request as the new value or before it. Send `true` to give the field back to the PMS; Boom restores the last value the PMS sent. For `description`, a single-family property gets back its unit's last PMS description; a multi-family property keeps no PMS copy, so its current text stays until the PMS sends a new one.\n\nIn v1, `name`, `address`, `market` and `owner_name` keep their earlier behaviour: changing one that follows the PMS turns its PMS sync off and saves the change. The rule above applies in v1 to `description`, `amenities` and `pet_policy`. `property_type`, `custom_button_link` and `prescreening_template_id` are never written by the PMS and can always be changed.\n\nOn a single-family property, `description`, `amenities` and `pet_policy` are shared with its only unit: changing them here changes the unit too, and the other way round.",
         "parameters": [
           {
             "name": "id",
@@ -2422,7 +2454,7 @@
       "patch": {
         "operationId": "UnitsController_update",
         "summary": "Update a unit",
-        "description": "Changes fields on one unit; fields left out stay unchanged. A deleted unit, or a unit whose property is deleted, returns `404` and nothing is saved. `unit_type`, `pms_id` and `listing_url` are read only and ignored when sent. In v1, `\"available_at\": null` is ignored like any other `null`.\n\n**PMS-controlled fields.** A unit with a `pms_id` accepts changes to every field the PMS does not control. A field is controlled by the PMS when its PMS sync is on (`pms_overrides.<field>` is `true`) and the PMS has sent a value for it; a field whose sync is on but that the PMS never sent can be changed. `waitlist` and `external_id` always follow the PMS: changing either is always refused, and they have no `pms_overrides` key, so they can't be taken off the PMS. A request that changes a PMS-controlled field is refused as a whole with `422` and code `pms_controlled_fields`; `fields` lists every refused field and nothing in the request is saved. Sending the current value is not a change. To change the field, send `pms_overrides: {\"<field>\": false}`, in the same request as the new value or before it. Send `true` to give the field back to the PMS; Boom restores the last value the PMS sent.\n\nA partner whose properties come from a PMS but who doesn't use BoomScreen can't update units through the API: the request is refused with `400` `Can't update unit`.",
+        "description": "Changes fields on one unit; fields left out stay unchanged. A deleted unit, or a unit whose property is deleted, returns `404` and nothing is saved. `unit_type`, `pms_id` and `listing_url` are read only and ignored when sent. In v1, `\"available_at\": null` is ignored like any other `null`.\n\n**PMS-controlled fields.** A unit with a `pms_id` accepts changes to every field the PMS does not control. A field is controlled by the PMS when its PMS sync is on (`pms_overrides.<field>` is `true`) and the PMS has sent a value for it; a field whose sync is on but that the PMS never sent can be changed. A unit created by a listing sync source has no `pms_id` but follows the same rule for the fields that source owns. `external_id` always follows the PMS: changing it is always refused, and it has no `pms_overrides` key, so it can't be taken off the PMS. `waitlist` is refused the same way only when the unit's PMS fills it through a custom field (UDF) mapping; otherwise it can be changed. A request that changes a PMS-controlled field is refused as a whole with `422` and code `pms_controlled_fields`; `fields` lists every refused field and nothing in the request is saved. Sending the current value is not a change. To change the field, send `pms_overrides: {\"<field>\": false}`, in the same request as the new value or before it. Send `true` to give the field back to the PMS; Boom restores the last value the PMS sent.\n\nA partner whose properties come from a PMS but who doesn't use BoomScreen can't update units through the API: the request is refused with `400` `Can't update unit`.",
         "parameters": [
           {
             "name": "id",
@@ -13484,7 +13516,7 @@
           },
           "waitlist": {
             "type": "boolean",
-            "description": "Whether prospects can join the unit's waitlist. On a unit with a `pms_id` it always follows the PMS and can't be changed through the API."
+            "description": "Whether prospects can join the unit's waitlist. When the unit's PMS fills it through a custom field (UDF) mapping, it follows the PMS and can't be changed through the API."
           },
           "ready_for_showing_at": {
             "type": "string",
@@ -13523,12 +13555,12 @@
           "entry_instructions": {
             "type": "string",
             "nullable": true,
-            "description": "Self-guided tour entry instructions."
+            "description": "Self-guided tour entry instructions: the unit's own text, or the listing template's text when the unit has none."
           },
           "exit_instructions": {
             "type": "string",
             "nullable": true,
-            "description": "Self-guided tour exit instructions."
+            "description": "Self-guided tour exit instructions: the unit's own text, or the listing template's text when the unit has none."
           },
           "home_rent_amount": {
             "type": "object",
@@ -13875,7 +13907,7 @@
           },
           "waitlist": {
             "type": "boolean",
-            "description": "Let prospects join the unit's waitlist. On a unit with a `pms_id` it always follows the PMS: a change is refused with `422` `pms_controlled_fields`."
+            "description": "Let prospects join the unit's waitlist. On a unit with a `pms_id` whose PMS fills `waitlist` through a custom field (UDF) mapping, a change is refused with `422` `pms_controlled_fields`."
           },
           "ready_for_showing_at": {
             "type": "string",
@@ -13895,11 +13927,11 @@
           },
           "entry_instructions": {
             "type": "string",
-            "description": "Self-guided tour entry instructions."
+            "description": "Self-guided tour entry instructions. Sending the listing template's text stores no override, so the unit keeps following the template."
           },
           "exit_instructions": {
             "type": "string",
-            "description": "Self-guided tour exit instructions."
+            "description": "Self-guided tour exit instructions. Sending the listing template's text stores no override, so the unit keeps following the template."
           },
           "purchase_price": {
             "allOf": [
@@ -14216,7 +14248,7 @@
           },
           "waitlist": {
             "type": "boolean",
-            "description": "Whether prospects can join the unit's waitlist. On a unit with a `pms_id` it always follows the PMS and can't be changed through the API."
+            "description": "Whether prospects can join the unit's waitlist. When the unit's PMS fills it through a custom field (UDF) mapping, it follows the PMS and can't be changed through the API."
           },
           "ready_for_showing_at": {
             "type": "string",
@@ -14255,12 +14287,12 @@
           "entry_instructions": {
             "type": "string",
             "nullable": true,
-            "description": "Self-guided tour entry instructions."
+            "description": "Self-guided tour entry instructions: the unit's own text, or the listing template's text when the unit has none."
           },
           "exit_instructions": {
             "type": "string",
             "nullable": true,
-            "description": "Self-guided tour exit instructions."
+            "description": "Self-guided tour exit instructions: the unit's own text, or the listing template's text when the unit has none."
           },
           "home_rent_amount": {
             "type": "object",
@@ -14433,7 +14465,7 @@
           },
           "waitlist": {
             "type": "boolean",
-            "description": "Let prospects join the unit's waitlist. On a unit with a `pms_id` it always follows the PMS: a change is refused with `422` `pms_controlled_fields`."
+            "description": "Let prospects join the unit's waitlist. On a unit with a `pms_id` whose PMS fills `waitlist` through a custom field (UDF) mapping, a change is refused with `422` `pms_controlled_fields`."
           },
           "ready_for_showing_at": {
             "type": "string",
@@ -14453,11 +14485,11 @@
           },
           "entry_instructions": {
             "type": "string",
-            "description": "Self-guided tour entry instructions."
+            "description": "Self-guided tour entry instructions. Sending the listing template's text stores no override, so the unit keeps following the template."
           },
           "exit_instructions": {
             "type": "string",
-            "description": "Self-guided tour exit instructions."
+            "description": "Self-guided tour exit instructions. Sending the listing template's text stores no override, so the unit keeps following the template."
           },
           "home_rent_amount": {
             "allOf": [
@@ -14599,7 +14631,7 @@
           },
           "waitlist": {
             "type": "boolean",
-            "description": "Let prospects join the unit's waitlist. On a unit with a `pms_id` it always follows the PMS: a change is refused with `422` `pms_controlled_fields`."
+            "description": "Let prospects join the unit's waitlist. On a unit with a `pms_id` whose PMS fills `waitlist` through a custom field (UDF) mapping, a change is refused with `422` `pms_controlled_fields`."
           },
           "ready_for_showing_at": {
             "type": "string",
@@ -14619,11 +14651,11 @@
           },
           "entry_instructions": {
             "type": "string",
-            "description": "Self-guided tour entry instructions."
+            "description": "Self-guided tour entry instructions. Sending the listing template's text stores no override, so the unit keeps following the template."
           },
           "exit_instructions": {
             "type": "string",
-            "description": "Self-guided tour exit instructions."
+            "description": "Self-guided tour exit instructions. Sending the listing template's text stores no override, so the unit keeps following the template."
           },
           "home_rent_amount": {
             "allOf": [
@@ -19383,10 +19415,39 @@
                 "items": {
                   "type": "string"
                 },
-                "description": "Sent with code `pms_controlled_fields`: every request field that was refused because the PMS controls it.",
+                "description": "Sent with code `pms_controlled_fields`: every request field that was refused because the PMS controls it. Sent with code `invalid_units`: every refused unit, as `units[<index>]`.",
                 "example": [
                   "monthly_rent_amount"
                 ]
+              },
+              "errors": {
+                "type": "array",
+                "description": "Sent with code `invalid_units`: one item per refused unit.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "field": {
+                      "type": "string",
+                      "example": "units[1]"
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "Why the unit was refused, for example `invalid_total_rent` or `unknown_amenities`.",
+                      "example": "invalid_total_rent"
+                    },
+                    "amenities": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "With `unknown_amenities`: the names that match no amenity."
+                    }
+                  },
+                  "required": [
+                    "field",
+                    "error"
+                  ]
+                }
               }
             },
             "required": [
@@ -19541,7 +19602,7 @@
       "PmsOverrides": {
         "type": "object",
         "nullable": true,
-        "description": "PMS sync of each field, or `null` when the record has no `pms_id`. `true`: the field follows the PMS, and once the PMS has sent a value for it, a request that changes it is refused with `422` `pms_controlled_fields`. `false`: the field was edited by hand and the PMS sync no longer writes it. Keys are the field names of this API; the owner's name is `property_owner_name`. A unit's `waitlist` and `external_id` have no key: on a unit with a `pms_id` they always follow the PMS. Change a setting with `pms_overrides` in Update.",
+        "description": "PMS sync of each field, or `null` when the record has no `pms_id`. A unit created by a listing sync source has an object here even without a `pms_id`, for the fields that source owns. `true`: the field follows the PMS, and once the PMS has sent a value for it, a request that changes it is refused with `422` `pms_controlled_fields`. `false`: the field was edited by hand and the PMS sync no longer writes it. Keys are the field names of this API; the owner's name is `property_owner_name`. A unit's `external_id` and `waitlist` have no key: on a unit with a `pms_id`, `external_id` always follows the PMS, and `waitlist` does when the PMS fills it through a custom field (UDF) mapping. Change a setting with `pms_overrides` in Update.",
         "additionalProperties": {
           "type": "boolean"
         },
@@ -19553,7 +19614,7 @@
       },
       "PmsOverridesInput": {
         "type": "object",
-        "description": "PMS sync per field, keyed like `pms_overrides` in the response. `false` stops the PMS sync for the field so you can change it: send it in the same request as the new value or before. `true` gives the field back to the PMS, and Boom restores the last value the PMS sent. Fields left out keep their setting.",
+        "description": "PMS sync per field, keyed like `pms_overrides` in the response. `false` stops the PMS sync for the field so you can change it: send it in the same request as the new value or before. `true` gives the field back to the PMS, and Boom restores the last value the PMS sent. For a property's `description`, a single-family property gets back its unit's last PMS description; a multi-family property keeps no PMS copy, so its current text stays until the PMS sends a new one. Fields left out keep their setting.",
         "properties": {
           "name": {
             "type": "boolean"
