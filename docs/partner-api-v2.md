@@ -59,6 +59,8 @@ On a property synced from a property management system (it has a `pms_id`), a fi
 
 `property_type`, `custom_button_link` and `prescreening_template_id` are never written by the PMS, so they can always be changed in both versions.
 
+`external_id` of a property with a `pms_id` always follows the PMS in v2: every sync writes it back and it has no `pms_overrides` key, so a change answers `422` `pms_controlled_fields` with `fields` `["external_id"]`. Sending the current value is accepted. v1 still saves a changed `external_id`.
+
 To change the field in v2, send `"pms_overrides": {"<field>": false}` in the same request as the new value, or before it. Use the keys `pms_overrides` returns: the pet policy is `cats_allowed` and `dogs_allowed` (not `pet_policy`), and the owner is `property_owner_name`, `property_owner_phone` and `property_owner_email`. Any other key is ignored without an error. Sending the current value is not a change. Send `true` to give the field back to the PMS: Boom restores the last value the PMS sent where it keeps a copy. For `description`, a single-family property gets back its unit's last PMS description; a multi-family property keeps no PMS copy, so its current text stays until the PMS sends a new one. On a unit, `security_deposit`, `application_fee`, `manufacturer`, `model_name`, `manufactured_date`, `listed` and `available_for_application` also keep their current value until the next sync. Units follow the same rule in both versions, except that v1 lets partners whose PMS units come through integration credentials change the older unit fields freely (see below).
 
 ### `"available_at": null` clears a unit's available date
@@ -90,7 +92,7 @@ With an API key scoped to some properties, the `properties` array of a user (`GE
 ## Moving from v1 to v2
 
 1. Regenerate your client from `screening-api-docs/v2/api.json`, or read `owner.name` wherever you read `owner` today.
-2. If you rename, move or change the market or owner of PMS-synced properties, handle `422` `pms_controlled_fields`, or send `pms_overrides` with `false` for those fields along with the change.
+2. If you rename, move or change the market or owner of PMS-synced properties, handle `422` `pms_controlled_fields`, or send `pms_overrides` with `false` for those fields along with the change. Stop changing the `external_id` of PMS-synced properties: v2 refuses it.
 3. If your client sends `"available_at": null` for units it doesn't mean to change, stop sending it: in v2 it clears the date.
 4. If your PMS units come through integration credentials, handle `422` `pms_controlled_fields` on unit updates, or send `pms_overrides` with `false` for those fields along with the change.
 5. If you create properties with `units`, handle `422` `invalid_units`: nothing is created, where v1 skipped the bad units.
