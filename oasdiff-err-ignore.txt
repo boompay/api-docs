@@ -1,0 +1,12 @@
+GET /partner/v2/applications/{id} the response property `property_id` became nullable for the status `200`
+POST /partner/v2/applications/{id}/approve the response property `property_id` became nullable for the status `200`
+POST /partner/v2/applications/{id}/cancel the response property `property_id` became nullable for the status `200`
+POST /partner/v2/applications/{id}/conditionally_approve the response property `property_id` became nullable for the status `200`
+POST /partner/v2/applications/{id}/merge the response property `property_id` became nullable for the status `200`
+POST /partner/v2/applications/{id}/place_on_hold the response property `property_id` became nullable for the status `200`
+POST /partner/v2/applications/{id}/reject the response property `property_id` became nullable for the status `200`
+POST /partner/v2/applications/{id}/resume the response property `property_id` became nullable for the status `200`
+POST /partner/v2/applications/{id}/split the response property `property_id` became nullable for the status `200`
+POST /partner/v2/applications/{id}/uncancel the response property `property_id` became nullable for the status `200`
+POST /partner/v2/applications/{id}/undo_decision the response property `property_id` became nullable for the status `200`
+POST /partner/v2/leads/{lead_id}/apply the response property `property_id` became nullable for the status `200`
