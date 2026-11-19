@@ -59,7 +59,7 @@ On a property synced from a property management system (it has a `pms_id`), a fi
 
 `property_type`, `custom_button_link` and `prescreening_template_id` are never written by the PMS, so they can always be changed in both versions.
 
-To change the field in v2, send `"pms_overrides": {"<field>": false}` in the same request as the new value, or before it. Use the keys `pms_overrides` returns: the pet policy is `cats_allowed` and `dogs_allowed` (not `pet_policy`), and the owner is `property_owner_name`, `property_owner_phone` and `property_owner_email`. Any other key is ignored without an error. Sending the current value is not a change. Send `true` to give the field back to the PMS: Boom restores the last value the PMS sent. For `description`, a single-family property gets back its unit's last PMS description; a multi-family property keeps no PMS copy, so its current text stays until the PMS sends a new one. Units follow the same rule in both versions.
+To change the field in v2, send `"pms_overrides": {"<field>": false}` in the same request as the new value, or before it. Use the keys `pms_overrides` returns: the pet policy is `cats_allowed` and `dogs_allowed` (not `pet_policy`), and the owner is `property_owner_name`, `property_owner_phone` and `property_owner_email`. Any other key is ignored without an error. Sending the current value is not a change. Send `true` to give the field back to the PMS: Boom restores the last value the PMS sent where it keeps a copy. For `description`, a single-family property gets back its unit's last PMS description; a multi-family property keeps no PMS copy, so its current text stays until the PMS sends a new one. On a unit, `security_deposit`, `application_fee`, `manufacturer`, `model_name`, `manufactured_date`, `listed` and `available_for_application` also keep their current value until the next sync. Units follow the same rule in both versions, except that v1 doesn't apply it to partners whose PMS units come through integration credentials (see below).
 
 ### `"available_at": null` clears a unit's available date
 
@@ -75,7 +75,7 @@ To change the field in v2, send `"pms_overrides": {"<field>": false}` in the sam
 
 ### Invalid units refuse Create a property
 
-`POST /partner/v2/properties` checks every element of `units` before creating anything. A unit that breaks a business rule (home rent and lot rent not adding up to the monthly rent, an amenity name that matches no amenity) answers `422` code `invalid_units`, with `fields` naming each unit as `units[<index>]` and `errors` giving the reason for each, and nothing is created. v1 skips such a unit and creates the property with the others. A wrong-typed field answers `400` in both versions.
+`POST /partner/v2/properties` checks every element of `units` before creating anything. A unit that breaks a business rule (home rent and lot rent not adding up to the monthly rent, an amenity name that matches no amenity) answers `422` code `invalid_units`, with `fields` naming each refused unit once as `units[<index>]` and `errors` holding one item per failed check (so a unit that fails two checks appears twice), and nothing is created. v1 skips such a unit and creates the property with the others. A wrong-typed field answers `400` in both versions.
 
 ### Nested properties follow the API key's property scope
 
@@ -92,5 +92,8 @@ With an API key scoped to some properties, the `properties` array of a user (`GE
 1. Regenerate your client from `screening-api-docs/v2/api.json`, or read `owner.name` wherever you read `owner` today.
 2. If you rename, move or change the market or owner of PMS-synced properties, handle `422` `pms_controlled_fields`, or send `pms_overrides` with `false` for those fields along with the change.
 3. If your client sends `"available_at": null` for units it doesn't mean to change, stop sending it: in v2 it clears the date.
-4. Change the base path from `/partner/v1/` to `/partner/v2/`, starting with `authenticate`. Try it on `api.sandbox.boompay.app` first.
-5. Keep handling webhook payloads as before.
+4. If your PMS units come through integration credentials, handle `422` `pms_controlled_fields` on unit updates, or send `pms_overrides` with `false` for those fields along with the change.
+5. If you create properties with `units`, handle `422` `invalid_units`: nothing is created, where v1 skipped the bad units.
+6. If you read a unit's `verification_template_id`, expect the unit's own template where it has one.
+7. Change the base path from `/partner/v1/` to `/partner/v2/`, starting with `authenticate`. Try it on `api.sandbox.boompay.app` first.
+8. Keep handling webhook payloads as before.

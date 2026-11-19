@@ -2413,7 +2413,7 @@
       "patch": {
         "operationId": "UnitsController_update",
         "summary": "Update a unit",
-        "description": "Changes fields on one unit; fields left out stay unchanged. A deleted unit, or a unit whose property is deleted, returns `404` and nothing is saved. `unit_type`, `pms_id` and `listing_url` are read only and ignored when sent. In v1, `\"available_at\": null` is ignored like any other `null`.\n\n**PMS-controlled fields.** A unit with a `pms_id` accepts changes to every field the PMS does not control. A field is controlled by the PMS when its PMS sync is on (`pms_overrides.<field>` is `true`) and the PMS has sent a value for it; a field whose sync is on but that the PMS never sent can be changed. A unit created by a listing sync source has no `pms_id` but follows the same rule for the fields that source owns. `external_id` always follows the PMS: changing it is always refused, and it has no `pms_overrides` key, so it can't be taken off the PMS. `waitlist` is refused the same way only when the unit's PMS fills it through a custom field (UDF) mapping; otherwise it can be changed. In v1, a partner with no account-level PMS setting (its PMS units come through integration credentials) edits units with a `pms_id` freely, as before: this rule does not apply to them. A request that changes a PMS-controlled field is refused as a whole with `422` and code `pms_controlled_fields`; `fields` lists every refused field and nothing in the request is saved. Sending the current value is not a change. To change the field, send `pms_overrides: {\"<field>\": false}`, in the same request as the new value or before it. Send `true` to give the field back to the PMS; Boom restores the last value the PMS sent.\n\nA partner whose properties come from a PMS but who doesn't use BoomScreen can't update units through the API: the request is refused with `400` `Can't update unit`.",
+        "description": "Changes fields on one unit; fields left out stay unchanged. A deleted unit, or a unit whose property is deleted, returns `404` and nothing is saved. `unit_type`, `pms_id` and `listing_url` are read only and ignored when sent. In v1, `\"available_at\": null` is ignored like any other `null`.\n\n**PMS-controlled fields.** A unit with a `pms_id` accepts changes to every field the PMS does not control. A field is controlled by the PMS when its PMS sync is on (`pms_overrides.<field>` is `true`) and the PMS has sent a value for it; a field whose sync is on but that the PMS never sent can be changed, except `manufacturer`, `model_name` and `manufactured_date` (the PMS sync keeps no copy of them, so any current value counts as sent by the PMS) and fields a listing sync source owns. A unit created by a listing sync source has no `pms_id` but follows the same rule for the fields that source owns. `external_id` always follows the PMS: changing it is always refused, and it has no `pms_overrides` key, so it can't be taken off the PMS. `waitlist` is refused the same way only when the unit's PMS fills it through a custom field (UDF) mapping; otherwise it can be changed. In v1, a partner with no account-level PMS setting (its PMS units come through integration credentials) edits units with a `pms_id` freely, as before: this rule does not apply to them. A request that changes a PMS-controlled field is refused as a whole with `422` and code `pms_controlled_fields`; `fields` lists every refused field and nothing in the request is saved. Sending the current value is not a change. To change the field, send `pms_overrides: {\"<field>\": false}`, in the same request as the new value or before it. Send `true` to give the field back to the PMS; Boom restores the last value the PMS sent where it keeps a copy; `security_deposit`, `application_fee`, `manufacturer`, `model_name`, `manufactured_date`, `listed` and `available_for_application` keep their current value until the next sync.\n\nA partner whose properties come from a PMS but who doesn't use BoomScreen can't update units through the API: the request is refused with `400` `Can't update unit`.",
         "parameters": [
           {
             "name": "id",
@@ -19375,39 +19375,10 @@
                 "items": {
                   "type": "string"
                 },
-                "description": "Sent with code `pms_controlled_fields`: every request field that was refused because the PMS controls it. Sent with code `invalid_units`: every refused unit, as `units[<index>]`.",
+                "description": "Sent with code `pms_controlled_fields`: every field that was refused because the PMS controls it, named like the `pms_overrides` keys. A pet change is listed as `cats_allowed`, `dogs_allowed` or `dog_size`, and an owner change as `property_owner_name`, `property_owner_email` or `property_owner_phone`.",
                 "example": [
                   "monthly_rent_amount"
                 ]
-              },
-              "errors": {
-                "type": "array",
-                "description": "Sent with code `invalid_units`: one item per refused unit.",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "field": {
-                      "type": "string",
-                      "example": "units[1]"
-                    },
-                    "error": {
-                      "type": "string",
-                      "description": "Why the unit was refused, for example `invalid_total_rent` or `unknown_amenities`.",
-                      "example": "invalid_total_rent"
-                    },
-                    "amenities": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      },
-                      "description": "With `unknown_amenities`: the names that match no amenity."
-                    }
-                  },
-                  "required": [
-                    "field",
-                    "error"
-                  ]
-                }
               }
             },
             "required": [
@@ -19613,7 +19584,7 @@
       },
       "UnitPmsOverridesInput": {
         "type": "object",
-        "description": "PMS sync per unit field. `false` stops the sync for the field so you can change it: send it in the same request as the new value or before. `true` gives the field back to the PMS, and Boom restores the last value the PMS sent. The three rent amounts move together. Fields left out keep their setting. Only the keys listed here are read; any other key (for example `pet_policy`) is ignored without an error. `external_id` and `waitlist` have no key.",
+        "description": "PMS sync per unit field. `false` stops the sync for the field so you can change it: send it in the same request as the new value or before. `true` gives the field back to the PMS, and Boom restores the last value the PMS sent where it keeps a copy; `security_deposit`, `application_fee`, `manufacturer`, `model_name`, `manufactured_date`, `listed` and `available_for_application` keep their current value until the next sync. The three rent amounts move together. Fields left out keep their setting. Only the keys listed here are read; any other key (for example `pet_policy`) is ignored without an error. `external_id` and `waitlist` have no key.",
         "properties": {
           "title": {
             "type": "boolean"
