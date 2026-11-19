@@ -59,7 +59,7 @@ On a property synced from a property management system (it has a `pms_id`), a fi
 
 `property_type`, `custom_button_link` and `prescreening_template_id` are never written by the PMS, so they can always be changed in both versions.
 
-To change the field in v2, send `"pms_overrides": {"<field>": false}` in the same request as the new value, or before it. Use the keys `pms_overrides` returns: the pet policy is `cats_allowed` and `dogs_allowed` (not `pet_policy`), and the owner is `property_owner_name`, `property_owner_phone` and `property_owner_email`. Any other key is ignored without an error. Sending the current value is not a change. Send `true` to give the field back to the PMS: Boom restores the last value the PMS sent where it keeps a copy. For `description`, a single-family property gets back its unit's last PMS description; a multi-family property keeps no PMS copy, so its current text stays until the PMS sends a new one. On a unit, `security_deposit`, `application_fee`, `manufacturer`, `model_name`, `manufactured_date`, `listed` and `available_for_application` also keep their current value until the next sync. Units follow the same rule in both versions, except that v1 doesn't apply it to partners whose PMS units come through integration credentials (see below).
+To change the field in v2, send `"pms_overrides": {"<field>": false}` in the same request as the new value, or before it. Use the keys `pms_overrides` returns: the pet policy is `cats_allowed` and `dogs_allowed` (not `pet_policy`), and the owner is `property_owner_name`, `property_owner_phone` and `property_owner_email`. Any other key is ignored without an error. Sending the current value is not a change. Send `true` to give the field back to the PMS: Boom restores the last value the PMS sent where it keeps a copy. For `description`, a single-family property gets back its unit's last PMS description; a multi-family property keeps no PMS copy, so its current text stays until the PMS sends a new one. On a unit, `security_deposit`, `application_fee`, `manufacturer`, `model_name`, `manufactured_date`, `listed` and `available_for_application` also keep their current value until the next sync. Units follow the same rule in both versions, except that v1 lets partners whose PMS units come through integration credentials change the older unit fields freely (see below).
 
 ### `"available_at": null` clears a unit's available date
 
@@ -67,7 +67,7 @@ To change the field in v2, send `"pms_overrides": {"<field>": false}` in the sam
 
 ### The PMS-controlled field rule covers every PMS unit
 
-`PATCH /partner/v2/units/{id}` applies the PMS-controlled field rule to every unit with a `pms_id`. In v1, a partner with no account-level PMS setting (its PMS units come through integration credentials) still edits those units freely, as before.
+`PATCH /partner/v2/units/{id}` applies the PMS-controlled field rule to every unit with a `pms_id`. In v1, a partner with no account-level PMS setting (its PMS units come through integration credentials) can still change `title`, `monthly_rent_amount`, `available_at`, `occupied`, `verification_template_id`, `external_id`, `listing_id` and `max_occupants` on those units as before; every newer unit field (`description`, `beds`, `amenities`, the pet policy, `lease_terms` and the rest) follows the rule in v1 too.
 
 ### A unit's own screening template
 
