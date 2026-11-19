@@ -32,6 +32,12 @@ Request bodies do not change: create and update a property's owner with `owner_n
 
 With an API key scoped to some properties, the `properties` array of a user (`GET`/`POST /partner/v2/users`, `GET`/`PATCH /partner/v2/users/{id}`) and of a property group (`GET /partner/v2/property_groups/{id}`) lists only the properties in the key's scope. In v1 these arrays list every property of the user or group. Keys without a property scope see every property in both versions.
 
+### Generic applications without a unit, on request
+
+A generic application is started from a generic application option (a pre-approval, for example) before the company sets its unit. v1 never returns one until its unit is set. In v2, `GET /partner/v2/applications` and `GET /partner/v2/applications/{id}` return them when you pass `include_generic=true`; their `property_id` and `unit_id` are `null` until the unit is set. Without the parameter, both endpoints hide them as v1 does. An API key scoped to some properties never sees them, since they belong to no property. Approving, rejecting and the other actions answer 404 for them until the unit is set.
+
+Applications in v2 also carry `generic_application_option_id` and `generic_application_option_label`: the option the application was started from, kept once its unit is set, or `null` for an application started for a unit.
+
 ## What does not change
 
 - Every other endpoint, field and error is the same as in v1.

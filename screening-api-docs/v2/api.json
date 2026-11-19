@@ -3162,6 +3162,16 @@
               "type": "string",
               "format": "date"
             }
+          },
+          {
+            "name": "include_generic",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "Also return generic applications that have no unit yet: applications started from a generic application option (a pre-approval, for example) before their unit was set. Their `property_id` and `unit_id` are `null`. An API key scoped to some properties never sees them."
           }
         ],
         "responses": {
@@ -3294,6 +3304,16 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "include_generic",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "Also return generic applications that have no unit yet: applications started from a generic application option (a pre-approval, for example) before their unit was set. Their `property_id` and `unit_id` are `null`. An API key scoped to some properties never sees them."
           }
         ],
         "responses": {
@@ -7846,6 +7866,30 @@
                 "$ref": "#/components/headers/X-Request-Id"
               }
             }
+          },
+          "422": {
+            "description": "The lead's application is a generic application that has no unit yet (`application_not_placed`). Set its unit in Boom, then apply again. Nothing was changed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "application_not_placed",
+                    "status": 422,
+                    "code": "application_not_placed",
+                    "user_message": "This lead's application has no unit yet. Set its unit in Boom before applying.",
+                    "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                  }
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           }
         },
         "tags": [
@@ -11891,7 +11935,7 @@
   },
   "info": {
     "title": "BoomScreen API (v2)",
-    "description": "Tenant screening (BoomScreen) and leasing CRM endpoints of the Boom Partner API, version 2.\n\n**What differs from v1.** Every `/partner/v1/` endpoint is also served under `/partner/v2/` with the same method, parameters, authentication, rate limits and API key scope. Responses are identical to v1 except: `owner` on a property (list, detail, create, update, and the property nested in units, users and property groups) is an object `{name, email, phone}`, or `null` when the property has no owner. In v1 it is the owner's name as a string. With an API key scoped to some properties, the `properties` array of a user or a property group lists only the properties in the key's scope (v1 lists all of them). Request bodies are unchanged (`owner_name` is still accepted). Webhook payloads are not versioned and keep the v1 shape. See the v2 migration guide on docs.boompay.app.\n\n**Authentication.** `POST /partner/v2/authenticate` with your API key pair returns a JWT; send it as `Authorization: Bearer <token>`. Keys are created self-serve under Settings → API. Read-only keys may only call GET endpoints (writes return 403 `forbidden`). Keys scoped to owners or property groups only see matching records.\n\n**Conventions.** Every response carries an `X-Request-Id` header. Errors use one envelope: `{\"error\": {\"message\", \"status\", \"code\", \"request_id\"}}`. Lists use one envelope with `page` / `per_page` (max 1000) and a deterministic order. 429 responses carry `Retry-After`. See the Errors, Pagination, Rate limits and Versioning guides on docs.boompay.app.\n\nPublic listing endpoints under `/crm/v1/` are not part of Partner API versioning and are listed here unchanged. Rent reporting (BoomReport) endpoints are documented in the companion BoomReport API specification.",
+    "description": "Tenant screening (BoomScreen) and leasing CRM endpoints of the Boom Partner API, version 2.\n\n**What differs from v1.** Every `/partner/v1/` endpoint is also served under `/partner/v2/` with the same method, parameters, authentication, rate limits and API key scope. Responses are identical to v1 except: `owner` on a property (list, detail, create, update, and the property nested in units, users and property groups) is an object `{name, email, phone}`, or `null` when the property has no owner. In v1 it is the owner's name as a string. With an API key scoped to some properties, the `properties` array of a user or a property group lists only the properties in the key's scope (v1 lists all of them). `GET /partner/v2/applications` and `GET /partner/v2/applications/{id}` take `include_generic=true` to also return generic applications that have no unit yet (their `property_id` and `unit_id` are `null`), and applications carry `generic_application_option_id` and `generic_application_option_label`. Request bodies are unchanged (`owner_name` is still accepted). Webhook payloads are not versioned and keep the v1 shape. See the v2 migration guide on docs.boompay.app.\n\n**Authentication.** `POST /partner/v2/authenticate` with your API key pair returns a JWT; send it as `Authorization: Bearer <token>`. Keys are created self-serve under Settings → API. Read-only keys may only call GET endpoints (writes return 403 `forbidden`). Keys scoped to owners or property groups only see matching records.\n\n**Conventions.** Every response carries an `X-Request-Id` header. Errors use one envelope: `{\"error\": {\"message\", \"status\", \"code\", \"request_id\"}}`. Lists use one envelope with `page` / `per_page` (max 1000) and a deterministic order. 429 responses carry `Retry-After`. See the Errors, Pagination, Rate limits and Versioning guides on docs.boompay.app.\n\nPublic listing endpoints under `/crm/v1/` are not part of Partner API versioning and are listed here unchanged. Rent reporting (BoomReport) endpoints are documented in the companion BoomReport API specification.",
     "version": "2.0",
     "contact": {
       "name": "Boom",
@@ -14060,7 +14104,9 @@
           },
           "property_id": {
             "type": "string",
-            "example": "123456"
+            "example": "123456",
+            "nullable": true,
+            "description": "`null` for a generic application that has no unit yet (returned with `include_generic=true`)."
           },
           "verification_template_id": {
             "type": "string",
@@ -14230,6 +14276,18 @@
             "items": {
               "$ref": "#/components/schemas/RuleSet"
             }
+          },
+          "generic_application_option_id": {
+            "type": "string",
+            "nullable": true,
+            "example": "6r5c7l9btmylv37s",
+            "description": "The generic application option the application was started from, kept once its unit is set; `null` for an application started for a unit."
+          },
+          "generic_application_option_label": {
+            "type": "string",
+            "nullable": true,
+            "example": "Pre-approval",
+            "description": "Name of that generic application option; `null` for an application started for a unit."
           }
         },
         "required": [
@@ -14252,7 +14310,9 @@
           },
           "property_id": {
             "type": "string",
-            "example": "123456"
+            "example": "123456",
+            "nullable": true,
+            "description": "`null` for a generic application that has no unit yet (returned with `include_generic=true`)."
           },
           "verification_template_id": {
             "type": "string",
@@ -14459,6 +14519,18 @@
           },
           "warnings_triggered_count": {
             "type": "integer"
+          },
+          "generic_application_option_id": {
+            "type": "string",
+            "nullable": true,
+            "example": "6r5c7l9btmylv37s",
+            "description": "The generic application option the application was started from, kept once its unit is set; `null` for an application started for a unit."
+          },
+          "generic_application_option_label": {
+            "type": "string",
+            "nullable": true,
+            "example": "Pre-approval",
+            "description": "Name of that generic application option; `null` for an application started for a unit."
           }
         },
         "required": [
