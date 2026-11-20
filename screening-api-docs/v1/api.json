@@ -13430,7 +13430,8 @@
             "integration_config_id": {
               "type": "integer",
               "example": 1117,
-              "description": "ID of one of your active PMS integrations (Boom gives you the IDs). Applications and guest cards for this property are pushed to that integration. Omit it and pushes go to your oldest integration. An ID that is unknown, deleted or another partner's returns 422 `validation_error`. `null` is rejected with 400 `validation_error`."
+              "nullable": true,
+              "description": "ID of one of your active PMS integrations (Boom gives you the IDs). Applications and guest cards for this property are pushed to that integration. Omitted or `null`: the property has no integration of its own and pushes go to your oldest integration. An ID that is unknown, deleted or another partner's returns 422 `validation_error`."
             }
         }
       },
@@ -13496,7 +13497,8 @@
             "integration_config_id": {
               "type": "integer",
               "example": 1117,
-              "description": "ID of one of your active PMS integrations (Boom gives you the IDs). Applications and guest cards for this property are pushed to that integration. Omit it to leave it unchanged. It cannot be cleared: `null` is rejected with 400 `validation_error`. An ID that is unknown, deleted or another partner's returns 422 `validation_error`."
+              "nullable": true,
+              "description": "ID of one of your active PMS integrations (Boom gives you the IDs). Applications and guest cards for this property are pushed to that integration. Omitted or `null`: unchanged, so it cannot be cleared through the API. An ID that is unknown, deleted or another partner's returns 422 `validation_error`."
             }
         }
       },
