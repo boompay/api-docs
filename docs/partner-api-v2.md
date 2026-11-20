@@ -2,7 +2,7 @@
 title: Partner API v2
 ---
 
-`/partner/v2/` is the second version of the Partner API. It serves every endpoint that `/partner/v1/` serves, with the same method, path, parameters, authentication, rate limits and API key scope. A response from v2 is identical to the same response from v1 except for the changes listed below. `v1` keeps working unchanged; see [Versioning and deprecation](versioning-and-deprecation.md) for how long.
+`/partner/v2/` is the second version of the Partner API. It serves every endpoint that `/partner/v1/` serves, with the same method, path, parameters (apart from `include_generic` on the applications GETs), authentication, rate limits and API key scope. A response from v2 is identical to the same response from v1 except for the changes listed below. `v1` keeps working unchanged; see [Versioning and deprecation](versioning-and-deprecation.md) for how long.
 
 | Version | Base path | BoomScreen specification |
 |---|---|---|
@@ -31,6 +31,12 @@ Request bodies do not change: create and update a property's owner with `owner_n
 ### Nested properties follow the API key's property scope
 
 With an API key scoped to some properties, the `properties` array of a user (`GET`/`POST /partner/v2/users`, `GET`/`PATCH /partner/v2/users/{id}`) and of a property group (`GET /partner/v2/property_groups/{id}`) lists only the properties in the key's scope. In v1 these arrays list every property of the user or group. Keys without a property scope see every property in both versions.
+
+### Generic applications without a unit, on request
+
+A generic application is started from a generic application option (a pre-approval, for example) before the company sets its unit. v1 never returns one until its unit is set. In v2, `GET /partner/v2/applications` and `GET /partner/v2/applications/{id}` return them when you pass `include_generic=true`; their `property_id` and `unit_id` are `null` until the unit is set. Without the parameter, both endpoints hide them as v1 does, so `property_id` is never `null` there. In the v2 specification only these two responses declare `property_id` as nullable (`ApplicationListWithGeneric`, `ApplicationDetailWithGeneric`); every other application response keeps it non-null. An API key scoped to some properties never sees them, since they belong to no property. Approving, rejecting and the other actions answer 404 for them until the unit is set.
+
+Applications in v2 also carry `generic_application_option_id` and `generic_application_option_label`: the option the application was started from, kept once its unit is set, or `null` for an application started for a unit.
 
 ## What does not change
 
