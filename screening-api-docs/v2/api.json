@@ -1050,6 +1050,10 @@
                       "error": {
                         "message": "Unknown amenities: Rooftop deck",
                         "status": 422,
+                        "code": "unknown_amenities",
+                        "amenities": [
+                          "Rooftop deck"
+                        ],
                         "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
                       }
                     }
@@ -1410,6 +1414,10 @@
                       "error": {
                         "message": "Unknown amenities: Rooftop deck",
                         "status": 422,
+                        "code": "unknown_amenities",
+                        "amenities": [
+                          "Rooftop deck"
+                        ],
                         "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
                       }
                     }
@@ -13817,7 +13825,7 @@
           },
           "external_id": {
             "type": "string",
-            "description": "On a unit with a `pms_id` it always follows the PMS: a change is refused with `422` `pms_controlled_fields`."
+            "description": "On a unit with a `pms_id` it always follows the PMS: a change is refused with `422` `pms_controlled_fields`. In v1, partners whose PMS units come through integration credentials can still change it."
           },
           "listing_id": {
             "type": "string",
@@ -14406,7 +14414,7 @@
           },
           "external_id": {
             "type": "string",
-            "description": "On a unit with a `pms_id` it always follows the PMS: a change is refused with `422` `pms_controlled_fields`."
+            "description": "On a unit with a `pms_id` it always follows the PMS: a change is refused with `422` `pms_controlled_fields`. In v1, partners whose PMS units come through integration credentials can still change it."
           },
           "listing_id": {
             "type": "string",
@@ -14576,7 +14584,7 @@
           },
           "external_id": {
             "type": "string",
-            "description": "On a unit with a `pms_id` it always follows the PMS: a change is refused with `422` `pms_controlled_fields`."
+            "description": "On a unit with a `pms_id` it always follows the PMS: a change is refused with `422` `pms_controlled_fields`. In v1, partners whose PMS units come through integration credentials can still change it."
           },
           "listing_id": {
             "type": "string",
@@ -19430,6 +19438,13 @@
                   "monthly_rent_amount"
                 ]
               },
+              "amenities": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Sent with code `unknown_amenities`: the names that match no amenity."
+              },
               "errors": {
                 "type": "array",
                 "description": "Sent with code `invalid_units`: one item per failed check, so a unit that fails two checks appears twice.",
@@ -19612,7 +19627,7 @@
       "PmsOverrides": {
         "type": "object",
         "nullable": true,
-        "description": "PMS sync of each field, or `null` when the record has no `pms_id`. A unit created by a listing sync source has an object here even without a `pms_id`, for the fields that source owns. `true`: the field follows the PMS, and once the PMS has sent a value for it, a request that changes it is refused with `422` `pms_controlled_fields`. `false`: the field was edited by hand and the PMS sync no longer writes it. Keys are listed in `PropertyPmsOverridesInput` and `UnitPmsOverridesInput`; the pet policy uses `cats_allowed`, `dogs_allowed` (and `dog_size` on a unit), not `pet_policy`. A unit's `external_id` and `waitlist` have no key: on a unit with a `pms_id`, `external_id` always follows the PMS, and `waitlist` does when the PMS fills it through a custom field (UDF) mapping. Change a setting with `pms_overrides` in Update.",
+        "description": "PMS sync of each field, or `null` when the record has no `pms_id`. A unit created by a listing sync source has an object here even without a `pms_id`, for the fields that source owns. `true`: the field follows the PMS, and once the PMS has sent a value for it, a request that changes it is refused with `422` `pms_controlled_fields`. `false`: the field was edited by hand and the PMS sync no longer writes it. Keys are listed in `PropertyPmsOverridesInput` and `UnitPmsOverridesInput`; the pet policy uses `cats_allowed`, `dogs_allowed` (and `dog_size` on a unit), not `pet_policy`. A unit's `external_id` and `waitlist` have no key: on a unit with a `pms_id`, `external_id` always follows the PMS, and `waitlist` does when the PMS fills it through a custom field (UDF) mapping. In v1, partners whose PMS units come through integration credentials can still change a unit's `external_id`. In v2, a property's `external_id` with a `pms_id` also has no key and always follows the PMS. Change a setting with `pms_overrides` in Update.",
         "additionalProperties": {
           "type": "boolean"
         },

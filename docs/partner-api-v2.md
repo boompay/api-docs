@@ -36,6 +36,8 @@ It applies to every response that contains a property:
 
 `owner_name` is still accepted but deprecated. When a request sends both, `owner` is used. In v1, send `owner_name` as before.
 
+An `owner` that isn't an object of `name`, `email` and `phone` strings answers `400` `invalid_owner`. An invalid `owner.email` answers `422` `invalid_owner_email`, and an `email` or `phone` without a `name`, on a property with no owner name yet, answers `422` `owner_name_required`. Nothing is saved in any of these cases.
+
 ### PMS-controlled `name`, `address`, `market` and owner are refused
 
 On a property synced from a property management system (it has a `pms_id`), a field is controlled by the PMS when its PMS sync is on (`pms_overrides.<field>` is `true`) and the PMS has sent a value for it. Changing such a field is refused as a whole, with nothing saved:
