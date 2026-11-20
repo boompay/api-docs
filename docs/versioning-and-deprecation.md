@@ -11,6 +11,8 @@ The Partner API is versioned in the path: every endpoint lives under `/partner/v
 
 The BoomScreen specification is published per version (`screening-api-docs/v1/api.json`, `screening-api-docs/v2/api.json`). Within a version a specification only grows; our CI rejects any change to a published version that would break a generated client.
 
+Known exception in `v2`: `property_id` on `GET /partner/v2/applications` and `GET /partner/v2/applications/{id}` became nullable after v2 was published. It is `null` only for generic applications without a unit, which these endpoints return only when you opt in with `include_generic=true`; without that parameter the responses are unchanged. If you generate a client from the v2 specification, regenerate it before passing `include_generic=true`. See [Partner API v2](partner-api-v2.md#generic-applications-without-a-unit-on-request).
+
 ## What we may change without notice (non-breaking)
 
 Your integration must tolerate all of the following at any time:

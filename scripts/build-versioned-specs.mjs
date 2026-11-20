@@ -36,20 +36,36 @@ function decodePointer(pointer) {
     .map((token) => token.replaceAll("~1", "/").replaceAll("~0", "~"));
 }
 
-// Subset of RFC 6902: only "add" and "replace", which is all a version overlay needs.
+function resolveParent(document, op, path) {
+  const tokens = decodePointer(path);
+  const key = tokens.pop();
+  let parent = document;
+  for (const token of tokens) {
+    if (!(token in parent)) throw new Error(`${op} ${path}: "${token}" does not exist`);
+    parent = parent[token];
+  }
+  return { parent, key };
+}
+
+// Subset of RFC 6902: "add" (with "-" to append to an array), "replace" and "copy".
+// "copy" lets a version derive a schema from the source one, so later source edits still reach it.
 function applyPatch(document, operations) {
-  for (const { op, path, value } of operations) {
-    const tokens = decodePointer(path);
-    const key = tokens.pop();
-    let parent = document;
-    for (const token of tokens) {
-      if (!(token in parent)) throw new Error(`${op} ${path}: "${token}" does not exist`);
-      parent = parent[token];
+  for (const { op, path, value, from } of operations) {
+    if (!["add", "replace", "copy"].includes(op)) throw new Error(`Unsupported patch op "${op}" at ${path}`);
+    const { parent, key } = resolveParent(document, op, path);
+    if (op === "add" && Array.isArray(parent) && key === "-") {
+      parent.push(value);
+      continue;
     }
     if (op === "replace" && !(key in parent)) throw new Error(`replace ${path}: target does not exist`);
-    if (op === "add" && key in parent) throw new Error(`add ${path}: target already exists, use replace`);
-    if (op !== "add" && op !== "replace") throw new Error(`Unsupported patch op "${op}" at ${path}`);
-    parent[key] = value;
+    if (op !== "replace" && key in parent) throw new Error(`${op} ${path}: target already exists, use replace`);
+    if (op === "copy") {
+      const source = resolveParent(document, op, from);
+      if (!(source.key in source.parent)) throw new Error(`copy ${path}: source ${from} does not exist`);
+      parent[key] = structuredClone(source.parent[source.key]);
+    } else {
+      parent[key] = value;
+    }
   }
   return document;
 }
