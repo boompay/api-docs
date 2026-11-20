@@ -12,7 +12,7 @@
   {
     "op": "replace",
     "path": "/info/description",
-    "value": "Tenant screening (BoomScreen) and leasing CRM endpoints of the Boom Partner API, version 2.\n\n**What differs from v1.** Every `/partner/v1/` endpoint is also served under `/partner/v2/` with the same method, parameters, authentication, rate limits and API key scope. Responses are identical to v1 except: `owner` on a property (list, detail, create, update, and the property nested in units, users and property groups) is an object `{name, email, phone}`, or `null` when the property has no owner. In v1 it is the owner's name as a string. With an API key scoped to some properties, the `properties` array of a user or a property group lists only the properties in the key's scope (v1 lists all of them). Request bodies are unchanged (`owner_name` is still accepted). Webhook payloads are not versioned and keep the v1 shape. See the v2 migration guide on docs.boompay.app.\n\n**Authentication.** `POST /partner/v2/authenticate` with your API key pair returns a JWT; send it as `Authorization: Bearer <token>`. Keys are created self-serve under Settings → API. Read-only keys may only call GET endpoints (writes return 403 `forbidden`). Keys scoped to owners or property groups only see matching records.\n\n**Conventions.** Every response carries an `X-Request-Id` header. Errors use one envelope: `{\"error\": {\"message\", \"status\", \"code\", \"request_id\"}}`. Lists use one envelope with `page` / `per_page` (max 1000) and a deterministic order. 429 responses carry `Retry-After`. See the Errors, Pagination, Rate limits and Versioning guides on docs.boompay.app.\n\nPublic listing endpoints under `/crm/v1/` are not part of Partner API versioning and are listed here unchanged. Rent reporting (BoomReport) endpoints are documented in the companion BoomReport API specification."
+    "value": "Tenant screening (BoomScreen) and leasing CRM endpoints of the Boom Partner API, version 2.\n\n**What differs from v1.** Every `/partner/v1/` endpoint is also served under `/partner/v2/` with the same method, parameters, authentication, rate limits and API key scope. Some responses and requests differ, for example `owner` on a property is an object `{name, email, phone}` instead of the owner's name. The Partner API v2 migration guide on docs.boompay.app lists every difference and the steps to move. Webhook payloads are not versioned and keep the v1 shape.\n\n**Authentication.** `POST /partner/v2/authenticate` with your API key pair returns a JWT; send it as `Authorization: Bearer <token>`. Keys are created self-serve under Settings → API. Read-only keys may only call GET endpoints (writes return 403 `forbidden`). Keys scoped to owners or property groups only see matching records.\n\n**Conventions.** Every response carries an `X-Request-Id` header. Errors use one envelope: `{\"error\": {\"message\", \"status\", \"code\", \"request_id\"}}`. Lists use one envelope with `page` / `per_page` (max 1000) and a deterministic order. 429 responses carry `Retry-After`. See the Errors, Pagination, Rate limits and Versioning guides on docs.boompay.app.\n\nPublic listing endpoints under `/crm/v1/` are not part of Partner API versioning and are listed here unchanged. Rent reporting (BoomReport) endpoints are documented in the companion BoomReport API specification."
   },
   {
     "op": "add",
@@ -96,5 +96,204 @@
     "op": "add",
     "path": "/components/schemas/User/properties/properties/description",
     "value": "Properties assigned to the user. With an API key scoped to some properties, only the properties in the key's scope."
+  },
+  {
+    "op": "add",
+    "path": "/components/schemas/PropertyOwnerInput",
+    "value": {
+      "type": "object",
+      "description": "Owner of the property, in the same shape as `owner` in the response. Send only the parts that change. On a property that has no owner name yet, an `owner` with `email` or `phone` but no `name` is refused with `422` `owner_name_required` and nothing is saved. An `email` that is not a valid email address is refused with `422` `invalid_owner_email` and nothing is saved.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Jane Owner"
+        },
+        "email": {
+          "type": "string",
+          "example": "jane@example.com"
+        },
+        "phone": {
+          "type": "string",
+          "example": "5551234567"
+        }
+      }
+    }
+  },
+  {
+    "op": "add",
+    "path": "/components/schemas/CreateProperty/properties/owner",
+    "value": {
+      "$ref": "#/components/schemas/PropertyOwnerInput"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/components/schemas/CreateProperty/properties/owner_name",
+    "value": {
+      "type": "string",
+      "deprecated": true,
+      "description": "Deprecated: send `owner.name`. When both are sent, `owner` is used."
+    }
+  },
+  {
+    "op": "add",
+    "path": "/components/schemas/UpdateProperty/properties/owner",
+    "value": {
+      "$ref": "#/components/schemas/PropertyOwnerInput"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/components/schemas/UpdateProperty/properties/owner_name",
+    "value": {
+      "type": "string",
+      "deprecated": true,
+      "description": "Deprecated: send `owner.name`. When both are sent, `owner` is used."
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/components/schemas/UpdateUnit/properties/available_at",
+    "value": {
+      "type": "string",
+      "format": "date",
+      "nullable": true,
+      "description": "Date the unit becomes available. Send the date (`2026-11-01`) or the timestamp a response returns; the time part is ignored. Send `null` to clear the date."
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/paths/~1partner~1v2~1properties~1{id}/patch/description",
+    "value": "Send only the fields that change. `owner` takes the same `{name, email, phone}` object as the response; `owner_name` is still accepted but deprecated, and `owner` is used when both are sent. `property_group`, `pms_id`, `listing_url` and `listing_fraud_monitoring_enabled` are read only and ignored when sent: move a property between groups and turn fraud monitoring on or off in the Portal.\n\n**PMS-controlled fields.** On a property with a `pms_id`, a field is controlled by the PMS when its PMS sync is on (`pms_overrides.<field>` is `true`) and the PMS has sent a value for it. A request that changes such a field is refused as a whole with `422` and code `pms_controlled_fields`; `fields` lists every refused field and nothing in the request is saved. Sending the current value is not a change. To change the field, send `pms_overrides: {\"<field>\": false}`, in the same request as the new value or before it. Send `true` to give the field back to the PMS; Boom restores the last value the PMS sent. For `description`, a single-family property gets back its unit's last PMS description; a multi-family property keeps no PMS copy, so its current text stays until the PMS sends a new one.\n\nThe rule covers every field, including `name`, `address`, `market` and the owner. In v1 a change to one of those four turns its PMS sync off and saves instead. `property_type`, `custom_button_link` and `prescreening_template_id` are never written by the PMS and can always be changed. `external_id` always follows the PMS on a property with a `pms_id`: every sync writes it back and it has no `pms_overrides` key, so a change is refused with `422` `pms_controlled_fields` and `fields` `[\"external_id\"]`; sending the current value is accepted. v1 still saves a changed `external_id`.\n\nOn a single-family property, `description`, `amenities` and `pet_policy` are shared with its only unit: changing them here changes the unit too, and the other way round."
+  },
+  {
+    "op": "replace",
+    "path": "/paths/~1partner~1v2~1units~1{id}/patch/description",
+    "value": "Changes fields on one unit; fields left out stay unchanged. A deleted unit, or a unit whose property is deleted, returns `404` and nothing is saved. `unit_type`, `pms_id` and `listing_url` are read only and ignored when sent. `\"available_at\": null` clears the available date (v1 ignores it).\n\n**PMS-controlled fields.** A unit with a `pms_id` accepts changes to every field the PMS does not control. A field is controlled by the PMS when its PMS sync is on (`pms_overrides.<field>` is `true`) and the PMS has sent a value for it; a field whose sync is on but that the PMS never sent can be changed, except `manufacturer`, `model_name` and `manufactured_date` (the PMS sync keeps no copy of them, so any current value counts as sent by the PMS) and fields a listing sync source owns. A unit created by a listing sync source has no `pms_id` but follows the same rule for the fields that source owns. `external_id` always follows the PMS: changing it is always refused, and it has no `pms_overrides` key, so it can't be taken off the PMS. `waitlist` is refused the same way only when the unit's PMS fills it through a custom field (UDF) mapping; otherwise it can be changed. The rule covers every unit with a `pms_id`, including those of a partner connected to its PMS only through integration credentials (v1 still lets such a partner change the unit fields Update a unit accepted before). A request that changes a PMS-controlled field is refused as a whole with `422` and code `pms_controlled_fields`; `fields` lists every refused field and nothing in the request is saved. Sending the current value is not a change. To change the field, send `pms_overrides: {\"<field>\": false}`, in the same request as the new value or before it. Send `true` to give the field back to the PMS; Boom restores the last value the PMS sent where it keeps a copy; `manufacturer`, `model_name`, `manufactured_date`, `listed` and `available_for_application` keep their current value until the next sync.\n\nA partner whose properties come from a PMS but who doesn't use BoomScreen can't update units through the API: the request is refused with `400` `Can't update unit`."
+  },
+  {
+    "op": "replace",
+    "path": "/paths/~1partner~1v2~1properties/post/description",
+    "value": "Creates the property and its `units` together. Every element of `units` takes the same fields and the same type checks as Create a unit. All units are checked before anything is created: a unit with a wrong type is refused with `400`, a unit that breaks a business rule (for example `home_rent_amount` + `site_rent_amount` not adding up to `monthly_rent_amount`) is refused with `422` naming its position, such as `units[1]`. In both cases no property and no unit is created. `property_group`, `pms_id`, `listing_url` and `listing_fraud_monitoring_enabled` are read only and ignored when sent."
+  },
+  {
+    "op": "replace",
+    "path": "/paths/~1partner~1v2~1properties/post/responses/422/description",
+    "value": "A business rule refused the request and nothing was created: an amenity name matches no amenity (the message lists those names), or units in `units` break a business rule (code `invalid_units`: `fields` lists them as `units[<index>]`, counting from 0, and each item of `errors` gives `field` and the `error` code, plus `amenities` with the unmatched names for `unknown_amenities`). A new property has no PMS ID, so `pms_controlled_fields` never applies here."
+  },
+  {
+    "op": "add",
+    "path": "/paths/~1partner~1v2~1properties/post/responses/422/content/application~1json/examples/invalid_units",
+    "value": {
+      "value": {
+        "error": {
+          "message": "units[1]: invalid_total_rent",
+          "status": 422,
+          "code": "invalid_units",
+          "fields": [
+            "units[1]"
+          ],
+          "errors": [
+            {
+              "field": "units[1]",
+              "error": "invalid_total_rent"
+            }
+          ],
+          "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+        }
+      }
+    }
+  },
+  {
+    "op": "add",
+    "path": "/paths/~1partner~1v2~1properties/post/responses/422/content/application~1json/examples/invalid_units_unknown_amenities",
+    "value": {
+      "value": {
+        "error": {
+          "message": "units[0]: unknown_amenities: Nope",
+          "status": 422,
+          "code": "invalid_units",
+          "fields": [
+            "units[0]"
+          ],
+          "errors": [
+            {
+              "field": "units[0]",
+              "error": "unknown_amenities",
+              "amenities": [
+                "Nope"
+              ]
+            }
+          ],
+          "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+        }
+      }
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/components/schemas/UnitList/properties/verification_template_id",
+    "value": {
+      "type": "string",
+      "example": "123456",
+      "nullable": true,
+      "description": "Screening template of the unit; the property's template when the unit has none of its own."
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/components/schemas/UnitDetail/properties/verification_template_id",
+    "value": {
+      "type": "string",
+      "example": "123456",
+      "nullable": true,
+      "description": "Screening template of the unit; the property's template when the unit has none of its own."
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/components/schemas/UpdateProperty/properties/external_id",
+    "value": {
+      "type": "string",
+      "description": "On a property with a `pms_id` it always follows the PMS: a change is refused with `422` `pms_controlled_fields`; sending the current value is accepted."
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/components/schemas/FieldErrorResponse/properties/error/properties/fields/description",
+    "value": "Sent with code `pms_controlled_fields`: every field that was refused because the PMS controls it, named like the `pms_overrides` keys. A pet change is listed as `cats_allowed`, `dogs_allowed` or `dog_size`, and an owner change as `property_owner_name`, `property_owner_email` or `property_owner_phone`. Sent with code `invalid_units`: each refused unit once, as `units[<index>]`."
+  },
+  {
+    "op": "add",
+    "path": "/components/schemas/FieldErrorResponse/properties/error/properties/errors",
+    "value": {
+      "type": "array",
+      "description": "Sent with code `invalid_units`: one item per failed check, so a unit that fails two checks appears twice.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "type": "string",
+            "example": "units[1]"
+          },
+          "error": {
+            "type": "string",
+            "description": "Why the unit was refused, for example `invalid_total_rent` or `unknown_amenities`.",
+            "example": "invalid_total_rent"
+          },
+          "amenities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "With `unknown_amenities`: the names that match no amenity."
+          }
+        },
+        "required": [
+          "field",
+          "error"
+        ]
+      }
+    }
   }
 ]
