@@ -47,25 +47,27 @@ function resolveParent(document, op, path) {
   return { parent, key };
 }
 
-// Subset of RFC 6902: "add" (with "-" to append to an array), "replace" and "copy".
-// "copy" lets a version derive a schema from the source one, so later source edits still reach it.
+function resolveValue(document, path) {
+  const { parent, key } = resolveParent(document, "copy", path);
+  if (!(key in parent)) throw new Error(`copy: source ${path} does not exist`);
+  return structuredClone(parent[key]);
+}
+
+// Subset of RFC 6902: "add" and "copy" (both append to an array with "-"), and "replace".
+// "copy" snapshots its source where it appears, so edits to that source must come before it.
 function applyPatch(document, operations) {
   for (const { op, path, value, from } of operations) {
     if (!["add", "replace", "copy"].includes(op)) throw new Error(`Unsupported patch op "${op}" at ${path}`);
     const { parent, key } = resolveParent(document, op, path);
-    if (op === "add" && Array.isArray(parent) && key === "-") {
-      parent.push(value);
+    if (key === "-") {
+      if (!Array.isArray(parent)) throw new Error(`${op} ${path}: "-" only works on an array`);
+      if (op === "replace") throw new Error(`replace ${path}: "-" only works with add or copy`);
+      parent.push(op === "copy" ? resolveValue(document, from) : value);
       continue;
     }
     if (op === "replace" && !(key in parent)) throw new Error(`replace ${path}: target does not exist`);
     if (op !== "replace" && key in parent) throw new Error(`${op} ${path}: target already exists, use replace`);
-    if (op === "copy") {
-      const source = resolveParent(document, op, from);
-      if (!(source.key in source.parent)) throw new Error(`copy ${path}: source ${from} does not exist`);
-      parent[key] = structuredClone(source.parent[source.key]);
-    } else {
-      parent[key] = value;
-    }
+    parent[key] = op === "copy" ? resolveValue(document, from) : value;
   }
   return document;
 }

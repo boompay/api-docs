@@ -13,6 +13,8 @@ The BoomScreen specification is published per version (`screening-api-docs/v1/ap
 
 Known exception in `v2`: `property_id` on `GET /partner/v2/applications` and `GET /partner/v2/applications/{id}` became nullable after v2 was published. It is `null` only for generic applications without a unit, which these endpoints return only when you opt in with `include_generic=true`; without that parameter the responses are unchanged. If you generate a client from the v2 specification, regenerate it before passing `include_generic=true`. See [Partner API v2](partner-api-v2.md#generic-applications-without-a-unit-on-request).
 
+Known change in `v1` and `v2`: `POST /partner/v1/leads/{lead_id}/apply` answers 422 `application_not_placed` when the lead's application is a generic application that has no unit yet. It used to answer 200 with that application, whose `property_id` was `null`, which the specification does not allow. See [Errors and request IDs](errors.md).
+
 ## What we may change without notice (non-breaking)
 
 Your integration must tolerate all of the following at any time:
