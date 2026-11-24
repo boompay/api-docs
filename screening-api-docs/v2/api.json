@@ -19842,7 +19842,8 @@
           },
           "title": {
             "type": "string",
-            "example": "Unit 204"
+            "example": "Unit 204",
+            "nullable": true
           }
         },
         "required": [
@@ -19859,11 +19860,13 @@
           },
           "first_name": {
             "type": "string",
-            "example": "Jordan"
+            "example": "Jordan",
+            "nullable": true
           },
           "last_name": {
             "type": "string",
-            "example": "Rivera"
+            "example": "Rivera",
+            "nullable": true
           },
           "email": {
             "type": "string",
@@ -19894,7 +19897,8 @@
           },
           "name": {
             "type": "string",
-            "example": "Dana Whitfield"
+            "example": "Dana Whitfield",
+            "nullable": true
           }
         },
         "required": [
