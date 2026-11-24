@@ -21,6 +21,7 @@ Every error from the Partner API uses one JSON envelope, whatever produced it (p
 | `status` | yes | The HTTP status, repeated in the body. |
 | `code` | almost always | Stable machine-readable code. Branch on this. A few legacy business-rule errors return only `message`; treat a missing `code` as `bad_request`. |
 | `request_id` | yes | Correlation id for the request. Also sent as the `X-Request-Id` response header. |
+| `user_message` | no | Human-readable explanation safe to show to your users. Sent only for some codes; wording may change. |
 
 Some codes add fields:
 
@@ -48,6 +49,7 @@ Some codes add fields:
 | 409 | `lock_failed` | The record changed while your request was in flight. Fetch it again and retry. |
 | 412 | `precondition_failed` | The lead changed since the `ETag` you sent in `If-Match` was read. Nothing was saved. Fetch it again and retry with the new `ETag`. |
 | 422 | `validation_error` / *(none)* | The request was understood but cannot be processed, for example a customer that fails eligibility. |
+| 422 | `application_not_placed` | `POST /partner/v1/leads/{lead_id}/apply` for a lead whose application is a generic application that has no unit yet. Nothing was changed. Set the application's unit in Boom, then apply again. |
 | 422 | `invalid_tag_name` | A tag name is empty, longer than 30 characters, or uses characters other than letters, numbers, spaces and common punctuation. The message quotes the name. |
 | 422 | `tag_added_and_removed` | The same tag is in both `add_tags` and `remove_tags`. The message quotes the tag. |
 | 422 | `tag_limit_reached` | The change would leave a lead with more than 20 tags. |

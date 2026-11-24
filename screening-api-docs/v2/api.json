@@ -3334,6 +3334,16 @@
               "type": "string",
               "format": "date"
             }
+          },
+          {
+            "name": "include_generic",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "Also return generic applications that have no unit yet: applications started from a generic application option (a pre-approval, for example) before their unit was set. Their `property_id` and `unit_id` are `null`. An API key scoped to some properties never sees them."
           }
         ],
         "responses": {
@@ -3351,7 +3361,7 @@
                         "items": {
                           "type": "array",
                           "items": {
-                            "$ref": "#/components/schemas/ApplicationList"
+                            "$ref": "#/components/schemas/ApplicationListWithGeneric"
                           }
                         },
                         "last_page": {
@@ -3466,6 +3476,16 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "include_generic",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "Also return generic applications that have no unit yet: applications started from a generic application option (a pre-approval, for example) before their unit was set. Their `property_id` and `unit_id` are `null`. An API key scoped to some properties never sees them."
           }
         ],
         "responses": {
@@ -3474,7 +3494,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApplicationDetail"
+                  "$ref": "#/components/schemas/ApplicationDetailWithGeneric"
                 }
               }
             },
@@ -8018,6 +8038,30 @@
                 "$ref": "#/components/headers/X-Request-Id"
               }
             }
+          },
+          "422": {
+            "description": "The lead's application is a generic application that has no unit yet (`application_not_placed`). Set its unit in Boom, then apply again. Nothing was changed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "application_not_placed",
+                    "status": 422,
+                    "code": "application_not_placed",
+                    "user_message": "This lead's application has no unit yet. Set its unit in Boom before applying.",
+                    "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                  }
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           }
         },
         "tags": [
@@ -12142,7 +12186,7 @@
   },
   "info": {
     "title": "BoomScreen API (v2)",
-    "description": "Tenant screening (BoomScreen) and leasing CRM endpoints of the Boom Partner API, version 2.\n\n**What differs from v1.** Every `/partner/v1/` endpoint is also served under `/partner/v2/` with the same method, parameters, authentication, rate limits and API key scope. Some responses and requests differ, for example `owner` on a property is an object `{name, email, phone}` instead of the owner's name. The Partner API v2 migration guide on docs.boompay.app lists every difference and the steps to move. Webhook payloads are not versioned and keep the v1 shape.\n\n**Authentication.** `POST /partner/v2/authenticate` with your API key pair returns a JWT; send it as `Authorization: Bearer <token>`. Keys are created self-serve under Settings → API. Read-only keys may only call GET endpoints (writes return 403 `forbidden`). Keys scoped to owners or property groups only see matching records.\n\n**Conventions.** Every response carries an `X-Request-Id` header. Errors use one envelope: `{\"error\": {\"message\", \"status\", \"code\", \"request_id\"}}`. Lists use one envelope with `page` / `per_page` (max 1000) and a deterministic order. 429 responses carry `Retry-After`. See the Errors, Pagination, Rate limits and Versioning guides on docs.boompay.app.\n\nPublic listing endpoints under `/crm/v1/` are not part of Partner API versioning and are listed here unchanged. Rent reporting (BoomReport) endpoints are documented in the companion BoomReport API specification.",
+    "description": "Tenant screening (BoomScreen) and leasing CRM endpoints of the Boom Partner API, version 2.\n\n**What differs from v1.** Every `/partner/v1/` endpoint is also served under `/partner/v2/` with the same method, parameters (apart from `include_generic` on the applications GETs), authentication, rate limits and API key scope. Some responses and requests differ. `owner` on a property (list, detail, create, update, and the property nested in units, users and property groups) is an object `{name, email, phone}`, or `null` when the property has no owner. In v1 it is the owner's name as a string. With an API key scoped to some properties, the `properties` array of a user or a property group lists only the properties in the key's scope (v1 lists all of them). `GET /partner/v2/applications` and `GET /partner/v2/applications/{id}` take `include_generic=true` to also return generic applications that have no unit yet (their `property_id` and `unit_id` are `null`), and applications carry `generic_application_option_id` and `generic_application_option_label`. Create and Update property take an `owner` object in the same shape (`owner_name` is still accepted but deprecated, and `owner` is used when both are sent). The Partner API v2 migration guide on docs.boompay.app lists every difference and the steps to move. Webhook payloads are not versioned and keep the v1 shape.\n\n**Authentication.** `POST /partner/v2/authenticate` with your API key pair returns a JWT; send it as `Authorization: Bearer <token>`. Keys are created self-serve under Settings → API. Read-only keys may only call GET endpoints (writes return 403 `forbidden`). Keys scoped to owners or property groups only see matching records.\n\n**Conventions.** Every response carries an `X-Request-Id` header. Errors use one envelope: `{\"error\": {\"message\", \"status\", \"code\", \"request_id\"}}`. Lists use one envelope with `page` / `per_page` (max 1000) and a deterministic order. 429 responses carry `Retry-After`. See the Errors, Pagination, Rate limits and Versioning guides on docs.boompay.app.\n\nPublic listing endpoints under `/crm/v1/` are not part of Partner API versioning and are listed here unchanged. Rent reporting (BoomReport) endpoints are documented in the companion BoomReport API specification.",
     "version": "2.0",
     "contact": {
       "name": "Boom",
@@ -15392,6 +15436,18 @@
             "items": {
               "$ref": "#/components/schemas/RuleSet"
             }
+          },
+          "generic_application_option_id": {
+            "type": "string",
+            "nullable": true,
+            "example": "6r5c7l9btmylv37s",
+            "description": "The generic application option the application was started from, kept once its unit is set; `null` for an application started for a unit."
+          },
+          "generic_application_option_label": {
+            "type": "string",
+            "nullable": true,
+            "example": "Pre-approval",
+            "description": "Name of that generic application option; `null` for an application started for a unit."
           }
         },
         "required": [
@@ -15621,6 +15677,18 @@
           },
           "warnings_triggered_count": {
             "type": "integer"
+          },
+          "generic_application_option_id": {
+            "type": "string",
+            "nullable": true,
+            "example": "6r5c7l9btmylv37s",
+            "description": "The generic application option the application was started from, kept once its unit is set; `null` for an application started for a unit."
+          },
+          "generic_application_option_label": {
+            "type": "string",
+            "nullable": true,
+            "example": "Pre-approval",
+            "description": "Name of that generic application option; `null` for an application started for a unit."
           }
         },
         "required": [
@@ -19392,6 +19460,11 @@
                 "type": "string",
                 "example": "tag_limit_reached",
                 "description": "Stable machine-readable error code; branch on this, not on `message`. See Errors and request IDs."
+              },
+              "user_message": {
+                "type": "string",
+                "example": "This lead's application has no unit yet. Set its unit in Boom before applying.",
+                "description": "Human-readable explanation safe to show to your users. Sent only for some codes; wording may change."
               }
             },
             "required": [
@@ -21315,6 +21388,455 @@
             "example": "5551234567"
           }
         }
+      },
+      "ApplicationListWithGeneric": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "1"
+          },
+          "property_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true,
+            "description": "`null` for a generic application that has no unit yet, returned only with `include_generic=true`."
+          },
+          "verification_template_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
+          },
+          "unit_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
+          },
+          "score": {
+            "type": "number",
+            "example": 10,
+            "nullable": true
+          },
+          "monthly_rent_amount": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ],
+            "type": "object"
+          },
+          "status": {
+            "type": "string",
+            "example": "pending",
+            "enum": [
+              "pending",
+              "started",
+              "submitted",
+              "approved",
+              "approved_with_conditions",
+              "rejected",
+              "canceled",
+              "merged",
+              "on_hold"
+            ]
+          },
+          "screening_status": {
+            "type": "string",
+            "enum": [
+              "not_started",
+              "failed",
+              "completed",
+              "processing"
+            ],
+            "example": "not_started"
+          },
+          "desired_move_in_date": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "started_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "submitted_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "applicants": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApplicantList"
+            }
+          },
+          "recommendation": {
+            "type": "string",
+            "example": "decline",
+            "nullable": true,
+            "description": "The application recommendation. Returns null if any submitted applicant has a failed identity verification that has not been manually overridden.",
+            "enum": [
+              "approve",
+              "conditional_approve",
+              "decline"
+            ]
+          },
+          "decision_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2025-02-03T15:55:38.816+00:00",
+            "nullable": true
+          },
+          "decision_time_in_days": {
+            "type": "number",
+            "example": 3,
+            "nullable": true
+          },
+          "listing_id": {
+            "type": "string",
+            "example": "1234567890",
+            "nullable": true
+          },
+          "grouped_income_rent_ratio": {
+            "type": "number",
+            "example": 0.3,
+            "nullable": true
+          },
+          "listing_rent_amount": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ],
+            "type": "object"
+          },
+          "pending_magic_links": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MagicLink"
+            }
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          },
+          "application_updated_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          },
+          "application_url": {
+            "type": "string",
+            "example": "https://boompay.app/applications/1234567890"
+          },
+          "adverse_action_reasons": {
+            "example": [
+              "condition"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "assignees": {
+            "type": "array",
+            "description": "List of partner users assigned to this application",
+            "items": {
+              "$ref": "#/components/schemas/Assignee"
+            }
+          },
+          "lead_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "evaluated_rule_set": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RuleSet"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "evaluated_rule_sets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RuleSet"
+            }
+          },
+          "generic_application_option_id": {
+            "type": "string",
+            "nullable": true,
+            "example": "6r5c7l9btmylv37s",
+            "description": "The generic application option the application was started from, kept once its unit is set; `null` for an application started for a unit."
+          },
+          "generic_application_option_label": {
+            "type": "string",
+            "nullable": true,
+            "example": "Pre-approval",
+            "description": "Name of that generic application option; `null` for an application started for a unit."
+          }
+        },
+        "required": [
+          "id",
+          "property_id",
+          "unit_id",
+          "monthly_rent_amount",
+          "status",
+          "applicants",
+          "created_at",
+          "updated_at"
+        ]
+      },
+      "ApplicationDetailWithGeneric": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "1"
+          },
+          "property_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true,
+            "description": "`null` for a generic application that has no unit yet, returned only with `include_generic=true`."
+          },
+          "verification_template_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
+          },
+          "unit_id": {
+            "type": "string",
+            "example": "123456",
+            "nullable": true
+          },
+          "score": {
+            "type": "number",
+            "example": 10,
+            "nullable": true
+          },
+          "monthly_rent_amount": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ],
+            "type": "object"
+          },
+          "status": {
+            "type": "string",
+            "example": "pending",
+            "enum": [
+              "pending",
+              "started",
+              "submitted",
+              "approved",
+              "approved_with_conditions",
+              "rejected",
+              "canceled",
+              "merged",
+              "on_hold"
+            ]
+          },
+          "screening_status": {
+            "type": "string",
+            "enum": [
+              "not_started",
+              "failed",
+              "completed",
+              "processing"
+            ],
+            "example": "not_started"
+          },
+          "desired_move_in_date": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "started_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "submitted_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z",
+            "nullable": true
+          },
+          "applicants": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApplicantList"
+            }
+          },
+          "recommendation": {
+            "type": "string",
+            "example": "decline",
+            "nullable": true,
+            "description": "The application recommendation. Returns null if any submitted applicant has a failed identity verification that has not been manually overridden.",
+            "enum": [
+              "approve",
+              "conditional_approve",
+              "decline"
+            ]
+          },
+          "decision_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2025-02-03T15:55:38.816+00:00",
+            "nullable": true
+          },
+          "decision_time_in_days": {
+            "type": "number",
+            "example": 3,
+            "nullable": true
+          },
+          "listing_id": {
+            "type": "string",
+            "example": "1234567890",
+            "nullable": true
+          },
+          "grouped_income_rent_ratio": {
+            "type": "number",
+            "example": 0.3,
+            "nullable": true
+          },
+          "listing_rent_amount": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ],
+            "type": "object"
+          },
+          "pending_magic_links": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MagicLink"
+            }
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          },
+          "application_updated_at": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2021-01-01T00:00:00.000Z"
+          },
+          "application_url": {
+            "type": "string",
+            "example": "https://boompay.app/applications/1234567890"
+          },
+          "adverse_action_reasons": {
+            "example": [
+              "condition"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "assignees": {
+            "type": "array",
+            "description": "List of partner users assigned to this application",
+            "items": {
+              "$ref": "#/components/schemas/Assignee"
+            }
+          },
+          "pet_rent_value": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ],
+            "type": "object"
+          },
+          "pets_count": {
+            "type": "number",
+            "example": 1,
+            "nullable": true
+          },
+          "has_voucher": {
+            "type": "boolean",
+            "example": true,
+            "nullable": true
+          },
+          "voucher_amount": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Money"
+              }
+            ],
+            "type": "object"
+          },
+          "evaluated_rule_set": {
+            "nullable": false,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RuleSet"
+              }
+            ],
+            "type": "object"
+          },
+          "evaluated_rule_sets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RuleSet"
+            },
+            "nullable": false
+          },
+          "lead_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "application_merged_into_id": {
+            "type": "string",
+            "description": "Set when this application was merged into another.",
+            "nullable": true
+          },
+          "warnings_triggered_count": {
+            "type": "integer"
+          },
+          "generic_application_option_id": {
+            "type": "string",
+            "nullable": true,
+            "example": "6r5c7l9btmylv37s",
+            "description": "The generic application option the application was started from, kept once its unit is set; `null` for an application started for a unit."
+          },
+          "generic_application_option_label": {
+            "type": "string",
+            "nullable": true,
+            "example": "Pre-approval",
+            "description": "Name of that generic application option; `null` for an application started for a unit."
+          }
+        },
+        "required": [
+          "id",
+          "property_id",
+          "unit_id",
+          "monthly_rent_amount",
+          "status",
+          "applicants",
+          "created_at",
+          "updated_at"
+        ]
       }
     },
     "headers": {
