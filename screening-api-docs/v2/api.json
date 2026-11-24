@@ -7627,7 +7627,7 @@
                   "object": "list",
                   "items": [
                     {
-                      "id": "shw_8Kq2mXz4",
+                      "id": "kg0hxrwupbjcerzo",
                       "status": "confirmed",
                       "showing_type": "guided",
                       "start_time": "2026-10-14T18:30:00Z",
@@ -7637,23 +7637,23 @@
                       "group_showing_id": null,
                       "desired_move_in_date": "2026-11-01",
                       "property": {
-                        "id": "prp_3Tn9Lw",
+                        "id": "m4v8qd2ntzx7ayle",
                         "name": "Maple Court Apartments",
                         "address": "1420 Maple Street, Austin, TX 78704"
                       },
                       "unit": {
-                        "id": "unt_7Rb5Qe",
+                        "id": "b9s3fhk6wcj1pu0r",
                         "title": "Unit 204"
                       },
                       "lead": {
-                        "id": "led_2Ym8Vd",
+                        "id": "x7e1ngo5ityq4dma",
                         "first_name": "Jordan",
                         "last_name": "Rivera",
                         "email": "jordan.rivera@example.com",
-                        "phone": "+15125550142"
+                        "phone": "5125550142"
                       },
                       "assigned_team_member": {
-                        "id": "usr_9Hc4Fa",
+                        "id": "r2w6zlc0ubh8kv3j",
                         "name": "Dana Whitfield"
                       },
                       "confirmed_at": "2026-10-05T15:12:44Z",
@@ -19814,7 +19814,7 @@
         "properties": {
           "id": {
             "type": "string",
-            "example": "prp_3Tn9Lw"
+            "example": "m4v8qd2ntzx7ayle"
           },
           "name": {
             "type": "string",
@@ -19838,7 +19838,7 @@
         "properties": {
           "id": {
             "type": "string",
-            "example": "unt_7Rb5Qe"
+            "example": "b9s3fhk6wcj1pu0r"
           },
           "title": {
             "type": "string",
@@ -19855,7 +19855,7 @@
         "properties": {
           "id": {
             "type": "string",
-            "example": "led_2Ym8Vd"
+            "example": "x7e1ngo5ityq4dma"
           },
           "first_name": {
             "type": "string",
@@ -19872,7 +19872,7 @@
           },
           "phone": {
             "type": "string",
-            "example": "+15125550142",
+            "example": "5125550142",
             "nullable": true
           }
         },
@@ -19889,7 +19889,7 @@
         "properties": {
           "id": {
             "type": "string",
-            "example": "usr_9Hc4Fa",
+            "example": "r2w6zlc0ubh8kv3j",
             "description": "Matches the id returned by `GET /partner/v2/users`."
           },
           "name": {
@@ -19907,7 +19907,7 @@
         "properties": {
           "id": {
             "type": "string",
-            "example": "shw_8Kq2mXz4"
+            "example": "kg0hxrwupbjcerzo"
           },
           "status": {
             "type": "string",
