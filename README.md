@@ -18,7 +18,8 @@ The API server (`boompay-api`, `app/endpoints/boom/partner_api/`) is the source 
 
 ## Versions
 
-- Edit `screening-api-docs/api.json` for anything that is the same in every version. Edit `screening-api-docs/v2/patch.json` (JSON Patch, `add` and `replace` only) for what only v2 returns.
+- Edit `screening-api-docs/api.json` for anything that is the same in every version. Edit `screening-api-docs/v2/patch.json` (JSON Patch, `add`, `replace` and `copy` only; `-` appends to an array with `add` or `copy`) for what only v2 returns.
+- A `copy` snapshots its source at that point in `patch.json`. An op that changes a copied schema (for example a v2-only field on `ApplicationList`, which `ApplicationListWithGeneric` copies) must sit above the `copy`, or the copy will miss it.
 - Regenerate the versioned files in the same change: `node scripts/build-versioned-specs.mjs`. CI fails when they are out of date.
 - A published version only grows. CI runs [oasdiff](https://github.com/oasdiff/oasdiff) against the base branch and fails on a breaking change (removed or renamed path, parameter or field, changed type, new required input). A breaking change goes into the next version instead; see `docs/versioning-and-deprecation.md`.
 

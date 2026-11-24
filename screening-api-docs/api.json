@@ -7846,6 +7846,30 @@
                 }
               }
             }
+          },
+          "422": {
+            "description": "The lead's application is a generic application that has no unit yet (`application_not_placed`). Set its unit in Boom, then apply again. Nothing was changed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "application_not_placed",
+                    "status": 422,
+                    "code": "application_not_placed",
+                    "user_message": "This lead's application has no unit yet. Set its unit in Boom before applying.",
+                    "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                  }
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
           }
         },
         "tags": [
@@ -18233,6 +18257,11 @@
                 "type": "string",
                 "example": "tag_limit_reached",
                 "description": "Stable machine-readable error code; branch on this, not on `message`. See Errors and request IDs."
+              },
+              "user_message": {
+                "type": "string",
+                "example": "This lead's application has no unit yet. Set its unit in Boom before applying.",
+                "description": "Human-readable explanation safe to show to your users. Sent only for some codes; wording may change."
               }
             },
             "required": [
