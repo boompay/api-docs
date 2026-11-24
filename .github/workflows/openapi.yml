@@ -1,0 +1,66 @@
+name: OpenAPI specs
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Versioned specs match their source
+        run: node scripts/build-versioned-specs.mjs --check
+
+      - name: Lint
+        run: npx --yes @redocly/cli lint screening-api-docs/api.json screening-api-docs/v1/api.json screening-api-docs/v2/api.json rent-reporting-api-docs/api.json
+
+  breaking-changes:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Partners generate clients from these files: a version may only grow, breaking changes go to the next version.
+      # Base files stay inside the workspace because the oasdiff action runs in a container that only mounts it.
+      - name: Collect published specs from the base branch
+        run: |
+          mkdir -p base-specs
+          git show "origin/${{ github.base_ref }}:screening-api-docs/api.json" > base-specs/screening-v1.json
+          if git cat-file -e "origin/${{ github.base_ref }}:screening-api-docs/v2/api.json" 2>/dev/null; then
+            git show "origin/${{ github.base_ref }}:screening-api-docs/v2/api.json" > base-specs/screening-v2.json
+          else
+            cp screening-api-docs/v2/api.json base-specs/screening-v2.json
+          fi
+          git show "origin/${{ github.base_ref }}:rent-reporting-api-docs/api.json" > base-specs/rent-reporting-v1.json
+
+      - name: screening v1 has no breaking change
+        uses: oasdiff/oasdiff-action/breaking@main
+        with:
+          base: base-specs/screening-v1.json
+          revision: screening-api-docs/v1/api.json
+          fail-on: ERR
+
+      - name: screening v2 has no breaking change
+        uses: oasdiff/oasdiff-action/breaking@main
+        with:
+          base: base-specs/screening-v2.json
+          revision: screening-api-docs/v2/api.json
+          fail-on: ERR
+
+      - name: rent reporting v1 has no breaking change
+        uses: oasdiff/oasdiff-action/breaking@main
+        with:
+          base: base-specs/rent-reporting-v1.json
+          revision: rent-reporting-api-docs/api.json
+          fail-on: ERR
