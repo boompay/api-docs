@@ -7552,6 +7552,299 @@
         "description": "Newest first. A showing on a property outside a scoped key's access is not returned."
       }
     },
+    "/partner/v2/showings": {
+      "get": {
+        "operationId": "ShowingsController_listShowings",
+        "summary": "List showings",
+        "description": "Returns showings across the partner's properties, newest created first (`created_at` descending, then `id` descending). Rescheduling or a status change does not move a showing in the list.\n\nThe created date is when the showing was booked in Boom, not the tour time. Showings still reserved (a slot held during booking) are never returned. A declined showing appears with status `canceled` and `cancellation_reason` `declined`.\n\nAn API key limited to specific properties only sees showings on those properties, and `total_count` counts only them.\n\nAll times are ISO 8601 in UTC with a `Z` suffix.\n\nNot returned: lockbox and entry codes, internal notes, the lead's message, pre-screening answers and results, approval likelihood, application and applicant data, lead tokens, check-in, reschedule, cancel and calendar links, and check-in coordinates.",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 20
+            },
+            "description": "Values above 1000 are clamped to 1000, not rejected."
+          },
+          {
+            "name": "created_at_from_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Only showings created on or after 00:00:00 UTC of this day."
+          },
+          {
+            "name": "created_at_to_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Only showings created on or before 23:59:59 UTC of this day. Both bounds are inclusive."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Showing"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "example": {
+                  "object": "list",
+                  "items": [
+                    {
+                      "id": "shw_8Kq2mXz4",
+                      "status": "confirmed",
+                      "showing_type": "guided",
+                      "start_time": "2026-10-14T18:30:00Z",
+                      "end_time": "2026-10-14T19:00:00Z",
+                      "timezone": "America/Chicago",
+                      "party_size": 2,
+                      "group_showing_id": null,
+                      "desired_move_in_date": "2026-11-01",
+                      "property": {
+                        "id": "prp_3Tn9Lw",
+                        "name": "Maple Court Apartments",
+                        "address": "1420 Maple Street, Austin, TX 78704"
+                      },
+                      "unit": {
+                        "id": "unt_7Rb5Qe",
+                        "title": "Unit 204"
+                      },
+                      "lead": {
+                        "id": "led_2Ym8Vd",
+                        "first_name": "Jordan",
+                        "last_name": "Rivera",
+                        "email": "jordan.rivera@example.com",
+                        "phone": "+15125550142"
+                      },
+                      "assigned_team_member": {
+                        "id": "usr_9Hc4Fa",
+                        "name": "Dana Whitfield"
+                      },
+                      "confirmed_at": "2026-10-05T15:12:44Z",
+                      "checked_in_at": null,
+                      "checked_out_at": null,
+                      "canceled_at": null,
+                      "canceled_by": null,
+                      "cancellation_reason": null,
+                      "reschedule_count": 0,
+                      "feedback": null,
+                      "created_at": "2026-10-05T14:58:10Z",
+                      "updated_at": "2026-10-05T15:12:44Z"
+                    }
+                  ],
+                  "current_page": 1,
+                  "page_count": 1,
+                  "total_count": 1,
+                  "has_more": false
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid date format, or `created_at_from_date` is after `created_at_to_date` (message: `created_at_from_date must be on or before created_at_to_date`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Showings"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v2/units/{unit_id}/showings": {
+      "get": {
+        "operationId": "UnitsController_listUnitShowings",
+        "summary": "List showings for a unit",
+        "description": "Returns the showings booked for one unit, newest created first (`created_at` descending, then `id` descending). Rescheduling or a status change does not move a showing in the list.\n\nThe created date is when the showing was booked in Boom, not the tour time. Showings still reserved (a slot held during booking) are never returned. A declined showing appears with status `canceled` and `cancellation_reason` `declined`.\n\nAn API key limited to specific properties only sees showings on those properties, and `total_count` counts only them.\n\nAll times are ISO 8601 in UTC with a `Z` suffix.\n\nNot returned: lockbox and entry codes, internal notes, the lead's message, pre-screening answers and results, approval likelihood, application and applicant data, lead tokens, check-in, reschedule, cancel and calendar links, and check-in coordinates.",
+        "parameters": [
+          {
+            "name": "unit_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The unit id returned by `GET /partner/v2/units`."
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 20
+            },
+            "description": "Values above 1000 are clamped to 1000, not rejected."
+          },
+          {
+            "name": "created_at_from_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Only showings created on or after 00:00:00 UTC of this day."
+          },
+          {
+            "name": "created_at_to_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Only showings created on or before 23:59:59 UTC of this day. Both bounds are inclusive."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Showing"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid date format, or `created_at_from_date` is after `created_at_to_date` (message: `created_at_from_date must be on or before created_at_to_date`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found. The unit does not exist, belongs to another partner, or is outside the API key's property scope.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Showings"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/partner/v2/leads/{lead_id}/communications": {
       "get": {
         "operationId": "LeadsController_getLeadCommunications",
@@ -19515,6 +19808,275 @@
             "example": "2026-08-02T10:00:00+00:00"
           }
         }
+      },
+      "ShowingProperty": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "prp_3Tn9Lw"
+          },
+          "name": {
+            "type": "string",
+            "example": "Maple Court Apartments"
+          },
+          "address": {
+            "type": "string",
+            "example": "1420 Maple Street, Austin, TX 78704",
+            "nullable": true,
+            "description": "One-line address without the country."
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "address"
+        ]
+      },
+      "ShowingUnit": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "unt_7Rb5Qe"
+          },
+          "title": {
+            "type": "string",
+            "example": "Unit 204"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ]
+      },
+      "ShowingLead": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "led_2Ym8Vd"
+          },
+          "first_name": {
+            "type": "string",
+            "example": "Jordan"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Rivera"
+          },
+          "email": {
+            "type": "string",
+            "example": "jordan.rivera@example.com",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "example": "+15125550142",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "first_name",
+          "last_name",
+          "email",
+          "phone"
+        ]
+      },
+      "ShowingTeamMember": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "usr_9Hc4Fa",
+            "description": "Matches the id returned by `GET /partner/v2/users`."
+          },
+          "name": {
+            "type": "string",
+            "example": "Dana Whitfield"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "Showing": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "shw_8Kq2mXz4"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "confirmed",
+              "lead_confirmed",
+              "in_progress",
+              "completed",
+              "no_show",
+              "canceled",
+              "expired"
+            ],
+            "example": "confirmed",
+            "description": "`pending`: waiting for the team to confirm. `confirmed`: confirmed by the team. `lead_confirmed`: confirmed by the lead. `in_progress`: the tour has started. `completed`: the tour took place. `no_show`: the lead did not attend. `canceled`: canceled by the lead, a team member or the system, or declined. `expired`: no confirmation arrived before the showing lapsed."
+          },
+          "showing_type": {
+            "type": "string",
+            "enum": [
+              "guided",
+              "self_guided"
+            ],
+            "example": "guided"
+          },
+          "start_time": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-10-14T18:30:00Z",
+            "nullable": true
+          },
+          "end_time": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-10-14T19:00:00Z",
+            "nullable": true
+          },
+          "timezone": {
+            "type": "string",
+            "example": "America/Chicago",
+            "nullable": true
+          },
+          "party_size": {
+            "type": "integer",
+            "example": 2,
+            "nullable": true
+          },
+          "group_showing_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "desired_move_in_date": {
+            "type": "string",
+            "format": "date",
+            "example": "2026-11-01",
+            "nullable": true
+          },
+          "property": {
+            "$ref": "#/components/schemas/ShowingProperty"
+          },
+          "unit": {
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ShowingUnit"
+              }
+            ],
+            "nullable": true
+          },
+          "lead": {
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ShowingLead"
+              }
+            ],
+            "nullable": true
+          },
+          "assigned_team_member": {
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ShowingTeamMember"
+              }
+            ],
+            "nullable": true,
+            "description": "`null` for a self-guided showing or one with no team member assigned."
+          },
+          "confirmed_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-10-05T15:12:44Z",
+            "nullable": true
+          },
+          "checked_in_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "checked_out_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "canceled_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "canceled_by": {
+            "type": "string",
+            "enum": [
+              "lead",
+              "team_member",
+              "system"
+            ],
+            "nullable": true
+          },
+          "cancellation_reason": {
+            "type": "string",
+            "nullable": true,
+            "description": "`declined` for any decline, otherwise the text the team sent the lead."
+          },
+          "reschedule_count": {
+            "type": "integer",
+            "example": 0
+          },
+          "feedback": {
+            "type": "string",
+            "nullable": true,
+            "description": "Feedback the team entered after the tour."
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-10-05T14:58:10Z",
+            "description": "When the showing was booked in Boom, not the tour time."
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-10-05T15:12:44Z"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "showing_type",
+          "start_time",
+          "end_time",
+          "timezone",
+          "party_size",
+          "group_showing_id",
+          "desired_move_in_date",
+          "property",
+          "unit",
+          "lead",
+          "assigned_team_member",
+          "confirmed_at",
+          "checked_in_at",
+          "checked_out_at",
+          "canceled_at",
+          "canceled_by",
+          "cancellation_reason",
+          "reschedule_count",
+          "feedback",
+          "created_at",
+          "updated_at"
+        ],
+        "description": "A showing (property tour) booked with the partner. All times are ISO 8601 in UTC with a `Z` suffix."
       },
       "LeadCommunication": {
         "type": "object",
