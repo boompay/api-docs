@@ -4,11 +4,11 @@ Machine-readable definitions of the Boom Partner API, served from `api.productio
 
 | File | Covers | Format |
 |---|---|---|
-| `screening-api-docs/api.json` | BoomScreen (tenant screening) and BoomCRM (leads, listings, magic links) under `/partner/v1/` and `/crm/v1/`. The source for both versions below; its URL stays stable for clients generated from it | OpenAPI 3.0 |
+| `screening-api-docs/api.json` | BoomScreen (tenant screening) and BoomCRM (leads, listings, magic links, showing availability) under `/partner/v1/` and `/crm/v1/`, plus the listing site endpoint under `/listing_sites/v1/`. The source for both versions below; its URL stays stable for clients generated from it | OpenAPI 3.0 |
 | `screening-api-docs/v1/api.json` | The same specification as `screening-api-docs/api.json`, published under the version path. Generated | OpenAPI 3.0 |
 | `screening-api-docs/v2/api.json` | BoomScreen and BoomCRM under `/partner/v2/`. Generated from the v1 source plus `screening-api-docs/v2/patch.json` | OpenAPI 3.0 |
 | `rent-reporting-api-docs/api.json` | BoomReport (customers, enrollments, rental payments, Plaid, ledgers) under `/partner/v1/` | OpenAPI 3.0 |
-| `docs/*.md` | Cross-cutting guides: errors and request IDs, pagination and ordering, rate limits, versioning and deprecation, Partner API v2 | Markdown, published on docs.boompay.app |
+| `docs/*.md` | Cross-cutting guides: errors and request IDs, pagination and ordering, rate limits, versioning and deprecation, Partner API v2, showing availability (Partner API and listing sites) | Markdown, published on docs.boompay.app |
 
 Both specifications share the same conventions: bearer JWT auth from `POST /partner/v1/authenticate`, one error envelope, one list envelope, an `X-Request-Id` on every response. The `info.description` of each file summarises them; the `docs/` guides are the long form.
 
