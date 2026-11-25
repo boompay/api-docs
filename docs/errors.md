@@ -28,6 +28,9 @@ Some codes add fields:
 - `validation_error` adds `errors`, an array of one string per failing parameter.
 - `api_error` adds `error_id` (unique to this failure) and `error_signature` (identical for repeats of the same underlying bug).
 - `POST /partner/v1/customers/check` adds `details`, a map of field → reason.
+- `pms_controlled_fields` adds `fields`, the refused fields named like the `pms_overrides` keys: a pet change is listed as `cats_allowed`, `dogs_allowed` or `dog_size`, and an owner change as `property_owner_name`, `property_owner_email` or `property_owner_phone`.
+- `unknown_amenities` adds `amenities`, the names that match no amenity.
+- `invalid_units` (v2 only) adds `fields`, each refused unit once as `units[<index>]`, and `errors`, one `{ field, error }` item per failed check (so a unit that fails two checks appears twice), with `amenities` on an `unknown_amenities` item.
 
 ## Error codes
 
@@ -36,6 +39,7 @@ Some codes add fields:
 | 400 | `validation_error` | A parameter is missing, has the wrong type, or fails a documented constraint. `errors` lists each problem. |
 | 400 | `invalid_request_body` | The body is not valid JSON for the declared `Content-Type`. |
 | 400 | `bad_request` / *(none)* | A business rule rejected the request, for example `Customer already have active enrollment`. |
+| 400 | `invalid_owner` | v2 Create or Update a property: `owner` is not an object of `name`, `email` and `phone` strings. |
 | 401 | `unauthenticated` | Missing, malformed, expired or revoked bearer token, or the partner has no API access. Request a new token with `POST /partner/v1/authenticate`. |
 | 402 | `stripe_card_error` | A card payment failed. `stripe_code` and `stripe_decline_code` carry Stripe's reason. |
 | 403 | `forbidden` | The key is read-only and the request is a write, or the user role does not permit the action. |
@@ -51,6 +55,13 @@ Some codes add fields:
 | 422 | `tag_limit_reached` | The change would leave a lead with more than 20 tags. |
 | 422 | `partner_tag_limit_reached` | A new tag name was sent, but the account already has 200 tags. |
 | 422 | `tag_not_found` | A tag was deleted in the Portal while the request was adding it. Retry the request. |
+| 422 | `pms_controlled_fields` | An update to a property or unit synced from a PMS changes fields the PMS controls (PMS sync on in `pms_overrides`, and the PMS has sent a value). `fields` lists each one and nothing in the request is saved. Send `pms_overrides` with `false` for those fields to change them. `external_id` of a unit with a `pms_id`, and in v2 of a property with one, always follows the PMS and has no override key, so it can't be changed through the API; v1 still lets partners whose PMS units come through integration credentials change a unit's. A unit's `waitlist` is the same when the PMS fills it through a custom field (UDF) mapping. |
+| 422 | `unknown_amenities` | An amenity name matches none of Boom's amenities or your own. `amenities` lists those names; nothing is saved and no amenity is created. |
+| 422 | `unknown_prescreening_template` | `prescreening_template_id` names no pre-screening template of your account. |
+| 422 | `invalid_custom_button_link` | `custom_button_link` of a property is not a valid `http` or `https` URL. |
+| 422 | `owner_name_required` | v2: an `owner` with `email` or `phone` but no `name`, on a property that has no owner name yet. Nothing is saved. |
+| 422 | `invalid_owner_email` | v2: `owner.email` is not a valid email address. Nothing is saved. |
+| 422 | `invalid_units` | v2 Create a property: units in `units` break a business rule (for example home and lot rent not adding up to the monthly rent). `fields` and `errors` name them; nothing is created. v1 skips such units instead. |
 | 429 | `rate_limited` | Rate limit exceeded. Honour the `Retry-After` header. See [Rate limits](rate-limits.md). |
 | 500 | `api_error` | Unexpected server error. Quote `request_id` and `error_id` to support. |
 | 503 | `request_timeout` | The request exceeded the server's processing time. Safe to retry GETs; for writes, fetch the record first to see whether the change was applied. |
