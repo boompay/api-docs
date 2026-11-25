@@ -1912,6 +1912,15 @@
             }
           },
           {
+            "name": "listed",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "`true` returns only listed units; `false` returns only units that are not listed. Leave it out to return both."
+          },
+          {
             "name": "external_id",
             "required": false,
             "in": "query",
@@ -2320,7 +2329,7 @@
       "patch": {
         "operationId": "UnitsController_update",
         "summary": "Update a unit",
-        "description": "Changes fields on one unit; fields left out stay unchanged. A deleted unit, or a unit whose property is deleted, returns `404` and nothing is saved.",
+        "description": "Changes fields on one unit; fields left out stay unchanged. A deleted unit, or a unit whose property is deleted, returns `404` and nothing is saved.\n\n`listed`, `waitlist` and `available_for_application` are linked:\n\n- Setting `listed` to `true` on a unit that is not available for application also turns on `available_for_application`. Sending `listed: true` together with `available_for_application: false` returns `422` with code `listed_requires_available_for_application`.\n- Setting `available_for_application` to `false` unlists the unit. Setting it to `true` does not change `listed`.\n- Changing `available_for_application` also turns the unit's magic link on or off to match.\n- `waitlist` can be turned on only when, after the request, the unit is occupied and has no available date, or has an available date after today in the property's local time. An occupied unit whose available date is today or in the past does not qualify. Otherwise the request returns `422` with code `waitlist_requirements_not_met`. The rule is checked against the new values when the same request also changes `available_at` or `occupied`.\n\nA `422` saves nothing from the request.",
         "parameters": [
           {
             "name": "id",
@@ -2348,6 +2357,45 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UnitDetail"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "422": {
+            "description": "The listed, waitlist and available_for_application values conflict (see the codes below). Nothing in the request was saved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "listed_requires_available_for_application": {
+                    "summary": "listed true sent together with available_for_application false",
+                    "value": {
+                      "error": {
+                        "message": "A listed unit must be available for application",
+                        "status": 422,
+                        "code": "listed_requires_available_for_application",
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  },
+                  "waitlist_requirements_not_met": {
+                    "summary": "waitlist true on a unit that is not occupied or has no future available date",
+                    "value": {
+                      "error": {
+                        "message": "A waitlisted unit must be occupied or have a future available date",
+                        "status": 422,
+                        "code": "waitlist_requirements_not_met",
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  }
                 }
               }
             },
@@ -2807,6 +2855,7 @@
       "patch": {
         "operationId": "MagicLinksController_updateLink",
         "summary": "Update a magic link",
+        "description": "Turning the magic link on or off (`active`) also changes Available for application and Listed on its unit. To change Listed on its own, use Update a unit (`PATCH /partner/v1/units/{id}`).",
         "parameters": [
           {
             "name": "id",
@@ -13169,6 +13218,21 @@
           "max_occupants": {
             "type": "integer",
             "nullable": true
+          },
+          "listed": {
+            "type": "boolean",
+            "example": true,
+            "description": "The unit shows on the company's public listings page and on the Zillow, Zumper and Apartments.com feeds that have auto-add turned on. A listed unit is always available for application."
+          },
+          "waitlist": {
+            "type": "boolean",
+            "example": false,
+            "description": "The unit shows as Coming Soon. It can be turned on only for an occupied unit with no available date, or with an available date after today in the property's local time."
+          },
+          "available_for_application": {
+            "type": "boolean",
+            "example": true,
+            "description": "The unit accepts applications through its magic link. Turning it off unlists the unit; turning it on leaves `listed` as it is."
           }
         },
         "required": [
@@ -13508,6 +13572,21 @@
           "max_occupants": {
             "type": "integer",
             "nullable": true
+          },
+          "listed": {
+            "type": "boolean",
+            "example": true,
+            "description": "The unit shows on the company's public listings page and on the Zillow, Zumper and Apartments.com feeds that have auto-add turned on. A listed unit is always available for application."
+          },
+          "waitlist": {
+            "type": "boolean",
+            "example": false,
+            "description": "The unit shows as Coming Soon. It can be turned on only for an occupied unit with no available date, or with an available date after today in the property's local time."
+          },
+          "available_for_application": {
+            "type": "boolean",
+            "example": true,
+            "description": "The unit accepts applications through its magic link. Turning it off unlists the unit; turning it on leaves `listed` as it is."
           }
         },
         "required": [
@@ -13590,11 +13669,24 @@
           "max_occupants": {
             "type": "integer",
             "minimum": 1
+          },
+          "listed": {
+            "type": "boolean",
+            "description": "`true` lists the unit on the company's public listings page and on the Zillow, Zumper and Apartments.com feeds that have auto-add turned on. Listing a unit that is not available for application also turns on `available_for_application`. Sending `true` together with `available_for_application: false` returns `422` (`listed_requires_available_for_application`)."
+          },
+          "waitlist": {
+            "type": "boolean",
+            "description": "`true` shows the unit as Coming Soon. After the request the unit must be occupied with no available date, or have an available date after today in the property's local time; otherwise `422` (`waitlist_requirements_not_met`). When the same request changes `available_at` or `occupied`, the new values are checked."
+          },
+          "available_for_application": {
+            "type": "boolean",
+            "description": "`false` unlists the unit; `true` does not change `listed`. The unit's magic link is turned on or off to match."
           }
         }
       },
       "UpdateMagicLink": {
         "type": "object",
+        "description": "Turning a magic link on or off (`active`) also changes Available for application and Listed on its unit. To change Listed on its own, use Update a unit (`PATCH /partner/v1/units/{id}`).",
         "properties": {
           "active": {
             "type": "boolean",
