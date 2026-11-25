@@ -7536,7 +7536,7 @@
       "get": {
         "operationId": "ShowingsController_listShowings",
         "summary": "List showings",
-        "description": "Returns showings across the partner's properties, newest created first (`created_at` descending, then `id` descending). Rescheduling or a status change does not move a showing in the list.\n\nThe created date is when the showing was booked in Boom, not the tour time. Showings still reserved (a slot held during booking) are never returned. A declined showing appears with status `canceled` and `cancellation_reason` `declined`.\n\nAn API key limited to specific properties only sees showings on those properties, and `total_count` counts only them.\n\nAll times are ISO 8601 in UTC with a `Z` suffix.\n\nNot returned: lockbox and entry codes, internal notes, the lead's message, pre-screening answers and results, approval likelihood, application and applicant data, lead tokens, check-in, reschedule, cancel and calendar links, and check-in coordinates.",
+        "description": "Returns showings across the partner's properties, newest created first (`created_at` descending, then `id` descending). Rescheduling or a status change does not move a showing in the list.\n\nThe created date is when the showing was booked in Boom, not the tour time. A slot hold still in progress is never returned; a hold the lead abandoned appears with status `expired`. A declined showing appears with status `canceled` and `cancellation_reason` `declined`.\n\nAn API key limited to specific properties only sees showings on those properties, and `total_count` counts only them.\n\nAll times are ISO 8601 in UTC with a `Z` suffix.\n\nNot returned: lockbox and entry codes, internal notes, the lead's message, pre-screening answers and results, approval likelihood, application and applicant data, lead tokens, check-in, reschedule, cancel and calendar links, and check-in coordinates.",
         "parameters": [
           {
             "name": "page",
@@ -7699,7 +7699,7 @@
       "get": {
         "operationId": "UnitsController_listUnitShowings",
         "summary": "List showings for a unit",
-        "description": "Returns the showings booked for one unit, newest created first (`created_at` descending, then `id` descending). Rescheduling or a status change does not move a showing in the list.\n\nThe created date is when the showing was booked in Boom, not the tour time. Showings still reserved (a slot held during booking) are never returned. A declined showing appears with status `canceled` and `cancellation_reason` `declined`.\n\nAn API key limited to specific properties only sees showings on those properties, and `total_count` counts only them.\n\nAll times are ISO 8601 in UTC with a `Z` suffix.\n\nNot returned: lockbox and entry codes, internal notes, the lead's message, pre-screening answers and results, approval likelihood, application and applicant data, lead tokens, check-in, reschedule, cancel and calendar links, and check-in coordinates.",
+        "description": "Returns the showings booked for one unit, newest created first (`created_at` descending, then `id` descending). Rescheduling or a status change does not move a showing in the list.\n\nThe created date is when the showing was booked in Boom, not the tour time. A slot hold still in progress is never returned; a hold the lead abandoned appears with status `expired`. A declined showing appears with status `canceled` and `cancellation_reason` `declined`.\n\nAn API key limited to specific properties only sees showings on those properties, and `total_count` counts only them.\n\nAll times are ISO 8601 in UTC with a `Z` suffix.\n\nNot returned: lockbox and entry codes, internal notes, the lead's message, pre-screening answers and results, approval likelihood, application and applicant data, lead tokens, check-in, reschedule, cancel and calendar links, and check-in coordinates.",
         "parameters": [
           {
             "name": "unit_id",
@@ -19885,7 +19885,7 @@
               "expired"
             ],
             "example": "confirmed",
-            "description": "`pending`: waiting for the team to confirm. `confirmed`: confirmed by the team. `lead_confirmed`: confirmed by the lead. `in_progress`: the tour has started. `completed`: the tour took place. `no_show`: the lead did not attend. `canceled`: canceled by the lead, a team member or the system, or declined. `expired`: no confirmation arrived before the showing lapsed."
+            "description": "`pending`: waiting for the team to confirm. `confirmed`: confirmed by the team. `lead_confirmed`: confirmed by the lead. `in_progress`: the tour has started. `completed`: the tour took place. `no_show`: the lead did not attend. `canceled`: canceled by the lead, a team member or the system, or declined. `expired`: the team never confirmed the request in time, or the lead abandoned a slot hold before finishing the booking."
           },
           "showing_type": {
             "type": "string",
