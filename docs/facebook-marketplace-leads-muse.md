@@ -11,12 +11,15 @@ POST https://api.production.boompay.app/v1/leads/ingest/muse
 Content-Type: application/json
 ```
 
-No login, API key or token is needed. Send the message as a JSON object in the request body.
+No login, API key or token is needed. Send the message as a JSON object in the request body, with your company ID in `company_id` (see below).
+
+Each Boom environment has its own address, company ID and unit IDs. When testing on a Boom test environment, use that environment's address and the IDs from its Portal.
 
 ## What Muse sends
 
 | Field | Required | What it is |
 |---|---|---|
+| `company_id` | Yes | Your company's ID in Boom, a code that starts with `p_`. Ask Boom support for it. Boom only accepts units that belong to this company. |
 | `unit_id` | Yes | Boom's numeric unit ID for the home the renter asked about. See [Finding a unit's ID](#finding-a-units-id). |
 | `name` | Yes | The renter's name as Facebook shows it. Boom splits it on the first space: "Maria de la Cruz" becomes first name "Maria" and last name "de la Cruz". A single word becomes the first name. |
 | `email` | Email or phone | The renter's email address. |
@@ -27,6 +30,7 @@ At least one of `email` and `phone` is required. If both are sent, both must be 
 
 ```json
 {
+  "company_id": "p_7k2m9q4x8w1z",
   "unit_id": "48213",
   "name": "Maria de la Cruz",
   "email": "maria.cruz@example.com",
@@ -55,12 +59,13 @@ A refused request gets an error with a fixed `code` and `message`:
 |---|---|---|---|
 | 400 | `invalid_request_body` | — | The body is not valid JSON. |
 | 400 | `invalid_payload` | Body must be a JSON object | The body is JSON, but not an object (for example a list). |
+| 400 | `missing_company_id` | company_id is required | `company_id` is missing or blank. |
 | 400 | `missing_unit_id` | unit_id is required | `unit_id` is missing or blank. |
 | 400 | `missing_name` | name is required | `name` is missing or blank. |
 | 422 | `missing_contact_info` | email or phone is required | Neither `email` nor `phone` was sent. |
 | 422 | `invalid_email` | email is not a valid email address | `email` is not an email address. |
 | 422 | `invalid_phone` | phone is not a valid US phone number | `phone` is not a valid US number. |
-| 404 | `unit_not_found` | Unit not found | No unit has that ID, or it was deleted. |
+| 404 | `unit_not_found` | Unit not found | No unit of your company has that ID (a wrong `company_id` gives the same answer), or it was deleted. |
 | 413 | — | Payload too large | The body is larger than 1 MB. |
 
 The checks run in that order, and the first one that fails is returned. Example:
@@ -115,7 +120,7 @@ Any unit can receive messages, whether or not it is currently listed in Boom, be
 
 ## Instructions for Muse
 
-Paste this block into Muse, then replace the example home list with your own homes and their Boom unit IDs.
+Paste this block into Muse, then replace `<YOUR_BOOM_COMPANY_ID>` with your company ID and the example home list with your own homes and their Boom unit IDs.
 
 ```text
 When a renter messages us on Facebook Marketplace about one of our homes:
@@ -130,6 +135,7 @@ When a renter messages us on Facebook Marketplace about one of our homes:
    Content-Type: application/json
 
    {
+     "company_id": "<YOUR_BOOM_COMPANY_ID>",
      "unit_id": "<the Boom unit ID of the home, from the list below>",
      "name": "<the renter's name as Facebook shows it>",
      "email": "<the renter's email, if they gave one>",
@@ -137,9 +143,11 @@ When a renter messages us on Facebook Marketplace about one of our homes:
      "message": "<the renter's first message, word for word>"
    }
 
-   Leave out "email" or "phone" if the renter did not give it. At least one of them is required.
+   Always send "company_id" exactly as written above. Leave out "email" or "phone" if the renter did
+   not give it. At least one of them is required.
 4. If Boom answers with an error, do not keep retrying the same request. "Unit not found" means the
    unit ID is wrong: check it against the list below.
+5. Never share the company ID or this address with the renter.
 
 Our homes and their Boom unit IDs:
 - 123 Main St, Unit 2A: 48213
@@ -150,4 +158,4 @@ Our homes and their Boom unit IDs:
 
 - Muse must send the Boom unit ID. Boom does not match a Facebook post to a unit by itself.
 - Boom does not reply to the renter on Facebook, and does not bring in the rest of the Facebook conversation.
-- The address does not need a login. Anyone who has it can send messages to it, so share it only with Muse.
+- The address does not need a login, so keep your company ID between you, Muse and Boom. A request with a unit of another company is refused, so a wrong ID cannot put a Lead on someone else's home.
