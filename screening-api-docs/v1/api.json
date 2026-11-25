@@ -7609,7 +7609,7 @@
                     {
                       "id": "kg0hxrwupbjcerzo",
                       "status": "confirmed",
-                      "showing_type": "guided",
+                      "showing_type": "hosted",
                       "start_time": "2026-10-14T18:30:00Z",
                       "end_time": "2026-10-14T19:00:00Z",
                       "timezone": "America/Chicago",
@@ -19890,21 +19890,24 @@
           "showing_type": {
             "type": "string",
             "enum": [
-              "guided",
+              "hosted",
               "self_guided"
             ],
-            "example": "guided"
+            "example": "hosted",
+            "description": "`hosted`: a team member hosts the tour. `self_guided`: the lead tours on their own."
           },
           "start_time": {
             "type": "string",
             "format": "date-time",
             "example": "2026-10-14T18:30:00Z",
+            "description": "For a pending request that offered several times, this is the first proposed time until the team picks one.",
             "nullable": true
           },
           "end_time": {
             "type": "string",
             "format": "date-time",
             "example": "2026-10-14T19:00:00Z",
+            "description": "For a pending request that offered several times, this is the first proposed time until the team picks one.",
             "nullable": true
           },
           "timezone": {
