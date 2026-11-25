@@ -7532,6 +7532,385 @@
         "description": "Newest first. A showing on a property outside a scoped key's access is not returned."
       }
     },
+    "/partner/v1/showings": {
+      "get": {
+        "operationId": "ShowingsController_listShowings",
+        "summary": "List showings",
+        "description": "Returns showings across the partner's properties, newest created first (`created_at` descending, then `id` descending). Rescheduling or a status change does not move a showing in the list.\n\nThe created date is when the showing was booked in Boom, not the tour time. A slot hold still in progress is never returned; a hold the lead abandoned appears with status `expired`. A declined showing appears with status `canceled` and `cancellation_reason` `declined`. For bookings that start with a slot hold, `created_at` is when the hold started (up to 30 minutes before the booking completes), so incremental pulls should overlap the previous window by at least 30 minutes.\n\nAn API key limited to specific properties only sees showings on those properties, and `total_count` counts only them. `lead` is `null` when the showing has no lead, or when the lead belongs to a property outside the API key property scope.\n\nAll times are ISO 8601 in UTC with a `Z` suffix.\n\nNot returned: lockbox and entry codes, internal notes, the lead's message, pre-screening answers and results, approval likelihood, application and applicant data, lead tokens, check-in, reschedule, cancel and calendar links, and check-in coordinates.",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 20
+            },
+            "description": "Values above 1000 are clamped to 1000, not rejected."
+          },
+          {
+            "name": "created_at_from_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Only showings created on or after 00:00:00 UTC of this day."
+          },
+          {
+            "name": "created_at_to_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Only showings created on or before 23:59:59 UTC of this day. Both bounds are inclusive."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Showing"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "example": {
+                  "object": "list",
+                  "items": [
+                    {
+                      "id": "kg0hxrwupbjcerzo",
+                      "status": "confirmed",
+                      "showing_type": "hosted",
+                      "start_time": "2026-10-14T18:30:00Z",
+                      "end_time": "2026-10-14T19:00:00Z",
+                      "timezone": "America/Chicago",
+                      "party_size": 2,
+                      "group_showing_id": null,
+                      "desired_move_in_date": "2026-11-01",
+                      "property": {
+                        "id": "m4v8qd2ntzx7ayle",
+                        "name": "Maple Court Apartments",
+                        "external_id": "ext-property-1",
+                        "address": {
+                          "address1": "1420 Maple Street",
+                          "address2": null,
+                          "city": "Austin",
+                          "state_or_province": "TX",
+                          "postal_code": "78704",
+                          "country": "United States",
+                          "lat": 30.2467,
+                          "lng": -97.7694
+                        }
+                      },
+                      "unit": {
+                        "id": "b9s3fhk6wcj1pu0r",
+                        "title": "Unit 204",
+                        "external_id": "ext-unit-1"
+                      },
+                      "lead": {
+                        "id": "x7e1ngo5ityq4dma",
+                        "first_name": "Jordan",
+                        "last_name": "Rivera",
+                        "email": "jordan.rivera@example.com",
+                        "phone": "15125550142"
+                      },
+                      "assigned_team_member": {
+                        "id": "r2w6zlc0ubh8kv3j",
+                        "name": "Dana Whitfield"
+                      },
+                      "confirmed_at": "2026-10-05T15:12:44Z",
+                      "checked_in_at": null,
+                      "checked_out_at": null,
+                      "canceled_at": null,
+                      "canceled_by": null,
+                      "cancellation_reason": null,
+                      "reschedule_count": 0,
+                      "feedback": null,
+                      "created_at": "2026-10-05T14:58:10Z",
+                      "updated_at": "2026-10-05T15:12:44Z"
+                    }
+                  ],
+                  "current_page": 1,
+                  "page_count": 1,
+                  "total_count": 1,
+                  "has_more": false
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid date format, or `created_at_from_date` is after `created_at_to_date` (message: `created_at_from_date must be on or before created_at_to_date`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Showings"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/partner/v1/units/{unit_id}/showings": {
+      "get": {
+        "operationId": "UnitsController_listUnitShowings",
+        "summary": "List showings for a unit",
+        "description": "Returns the showings booked for one unit, newest created first (`created_at` descending, then `id` descending). Rescheduling or a status change does not move a showing in the list.\n\nThe created date is when the showing was booked in Boom, not the tour time. A slot hold still in progress is never returned; a hold the lead abandoned appears with status `expired`. A declined showing appears with status `canceled` and `cancellation_reason` `declined`. For bookings that start with a slot hold, `created_at` is when the hold started (up to 30 minutes before the booking completes), so incremental pulls should overlap the previous window by at least 30 minutes.\n\nAn API key limited to specific properties only sees showings on those properties, and `total_count` counts only them. `lead` is `null` when the showing has no lead, or when the lead belongs to a property outside the API key property scope.\n\nAll times are ISO 8601 in UTC with a `Z` suffix.\n\nNot returned: lockbox and entry codes, internal notes, the lead's message, pre-screening answers and results, approval likelihood, application and applicant data, lead tokens, check-in, reschedule, cancel and calendar links, and check-in coordinates.",
+        "parameters": [
+          {
+            "name": "unit_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The unit id returned by `GET /partner/v1/units`."
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "per_page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 20
+            },
+            "description": "Values above 1000 are clamped to 1000, not rejected."
+          },
+          {
+            "name": "created_at_from_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Only showings created on or after 00:00:00 UTC of this day."
+          },
+          {
+            "name": "created_at_to_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Only showings created on or before 23:59:59 UTC of this day. Both bounds are inclusive."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/PaginatedResponse"
+                    },
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Showing"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid date format, or `created_at_from_date` is after `created_at_to_date` (message: `created_at_from_date must be on or before created_at_to_date`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "404": {
+            "description": "The unit does not exist, is deleted, belongs to a deleted property or another partner, or is outside the API key property scope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/Retry-After"
+              },
+              "X-RateLimit-Limit": {
+                "$ref": "#/components/headers/X-RateLimit-Limit"
+              },
+              "X-RateLimit-Remaining": {
+                "$ref": "#/components/headers/X-RateLimit-Remaining"
+              },
+              "X-RateLimit-Reset": {
+                "$ref": "#/components/headers/X-RateLimit-Reset"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Showings"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/partner/v1/leads/{lead_id}/communications": {
       "get": {
         "operationId": "LeadsController_getLeadCommunications",
@@ -19474,6 +19853,248 @@
             "example": "2026-08-02T10:00:00+00:00"
           }
         }
+      },
+      "ShowingLead": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "x7e1ngo5ityq4dma"
+          },
+          "first_name": {
+            "type": "string",
+            "example": "Jordan",
+            "nullable": true
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Rivera",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "example": "jordan.rivera@example.com",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "example": "15125550142",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "first_name",
+          "last_name",
+          "email",
+          "phone"
+        ]
+      },
+      "ShowingTeamMember": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "r2w6zlc0ubh8kv3j",
+            "description": "Matches the id returned by `GET /partner/v1/users`."
+          },
+          "name": {
+            "type": "string",
+            "example": "Dana Whitfield",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "Showing": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "kg0hxrwupbjcerzo"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "confirmed",
+              "lead_confirmed",
+              "in_progress",
+              "completed",
+              "no_show",
+              "canceled",
+              "expired"
+            ],
+            "example": "confirmed",
+            "description": "`pending`: requested, not confirmed yet. `confirmed`: confirmed, by the team or automatically. `lead_confirmed`: the lead confirmed they are coming. `in_progress`: the tour has started. `completed`: the tour took place. `no_show`: the lead did not attend. `canceled`: canceled by the lead, a team member or the system, or declined. `expired`: never confirmed in time, or the lead abandoned a slot hold before finishing the booking."
+          },
+          "showing_type": {
+            "type": "string",
+            "enum": [
+              "hosted",
+              "self_guided"
+            ],
+            "example": "hosted",
+            "description": "`hosted`: a team member hosts the tour. `self_guided`: the lead tours on their own."
+          },
+          "start_time": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-10-14T18:30:00Z",
+            "description": "For a pending request that offered several times, this is the earliest proposed time that is still available, until the team picks one.",
+            "nullable": true
+          },
+          "end_time": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-10-14T19:00:00Z",
+            "description": "For a pending request that offered several times, this is the earliest proposed time that is still available, until the team picks one.",
+            "nullable": true
+          },
+          "timezone": {
+            "type": "string",
+            "example": "America/Chicago",
+            "nullable": true
+          },
+          "party_size": {
+            "type": "integer",
+            "example": 2,
+            "nullable": true
+          },
+          "group_showing_id": {
+            "type": "string",
+            "example": "p5n1yt8kqc3wmzgd",
+            "nullable": true
+          },
+          "desired_move_in_date": {
+            "type": "string",
+            "format": "date",
+            "example": "2026-11-01",
+            "nullable": true
+          },
+          "property": {
+            "$ref": "#/components/schemas/LeadProperty"
+          },
+          "unit": {
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LeadUnit"
+              }
+            ],
+            "nullable": true
+          },
+          "lead": {
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ShowingLead"
+              }
+            ],
+            "nullable": true,
+            "description": "`null` when the showing has no lead, or when the lead belongs to a property outside the API key property scope."
+          },
+          "assigned_team_member": {
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ShowingTeamMember"
+              }
+            ],
+            "nullable": true,
+            "description": "`null` for a self-guided showing or one with no team member assigned."
+          },
+          "confirmed_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-10-05T15:12:44Z",
+            "nullable": true
+          },
+          "checked_in_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-10-14T18:31:05Z",
+            "nullable": true
+          },
+          "checked_out_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-10-14T18:58:40Z",
+            "nullable": true
+          },
+          "canceled_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-10-10T09:20:00Z",
+            "nullable": true
+          },
+          "canceled_by": {
+            "type": "string",
+            "enum": [
+              "lead",
+              "team_member",
+              "system"
+            ],
+            "example": "team_member",
+            "nullable": true
+          },
+          "cancellation_reason": {
+            "type": "string",
+            "example": "The unit is no longer available",
+            "nullable": true,
+            "description": "Free text written by the team or by Boom (for example when a showing is canceled automatically). Only the value `declined` is stable: it stands for any decline. Do not parse other values."
+          },
+          "reschedule_count": {
+            "type": "integer",
+            "example": 0
+          },
+          "feedback": {
+            "type": "string",
+            "example": "Lead liked the layout, asked about parking",
+            "nullable": true,
+            "description": "Feedback the team entered after the tour."
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-10-05T14:58:10Z",
+            "description": "When the showing was booked in Boom, not the tour time. For bookings that start with a slot hold, `created_at` is when the hold started (up to 30 minutes before the booking completes), so incremental pulls should overlap the previous window by at least 30 minutes."
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-10-05T15:12:44Z"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "showing_type",
+          "start_time",
+          "end_time",
+          "timezone",
+          "party_size",
+          "group_showing_id",
+          "desired_move_in_date",
+          "property",
+          "unit",
+          "lead",
+          "assigned_team_member",
+          "confirmed_at",
+          "checked_in_at",
+          "checked_out_at",
+          "canceled_at",
+          "canceled_by",
+          "cancellation_reason",
+          "reschedule_count",
+          "feedback",
+          "created_at",
+          "updated_at"
+        ],
+        "description": "A showing (property tour) booked with the partner. All times are ISO 8601 in UTC with a `Z` suffix."
       },
       "LeadCommunication": {
         "type": "object",
