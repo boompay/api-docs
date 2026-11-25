@@ -19919,6 +19919,7 @@
           },
           "group_showing_id": {
             "type": "string",
+            "example": "p5n1yt8kqc3wmzgd",
             "nullable": true
           },
           "desired_move_in_date": {
@@ -19967,16 +19968,19 @@
           "checked_in_at": {
             "type": "string",
             "format": "date-time",
+            "example": "2026-10-14T18:31:05Z",
             "nullable": true
           },
           "checked_out_at": {
             "type": "string",
             "format": "date-time",
+            "example": "2026-10-14T18:58:40Z",
             "nullable": true
           },
           "canceled_at": {
             "type": "string",
             "format": "date-time",
+            "example": "2026-10-10T09:20:00Z",
             "nullable": true
           },
           "canceled_by": {
@@ -19986,10 +19990,12 @@
               "team_member",
               "system"
             ],
+            "example": "team_member",
             "nullable": true
           },
           "cancellation_reason": {
             "type": "string",
+            "example": "The unit is no longer available",
             "nullable": true,
             "description": "`declined` for any decline, otherwise the text the team sent the lead."
           },
@@ -19999,6 +20005,7 @@
           },
           "feedback": {
             "type": "string",
+            "example": "Lead liked the layout, asked about parking",
             "nullable": true,
             "description": "Feedback the team entered after the tour."
           },
