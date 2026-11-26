@@ -1012,6 +1012,37 @@
               }
             }
           },
+          "422": {
+            "description": "`integration_config_id` is not one of your active PMS integrations. `errors` holds one string per failing field.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                },
+                "examples": {
+                  "unknown_integration_config": {
+                    "summary": "`integration_config_id` is not an active integration of this partner (unknown, deleted or another partner's)",
+                    "value": {
+                      "error": {
+                        "status": 422,
+                        "message": "integration_config_id 999 is not an active integration of this partner",
+                        "code": "validation_error",
+                        "errors": [
+                          "integration_config_id 999 is not an active integration of this partner"
+                        ],
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
           "429": {
             "description": "Rate limit exceeded",
             "content": {
@@ -1267,6 +1298,37 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            }
+          },
+          "422": {
+            "description": "`integration_config_id` is not one of your active PMS integrations. `errors` holds one string per failing field.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatorResponse"
+                },
+                "examples": {
+                  "unknown_integration_config": {
+                    "summary": "`integration_config_id` is not an active integration of this partner (unknown, deleted or another partner's)",
+                    "value": {
+                      "error": {
+                        "status": 422,
+                        "message": "integration_config_id 999 is not an active integration of this partner",
+                        "code": "validation_error",
+                        "errors": [
+                          "integration_config_id 999 is not an active integration of this partner"
+                        ],
+                        "request_id": "4f0d8c1e-2b1a-4a5e-9c3d-7e6f5a4b3c2d"
+                      }
+                    }
+                  }
                 }
               }
             },
@@ -12633,7 +12695,13 @@
             "example": "abc123",
             "nullable": true,
             "description": "The ID of the bank account associated with this property (only applicable for partners with per_property billing)"
-          }
+          },
+            "integration_config_id": {
+              "type": "integer",
+              "example": 1117,
+              "nullable": true,
+              "description": "ID of the PMS integration this property's applications and guest cards are pushed to. `null`: the property has no integration of its own and pushes go to your oldest integration."
+            }
         },
         "required": [
           "id",
@@ -13253,7 +13321,13 @@
             "example": "abc123",
             "nullable": true,
             "description": "The ID of the bank account associated with this property (only applicable for partners with per_property billing)"
-          }
+          },
+            "integration_config_id": {
+              "type": "integer",
+              "example": 1117,
+              "nullable": true,
+              "description": "ID of the PMS integration this property's applications and guest cards are pushed to. `null`: the property has no integration of its own and pushes go to your oldest integration."
+            }
         },
         "required": [
           "id",
@@ -13376,7 +13450,13 @@
           },
           "use_property_group_verification_template": {
             "type": "boolean"
-          }
+          },
+            "integration_config_id": {
+              "type": "integer",
+              "example": 1117,
+              "nullable": true,
+              "description": "ID of one of your active PMS integrations (Boom gives you the IDs). Applications and guest cards for this property are pushed to that integration. Omitted or `null`: the property has no integration of its own and pushes go to your oldest integration. An ID that is unknown, deleted or another partner's returns 422 `validation_error`."
+            }
         }
       },
       "ForbiddenErrorResponse": {
@@ -13437,7 +13517,13 @@
           },
           "use_property_group_verification_template": {
             "type": "boolean"
-          }
+          },
+            "integration_config_id": {
+              "type": "integer",
+              "example": 1117,
+              "nullable": true,
+              "description": "ID of one of your active PMS integrations (Boom gives you the IDs). Applications and guest cards for this property are pushed to that integration. Omitted or `null`: unchanged, so it cannot be cleared through the API. An ID that is unknown, deleted or another partner's returns 422 `validation_error`."
+            }
         }
       },
       "UnitDetail": {
